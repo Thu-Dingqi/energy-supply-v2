@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 
 interface DataRow {
@@ -18,6 +18,10 @@ interface EditableDataTableProps {
 export default function EditableDataTable({ data, years, onDataChange }: EditableDataTableProps) {
   const [editableData, setEditableData] = useState<DataRow[]>(data)
   const [editingCell, setEditingCell] = useState<{ rowIndex: number; year: string } | null>(null)
+
+  useEffect(() => {
+    setEditableData(data)
+  }, [data])
 
   const handleCellValueChange = (rowIndex: number, year: string, value: string) => {
     // Only allow numbers and decimals
