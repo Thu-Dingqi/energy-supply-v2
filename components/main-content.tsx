@@ -243,46 +243,37 @@ export default function MainContent({
       ],
     },
     {
-      id: "oil-refining",
-      label: "炼油技术",
+      id: "energy-chemical",
+      label: "能源化工",
       children: [
-        { id: "ATM", label: "ATM (常压蒸馏)" },
-        { id: "FCC", label: "FCC (流化催化裂化)" },
-        { id: "HYD", label: "HYD (加氢裂化)" },
-      ],
-    },
-    {
-      id: "coking",
-      label: "炼焦技术",
-      children: [
-        { id: "CONV", label: "CONV (常规焦炉炼焦)" },
-        { id: "HR", label: "HR (热回收焦炉炼焦)" },
+        { id: "CTL", label: "煤制油" },
+        { id: "CTH", label: "煤制氢" },
+        { id: "oil-refining", label: "炼油技术" },
+        { id: "coking", label: "炼焦技术" }
       ],
     },
   ]
 
   const resourcesTree: TreeNode[] = [
     {
-      id: "primary",
-      label: "一次能源",
+      id: "fossil",
+      label: "传统化石能源",
       children: [
         { id: "coal", label: "煤炭" },
-        { id: "oil", label: "石油" },
-        { id: "natural-gas", label: "天然气" },
-        { id: "nuclear-fuel", label: "核燃料" },
-        { id: "renewable", label: "可再生能源" },
-      ],
+        { id: "oil", label: "石油" }, 
+        { id: "natural-gas", label: "天然气" }
+      ]
     },
     {
-      id: "secondary",
-      label: "二次能源",
+      id: "renewable", 
+      label: "可再生能源",
       children: [
-        { id: "electricity", label: "电力" },
-        { id: "heat", label: "热力" },
-        { id: "hydrogen", label: "氢能" },
-        { id: "refined-oil", label: "成品油" },
-      ],
-    },
+        { id: "wind", label: "风能" },
+        { id: "solar", label: "太阳能" },
+        { id: "hydro", label: "水能" },
+        { id: "biomass", label: "生物质能" }
+      ]
+    }
   ]
 
   // Get the appropriate tree based on the active section
@@ -322,6 +313,35 @@ export default function MainContent({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="beijing">北京</SelectItem>
+                  <SelectItem value="tianjin">天津</SelectItem>
+                  <SelectItem value="hebei">河北</SelectItem>
+                  <SelectItem value="shanxi">山西</SelectItem>
+                  <SelectItem value="neimenggu">内蒙古</SelectItem>
+                  <SelectItem value="liaoning">辽宁</SelectItem>
+                  <SelectItem value="jilin">吉林</SelectItem>
+                  <SelectItem value="heilongjiang">黑龙江</SelectItem>
+                  <SelectItem value="shanghai">上海</SelectItem>
+                  <SelectItem value="jiangsu">江苏</SelectItem>
+                  <SelectItem value="zhejiang">浙江</SelectItem>
+                  <SelectItem value="anhui">安徽</SelectItem>
+                  <SelectItem value="fujian">福建</SelectItem>
+                  <SelectItem value="jiangxi">江西</SelectItem>
+                  <SelectItem value="shandong">山东</SelectItem>
+                  <SelectItem value="henan">河南</SelectItem>
+                  <SelectItem value="hubei">湖北</SelectItem>
+                  <SelectItem value="hunan">湖南</SelectItem>
+                  <SelectItem value="guangdong">广东</SelectItem>
+                  <SelectItem value="guangxi">广西</SelectItem>
+                  <SelectItem value="hainan">海南</SelectItem>
+                  <SelectItem value="chongqing">重庆</SelectItem>
+                  <SelectItem value="sichuan">四川</SelectItem>
+                  <SelectItem value="guizhou">贵州</SelectItem>
+                  <SelectItem value="yunnan">云南</SelectItem>
+                  <SelectItem value="shaanxi">陕西</SelectItem>
+                  <SelectItem value="gansu">甘肃</SelectItem>
+                  <SelectItem value="qinghai">青海</SelectItem>
+                  <SelectItem value="ningxia">宁夏</SelectItem>
+                  <SelectItem value="xinjiang">新疆</SelectItem>
                 </SelectContent>
               </Select>
             </div>

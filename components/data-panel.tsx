@@ -201,6 +201,146 @@ export default function DataPanel({
     }
   }
 
+  // 在 generatePowerTechData 函数后添加新的函数
+  const generateChemicalTechData = (
+    techId: string,
+    baseEfficiency: number,      // 转化效率 (%)
+    baseAF: number,              // 可用系数 (%)
+    baseLifetime: number,        // 寿期 (年)
+    baseNCAPCost: number,        // 投资成本 (元/kW)
+    baseNCAPFOM: number,         // 固定运维成本 (元/kW/年)
+    baseACTCost: number,         // 可变运维成本 (元/kWh)
+  ) => {
+    const efficiencyData = {
+      title: `${techId} - 效率`,
+      data: [
+        {
+          indicator: "效率",
+          unit: "%",
+          values: {
+            "2025": Number.parseFloat(baseEfficiency.toFixed(1)),
+            "2030": Number.parseFloat((baseEfficiency * 1.05).toFixed(1)),
+            "2035": Number.parseFloat((baseEfficiency * 1.1).toFixed(1)),
+            "2040": Number.parseFloat((baseEfficiency * 1.15).toFixed(1)),
+            "2045": Number.parseFloat((baseEfficiency * 1.18).toFixed(1)),
+            "2050": Number.parseFloat((baseEfficiency * 1.2).toFixed(1)),
+            "2055": Number.parseFloat((baseEfficiency * 1.22).toFixed(1)),
+            "2060": Number.parseFloat((baseEfficiency * 1.25).toFixed(1)),
+          },
+        },
+      ],
+    }
+
+    const afData = {
+      title: `${techId} - 可用系数`,
+      data: [
+        {
+          indicator: "可用系数",
+          unit: "%",
+          values: {
+            "2025": Number.parseFloat(baseAF.toFixed(1)),
+            "2030": Number.parseFloat((baseAF * 1.02).toFixed(1)),
+            "2035": Number.parseFloat((baseAF * 1.04).toFixed(1)),
+            "2040": Number.parseFloat((baseAF * 1.06).toFixed(1)),
+            "2045": Number.parseFloat((baseAF * 1.08).toFixed(1)),
+            "2050": Number.parseFloat((baseAF * 1.1).toFixed(1)),
+            "2055": Number.parseFloat((baseAF * 1.11).toFixed(1)),
+            "2060": Number.parseFloat((baseAF * 1.12).toFixed(1)),
+          },
+        },
+      ],
+    }
+
+    const lifetimeData = {
+      title: `${techId} - 寿期`,
+      data: [
+        {
+          indicator: "寿期",
+          unit: "年",
+          values: {
+            "2025": Number.parseFloat(baseLifetime.toFixed(1)),
+            "2030": Number.parseFloat(baseLifetime.toFixed(1)),
+            "2035": Number.parseFloat(baseLifetime.toFixed(1)),
+            "2040": Number.parseFloat(baseLifetime.toFixed(1)),
+            "2045": Number.parseFloat(baseLifetime.toFixed(1)),
+            "2050": Number.parseFloat(baseLifetime.toFixed(1)),
+            "2055": Number.parseFloat(baseLifetime.toFixed(1)),
+            "2060": Number.parseFloat(baseLifetime.toFixed(1)),
+          },
+        },
+      ],
+    }
+
+    const ncapCostData = {
+      title: `${techId} - 投资成本`,
+      data: [
+        {
+          indicator: "投资成本",
+          unit: "元/kW",
+          values: {
+            "2025": Number.parseFloat(baseNCAPCost.toFixed(1)),
+            "2030": Number.parseFloat((baseNCAPCost * 0.95).toFixed(1)),
+            "2035": Number.parseFloat((baseNCAPCost * 0.9).toFixed(1)),
+            "2040": Number.parseFloat((baseNCAPCost * 0.85).toFixed(1)),
+            "2045": Number.parseFloat((baseNCAPCost * 0.8).toFixed(1)),
+            "2050": Number.parseFloat((baseNCAPCost * 0.75).toFixed(1)),
+            "2055": Number.parseFloat((baseNCAPCost * 0.72).toFixed(1)),
+            "2060": Number.parseFloat((baseNCAPCost * 0.7).toFixed(1)),
+          },
+        },
+      ],
+    }
+
+    const ncapFOMData = {
+      title: `${techId} - 固定运维成本`,
+      data: [
+        {
+          indicator: "固定运维成本",
+          unit: "元/kW/年",
+          values: {
+            "2025": Number.parseFloat(baseNCAPFOM.toFixed(1)),
+            "2030": Number.parseFloat((baseNCAPFOM * 0.98).toFixed(1)),
+            "2035": Number.parseFloat((baseNCAPFOM * 0.96).toFixed(1)),
+            "2040": Number.parseFloat((baseNCAPFOM * 0.94).toFixed(1)),
+            "2045": Number.parseFloat((baseNCAPFOM * 0.92).toFixed(1)),
+            "2050": Number.parseFloat((baseNCAPFOM * 0.9).toFixed(1)),
+            "2055": Number.parseFloat((baseNCAPFOM * 0.88).toFixed(1)),
+            "2060": Number.parseFloat((baseNCAPFOM * 0.85).toFixed(1)),
+          },
+        },
+      ],
+    }
+
+    const actCostData = {
+      title: `${techId} - 可变运维成本`,
+      data: [
+        {
+          indicator: "可变运维成本",
+          unit: "元/kWh",
+          values: {
+            "2025": Number.parseFloat(baseACTCost.toFixed(3)),
+            "2030": Number.parseFloat((baseACTCost * 0.98).toFixed(3)),
+            "2035": Number.parseFloat((baseACTCost * 0.96).toFixed(3)),
+            "2040": Number.parseFloat((baseACTCost * 0.94).toFixed(3)),
+            "2045": Number.parseFloat((baseACTCost * 0.92).toFixed(3)),
+            "2050": Number.parseFloat((baseACTCost * 0.9).toFixed(3)),
+            "2055": Number.parseFloat((baseACTCost * 0.88).toFixed(3)),
+            "2060": Number.parseFloat((baseACTCost * 0.85).toFixed(3)),
+          },
+        },
+      ],
+    }
+
+    return {
+      EFF: efficiencyData,
+      AF: afData,
+      LIFETIME: lifetimeData,
+      NCAP_COST: ncapCostData,
+      NCAP_FOM: ncapFOMData,
+      ACT_COST: actCostData,
+    }
+  }
+
   // Define data sets for different nodes
   const dataSets: Record<
     string,
@@ -1174,40 +1314,7 @@ export default function DataPanel({
         },
       ],
     },
-    renewable: {
-      title: "可再生能源",
-      defaultChartType: "bar",
-      data: [
-        {
-          indicator: "进口设备",
-          unit: "亿元",
-          values: {
-            "2025": 300,
-            "2030": 250,
-            "2035": 200,
-            "2040": 150,
-            "2045": 100,
-            "2050": 80,
-            "2055": 60,
-            "2060": 40,
-          },
-        },
-        {
-          indicator: "出口设备",
-          unit: "亿元",
-          values: {
-            "2025": 800,
-            "2030": 1000,
-            "2035": 1200,
-            "2040": 1400,
-            "2045": 1600,
-            "2050": 1800,
-            "2055": 2000,
-            "2060": 2200,
-          },
-        },
-      ],
-    },
+    
     electricity: {
       title: "电力",
       defaultChartType: "bar",
@@ -1541,6 +1648,136 @@ export default function DataPanel({
       title: "HR (热回收焦炉炼焦)",
       isEnergyTech: true,
       techData: generatePowerTechData("HR", 85, 88, 25, 11000, 330, 0.035),
+    },
+
+    // 添加能源化工技术的数据
+    CTL: {
+      title: "煤制油",
+      isEnergyTech: true,
+      techData: generateChemicalTechData(
+        "CTL",
+        45,    // 转化效率
+        85,    // 可用系数
+        30,    // 寿期
+        12000, // 投资成本
+        360,   // 固定运维成本
+        0.05   // 可变运维成本
+      ),
+    },
+    CTH: {
+      title: "煤制氢",
+      isEnergyTech: true,
+      techData: generateChemicalTechData(
+        "CTH",
+        50,    // 转化效率
+        88,    // 可用系数
+        30,    // 寿期
+        10000, // 投资成本
+        300,   // 固定运维成本
+        0.04   // 可变运维成本
+      ),
+    },
+    "oil-refining": {
+      title: "炼油",
+      isEnergyTech: true,
+      techData: generateChemicalTechData(
+        "oil-refining",
+        92,    // 转化效率
+        90,    // 可用系数
+        35,    // 寿期
+        8000,  // 投资成本
+        240,   // 固定运维成本
+        0.03   // 可变运维成本
+      ),
+    },
+    coking: {
+      title: "炼焦",
+      isEnergyTech: true,
+      techData: generateChemicalTechData(
+        "coking",
+        88,    // 转化效率
+        85,    // 可用系数
+        30,    // 寿期
+        7000,  // 投资成本
+        210,   // 固定运维成本
+        0.03   // 可变运维成本
+      ),
+    },
+    wind: {
+      title: "风能",
+      data: [
+        {
+          indicator: "资源开发潜力上限",
+          unit: "GW",
+          values: {
+            "2025": 300,
+            "2030": 450,
+            "2035": 600,
+            "2040": 750,
+            "2045": 900,
+            "2050": 1050,
+            "2055": 1200,
+            "2060": 1350,
+          },
+        },
+      ],
+    },
+    solar: {
+      title: "太阳能",
+      data: [
+        {
+          indicator: "资源开发潜力上限",
+          unit: "GW",
+          values: {
+            "2025": 500,
+            "2030": 800,
+            "2035": 1100,
+            "2040": 1400,
+            "2045": 1700,
+            "2050": 2000,
+            "2055": 2300,
+            "2060": 2600,
+          },
+        },
+      ],
+    },
+    hydro: {
+      title: "水能",
+      data: [
+        {
+          indicator: "资源开发潜力上限",
+          unit: "GW",
+          values: {
+            "2025": 380,
+            "2030": 400,
+            "2035": 420,
+            "2040": 430,
+            "2045": 440,
+            "2050": 450,
+            "2055": 455,
+            "2060": 460,
+          },
+        },
+      ],
+    },
+    biomass: {
+      title: "生物质能",
+      data: [
+        {
+          indicator: "资源开发潜力上限",
+          unit: "GW",
+          values: {
+            "2025": 50,
+            "2030": 75,
+            "2035": 100,
+            "2040": 125,
+            "2045": 150,
+            "2050": 175,
+            "2055": 185,
+            "2060": 195,
+          },
+        },
+      ],
     },
   }
 
