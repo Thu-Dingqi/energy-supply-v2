@@ -1999,8 +1999,9 @@ export default function ResultPanel({
   // 在组件内部添加省份映射函数
   const getProvinceLabel = (provinceCode: string): string => {
     const provinceMap: Record<string, string> = {
+      national: "全国",
       beijing: "北京",
-      tianjin: "天津",
+      tianjin: "天津", 
       hebei: "河北",
       shanxi: "山西",
       neimenggu: "内蒙古",

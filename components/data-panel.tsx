@@ -1184,7 +1184,7 @@ export default function DataPanel({
       defaultChartType: "bar",
       data: [
         {
-          indicator: "进口量",
+          indicator: selectedProvince === "national" ? "进口量" : "调入量",
           unit: "万吨",
           values: {
             "2025": 3000,
@@ -1198,7 +1198,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "出口量",
+          indicator: selectedProvince === "national" ? "出口量" : "调出量",
           unit: "万吨",
           values: {
             "2025": 500,
@@ -1218,7 +1218,7 @@ export default function DataPanel({
       defaultChartType: "bar",
       data: [
         {
-          indicator: "进口量",
+          indicator: selectedProvince === "national" ? "进口量" : "调入量",
           unit: "万吨",
           values: {
             "2025": 5000,
@@ -1232,7 +1232,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "出口量",
+          indicator: selectedProvince === "national" ? "出口量" : "调出量",
           unit: "万吨",
           values: {
             "2025": 200,
@@ -1252,7 +1252,7 @@ export default function DataPanel({
       defaultChartType: "bar",
       data: [
         {
-          indicator: "进口量",
+          indicator: selectedProvince === "national" ? "进口量" : "调入量",
           unit: "亿立方米",
           values: {
             "2025": 1500,
@@ -1266,7 +1266,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "出口量",
+          indicator: selectedProvince === "national" ? "出口量" : "调出量",
           unit: "亿立方米",
           values: {
             "2025": 50,
@@ -1981,7 +1981,7 @@ export default function DataPanel({
           </h3>
           {nodeTitle && <div className="text-sm text-muted-foreground">当前选择: {nodeTitle}</div>}
         </div>
-        <div className="text-sm text-muted-foreground mb-2">展示 {selectedProvince === "beijing" ? "北京" : selectedProvince === "tianjin" ? "天津" : selectedProvince === "hebei" ? "河北" : selectedProvince === "shanxi" ? "山西" : selectedProvince === "neimenggu" ? "内蒙古" : selectedProvince === "liaoning" ? "辽宁" : selectedProvince === "jilin" ? "吉林" : selectedProvince === "heilongjiang" ? "黑龙江" : selectedProvince === "shanghai" ? "上海" : selectedProvince === "jiangsu" ? "江苏" : selectedProvince === "zhejiang" ? "浙江" : selectedProvince === "anhui" ? "安徽" : selectedProvince === "fujian" ? "福建" : selectedProvince === "jiangxi" ? "江西" : selectedProvince === "shandong" ? "山东" : selectedProvince === "henan" ? "河南" : selectedProvince === "hubei" ? "湖北" : selectedProvince === "hunan" ? "湖南" : selectedProvince === "guangdong" ? "广东" : selectedProvince === "guangxi" ? "广西" : selectedProvince === "hainan" ? "海南" : selectedProvince === "chongqing" ? "重庆" : selectedProvince === "sichuan" ? "四川" : selectedProvince === "guizhou" ? "贵州" : selectedProvince === "yunnan" ? "云南" : selectedProvince === "shaanxi" ? "陕西" : selectedProvince === "gansu" ? "甘肃" : selectedProvince === "qinghai" ? "青海" : selectedProvince === "ningxia" ? "宁夏" : selectedProvince === "xinjiang" ? "新疆" : ""} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。</div>
+        <div className="text-sm text-muted-foreground mb-2">展示 {selectedProvince === "national" ? "全国" : selectedProvince === "beijing" ? "北京" : selectedProvince === "tianjin" ? "天津" : selectedProvince === "hebei" ? "河北" : selectedProvince === "shanxi" ? "山西" : selectedProvince === "neimenggu" ? "内蒙古" : selectedProvince === "liaoning" ? "辽宁" : selectedProvince === "jilin" ? "吉林" : selectedProvince === "heilongjiang" ? "黑龙江" : selectedProvince === "shanghai" ? "上海" : selectedProvince === "jiangsu" ? "江苏" : selectedProvince === "zhejiang" ? "浙江" : selectedProvince === "anhui" ? "安徽" : selectedProvince === "fujian" ? "福建" : selectedProvince === "jiangxi" ? "江西" : selectedProvince === "shandong" ? "山东" : selectedProvince === "henan" ? "河南" : selectedProvince === "hubei" ? "湖北" : selectedProvince === "hunan" ? "湖南" : selectedProvince === "guangdong" ? "广东" : selectedProvince === "guangxi" ? "广西" : selectedProvince === "hainan" ? "海南" : selectedProvince === "chongqing" ? "重庆" : selectedProvince === "sichuan" ? "四川" : selectedProvince === "guizhou" ? "贵州" : selectedProvince === "yunnan" ? "云南" : selectedProvince === "shaanxi" ? "陕西" : selectedProvince === "gansu" ? "甘肃" : selectedProvince === "qinghai" ? "青海" : selectedProvince === "ningxia" ? "宁夏" : selectedProvince === "xinjiang" ? "新疆" : ""} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。</div>
       </div>
 
       <div className="flex-1 flex flex-col p-4 overflow-auto">

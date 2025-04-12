@@ -350,6 +350,7 @@ export default function MainContent({
                   <SelectValue placeholder="选择省份" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="national">全国</SelectItem>
                   <SelectItem value="beijing">北京</SelectItem>
                   <SelectItem value="tianjin">天津</SelectItem>
                   <SelectItem value="hebei">河北</SelectItem>
@@ -414,3 +415,4 @@ export default function MainContent({
     </div>
   )
 }
+
