@@ -105,42 +105,42 @@ export default function MainContent({
               id: "coal-no-ccs",
               label: "无CCS",
               children: [
-                { id: "ECHPCOA", label: "ECHPCOA (煤基联合供热发电)" },
-                { id: "EPLTCOAUSC", label: "EPLTCOAUSC (超超临界煤电 - 空气冷却)" },
-                { id: "HPLTCOA", label: "HPLTCOA (煤基高温发电)" },
+                { id: "ECHPCOA", label: "煤基热电联产" },
+                { id: "EPLTCOAUSC", label: "超超临界燃煤发电" },
+                { id: "HPLTCOA", label: "煤基高温发电" },
               ],
             },
             {
               id: "coal-with-ccs",
               label: "带CCS",
               children: [
-                { id: "ECHPCOACCS", label: "ECHPCOACCS (带CCS的煤基联合供热发电)" },
-                { id: "EPLTCUSCCCS", label: "EPLTCUSCCCS (带CCS的超超临界煤电)" },
-                { id: "HPLTCOACCS", label: "HPLTCOACCS (带CCS的煤基高温发电)" },
+                { id: "ECHPCOACCS", label: "煤基热电联产 (带CCS)" },
+                { id: "EPLTCUSCCCS", label: "超超临界燃煤发电 (带CCS)" },
+                { id: "HPLTCOACCS", label: "煤基高温发电 (带CCS)" },
               ],
             },
           ],
         },
         {
           id: "gas-power",
-          label: "燃气",
+          label: "气电",
           children: [
             {
               id: "gas-no-ccs",
               label: "无CCS",
               children: [
-                { id: "ECHPNGA", label: "ECHPNGA (天然气联合供热发电)" },
-                { id: "EPLTNGANGCC", label: "EPLTNGANGCC (天然气联合循环发电 - 空气冷却)" },
-                { id: "HPLTGAS", label: "HPLTGAS (燃气高温发电)" },
+                { id: "ECHPNGA", label: "燃气热电联产" },
+                { id: "EPLTNGANGCC", label: "燃气联合循环 (NGCC)" },
+                { id: "HPLTGAS", label: "燃气高温发电" },
               ],
             },
             {
               id: "gas-with-ccs",
               label: "带CCS",
               children: [
-                { id: "ECHPNGACCS", label: "ECHPNGACCS (带CCS的天然气联合供热发电)" },
-                { id: "EPLTNGACCS", label: "EPLTNGACCS (带CCS的天然气联合循环发电 - 空气冷却)" },
-                { id: "HPLTGASCCS", label: "HPLTGASCCS (带CCS的燃气高温发电)" },
+                { id: "ECHPNGACCS", label: "燃气热电联产 (带CCS)" },
+                { id: "EPLTNGACCS", label: "燃气联合循环 (NGCC) (带CCS)" },
+                { id: "HPLTGASCCS", label: "燃气高温发电 (带CCS)" },
               ],
             },
           ],
@@ -148,33 +148,25 @@ export default function MainContent({
         {
           id: "nuclear",
           label: "核能",
-          children: [{ id: "EPLTNUC", label: "EPLTNUC (核电 - 一次性冷却)" }],
+          children: [{ id: "EPLTNUC", label: "核电" }],
         },
         {
           id: "hydro",
           label: "水电",
-          children: [{ id: "EPLTHYDL", label: "EPLTHYDL (大型水电)" }],
+          children: [{ id: "EPLTHYDL", label: "大型水电" }],
         },
         {
-          id: "wind",
+          id: "transformation-wind",
           label: "风电",
           children: [
-            {
-              id: "onshore-wind",
-              label: "陆上风电",
-              children: [{ id: "EPLTWINONS", label: "EPLTWINONS (陆上风电)" }],
-            },
-            {
-              id: "offshore-wind",
-              label: "海上风电",
-              children: [{ id: "EPLTWINOFS", label: "EPLTWINOFS (海上风电)" }],
-            },
+            { id: "EPLTWINONS", label: "陆上风电" },
+            { id: "EPLTWINOFS", label: "海上风电" }
           ],
         },
         {
-          id: "solar",
+          id: "transformation-solar",
           label: "太阳能",
-          children: [{ id: "EPLTSOLPV", label: "EPLTSOLPV (太阳能光伏)" }],
+          children: [{ id: "EPLTSOLPV", label: "太阳能光伏" }],
         },
         {
           id: "biomass",
@@ -184,23 +176,23 @@ export default function MainContent({
               id: "biomass-direct",
               label: "直接燃烧",
               children: [
-                { id: "ECHPBSL", label: "ECHPBSL (固体生物质燃烧联合供热发电)" },
-                { id: "HPLTBSL", label: "HPLTBSL (固体生物质高温发电)" },
+                { id: "ECHPBSL", label: "生物质热电联产" },
+                { id: "HPLTBSL", label: "生物质高温发电" },
               ],
             },
             {
               id: "biomass-mixed",
               label: "混烧",
-              children: [{ id: "EPLTBIOSLDC", label: "EPLTBIOSLDC (固体生物质混烧发电)" }],
+              children: [{ id: "EPLTBIOSLDC", label: "生物质混烧发电" }],
             },
             {
               id: "biomass-ccs",
               label: "带CCS/BECCS",
               children: [
-                { id: "ECHPBIOBSLDCCS", label: "ECHPBIOBSLDCCS (带CCS的固体生物质燃烧联合供热发电)" },
-                { id: "EPLTBSLDCCS", label: "EPLTBSLDCCS (固体生物质直接燃烧带CCS发电)" },
-                { id: "EPLTCBECCS", label: "EPLTCBECCS20-100 (固体生物质与煤混烧BECCS，比例20%-100%)" },
-                { id: "HPLTBSLCCS", label: "HPLTBSLCCS (带CCS的固体生物质高温发电)" },
+                { id: "ECHPBIOBSLDCCS", label: "生物质热电联产 (带CCS/BECCS)" },
+                { id: "EPLTBSLDCCS", label: "生物质直燃发电 (带CCS/BECCS)" },
+                { id: "EPLTCBECCS", label: "生物质与煤混烧 (BECCS)" },
+                { id: "HPLTBSLCCS", label: "生物质高温发电 (带CCS/BECCS)" },
               ],
             },
           ],
@@ -213,22 +205,22 @@ export default function MainContent({
               id: "oil-no-ccs",
               label: "无CCS",
               children: [
-                { id: "ECHPOIL", label: "ECHPOIL (油基联合供热发电)" },
-                { id: "EPLTOILST", label: "EPLTOILST (油蒸汽轮机发电)" },
-                { id: "HPLTOIL", label: "HPLTOIL (油基高温发电)" },
+                { id: "ECHPOIL", label: "燃油热电联产" },
+                { id: "EPLTOILST", label: "燃油蒸汽轮机发电" },
+                { id: "HPLTOIL", label: "燃油高温发电" },
               ],
             },
             {
               id: "oil-with-ccs",
               label: "带CCS",
-              children: [{ id: "HPLTOILCCS", label: "HPLTOILCCS (带CCS的油基高温发电)" }],
+              children: [{ id: "HPLTOILCCS", label: "燃油高温发电 (带CCS)" }],
             },
           ],
         },
         {
           id: "geothermal",
           label: "地热能",
-          children: [{ id: "HPLTGEO", label: "HPLTGEO (地热发电)" }],
+          children: [{ id: "HPLTGEO", label: "地热发电" }],
         },
       ],
     },
@@ -236,10 +228,10 @@ export default function MainContent({
       id: "hydrogen-production",
       label: "制氢技术",
       children: [
-        { id: "ALK", label: "ALK (碱性电解水制氢)" },
-        { id: "SOEC", label: "SOEC (固体氧化物电解水制氢)" },
-        { id: "AEM", label: "AEM (阴离子交换膜制氢)" },
-        { id: "PEM", label: "PEM (质子交换膜电解水制氢)" },
+        { id: "ALK", label: "碱性电解 (ALK)" },
+        { id: "SOEC", label: "固体氧化物电解 (SOEC)" },
+        { id: "AEM", label: "阴离子交换膜 (AEM)" },
+        { id: "PEM", label: "质子交换膜电解 (PEM)" },
       ],
     },
     {
@@ -268,10 +260,10 @@ export default function MainContent({
       id: "renewable", 
       label: "可再生能源",
       children: [
-        { id: "wind", label: "风能" },
-        { id: "solar", label: "太阳能" },
-        { id: "hydro", label: "水能" },
-        { id: "biomass", label: "生物质能" }
+        { id: "wind-resource", label: "风能" },
+        { id: "solar-resource", label: "太阳能" },
+        { id: "hydro-resource", label: "水能" },
+        { id: "biomass-resource", label: "生物质能" }
       ]
     }
   ]
