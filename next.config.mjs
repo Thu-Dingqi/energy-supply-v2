@@ -26,7 +26,8 @@ const nextConfig = {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
-  },
+  }
+  // 移除 webpack 配置部分
 }
 
 if (userConfig) {
@@ -49,3 +50,5 @@ if (userConfig) {
 }
 
 export default nextConfig
+
+

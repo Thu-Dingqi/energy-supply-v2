@@ -4,12 +4,13 @@ import { useState } from "react"
 import Navigation from "./navigation"
 import MainContent from "./main-content"
 import DataPanel from "./data-panel"
+import ResultPanel from "./result-panel"
 
 export type NavigationItem = "analysis" | "results" | "overview" | "note" | "return"
 export type ContentSection = "key-assumptions" | "demand" | "transformation" | "resources"
 
 export default function EnergyPlatform() {
-  const [activeNav, setActiveNav] = useState<NavigationItem>("analysis")
+  const [activeNav, setActiveNav] = useState<NavigationItem>("overview")
   const [activeSection, setActiveSection] = useState<ContentSection>("key-assumptions")
   const [selectedScenario, setSelectedScenario] = useState("cn60")
   const [selectedProvince, setSelectedProvince] = useState("beijing")
@@ -40,13 +41,22 @@ export default function EnergyPlatform() {
       )}
 
       {/* Right Column - Data/Charts/Explanation (increased proportionally) */}
-      <DataPanel
-        activeNav={activeNav}
-        activeSection={activeSection}
-        selectedNode={selectedNode}
-        selectedScenario={selectedScenario}
-        selectedProvince={selectedProvince}
-      />
+      {activeNav === "results" ? (
+        <ResultPanel
+          activeNav={activeNav}
+          selectedNode={selectedNode}
+          selectedScenario={selectedScenario}
+          selectedProvince={selectedProvince}
+        />
+      ) : (
+        <DataPanel
+          activeNav={activeNav}
+          activeSection={activeSection}
+          selectedNode={selectedNode}
+          selectedScenario={selectedScenario}
+          selectedProvince={selectedProvince}
+        />
+      )}
     </div>
   )
 }

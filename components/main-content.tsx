@@ -268,8 +268,54 @@ export default function MainContent({
     }
   ]
 
+  const resultsTree: TreeNode[] = [
+    {
+      id: "final-energy-consumption",
+      label: "终端用能需求",
+      children: [
+        { id: "demand-by-sector", label: "分部门" },
+        { id: "demand-by-fuel", label: "分燃料" },
+        {
+          id: "demand-by-sector-fuel",
+          label: "分部门分燃料",
+          children: [
+            { id: "agriculture-fuel", label: "农业" },
+            { id: "industry-fuel", label: "工业" },
+            { id: "construction-fuel", label: "建筑业" },
+            { id: "transportation-fuel", label: "交通运输" },
+            { id: "service-fuel", label: "服务业" },
+            { id: "residential-fuel", label: "居民生活" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "energy-supply",
+      label: "能源供应",
+      children: [
+        { id: "power-generation-mix", label: "发电结构" },
+        { id: "installed-power-capacity", label: "电力装机" },
+        { id: "new-installed-capacity", label: "新增电力装机" },
+        { id: "primary-energy-supply", label: "一次能源供应" },
+        { id: "hydrogen-supply", label: "氢能供应" },
+        { id: "net-electricity-export", label: "净调出电量" },
+      ]
+    },
+    {
+      id: "co2-emissions",
+      label: "二氧化碳排放",
+      children: [
+        { id: "emissions-by-sector", label: "分部门碳排放" }
+      ]
+    },
+  ]
+
   // Get the appropriate tree based on the active section
   const getActiveTree = () => {
+    if (activeNav === "results") {
+      return resultsTree;
+    }
+    
     switch (activeSection) {
       case "key-assumptions":
         return keyAssumptionsTree
@@ -339,18 +385,24 @@ export default function MainContent({
             </div>
           </div>
 
-          <Tabs
-            value={activeSection}
-            onValueChange={(value) => setActiveSection(value as ContentSection)}
-            className="w-full"
-          >
-            <TabsList className="grid grid-cols-4">
-              <TabsTrigger value="key-assumptions">关键假设</TabsTrigger>
-              <TabsTrigger value="demand">需求</TabsTrigger>
-              <TabsTrigger value="transformation">技术</TabsTrigger>
-              <TabsTrigger value="resources">资源</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          {activeNav !== "results" ? (
+            <Tabs
+              value={activeSection}
+              onValueChange={(value) => setActiveSection(value as ContentSection)}
+              className="w-full"
+            >
+              <TabsList className="grid grid-cols-4">
+                <TabsTrigger value="key-assumptions">关键假设</TabsTrigger>
+                <TabsTrigger value="demand">需求</TabsTrigger>
+                <TabsTrigger value="transformation">技术</TabsTrigger>
+                <TabsTrigger value="resources">资源</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          ) : (
+            <div className="p-2 text-center bg-secondary rounded-md">
+              <h3 className="text-md font-medium">结果数据</h3>
+            </div>
+          )}
         </div>
       </div>
 
