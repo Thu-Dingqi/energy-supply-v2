@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { NavigationItem, ContentSection } from "./energy-platform"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import EditableDataTable from "./editable-data-table"
 import SimpleChart from "./simple-chart"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 
 interface DataRow {
   indicator: string
@@ -1843,34 +1844,130 @@ export default function DataPanel({
         <div className="p-4 border-b border-border">
           <h3 className="text-lg font-medium">说明</h3>
         </div>
-        <ScrollArea className="flex-1 p-4">
-          <div className="max-w-3xl mx-auto space-y-8">
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-muted-foreground">
-                  本能源平台基于LEAP（长期能源替代规划系统）模型结构设计，主要包括关键假设、需求、转换和资源四个主要模块。
-                  平台支持多情景分析，可以对比不同政策和技术路径下的能源系统发展和碳排放轨迹。
-                </p>
-              </CardContent>
-            </Card>
+        
+        <div className="flex-1 p-6">
+          <div className="max-w-4xl mx-auto">
+            <Accordion type="single" collapsible className="w-full space-y-6">
+              {/* 功能介绍 */}
+              <Card className="border shadow-sm hover:shadow transition-all duration-200">
+                <AccordionItem value="introduction" className="border-none">
+                  <CardHeader className="p-0">
+                    <AccordionTrigger className="px-6 py-4">
+                      <h3 className="text-xl font-semibold">功能介绍</h3>
+                    </AccordionTrigger>
+                  </CardHeader>
+                  <AccordionContent>
+                    <CardContent className="px-6 pb-6 pt-2">
+                      <div className="space-y-4">
+                        <p>
+                          本能源平台为您提供一套强大的分析工具，旨在深入探索和可视化不同能源发展路径。通过模拟各种情景，平台帮助用户评估实现可持续能源目标和碳中和策略的可行性与影响。
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            <strong>情景对比与影响评估</strong>：轻松比较不同政策与技术假设下的能源系统表现（例如 CN60 碳中和情景），量化分析其对能源消费、生产结构及碳排放的具体影响。
+                          </li>
+                          <li>
+                            <strong>精细化区域分析</strong>：支持超过 30 个中国省份的选择，允许用户聚焦特定区域，结合当地资源禀赋、能源需求和基础设施特点，获得定制化的深度洞察。
+                          </li>
+                          <li>
+                            <strong>直观数据交互</strong>：通过清晰的树状目录结构和可编辑的数据表格，便捷地浏览和修改覆盖社会经济指标、分部门能源需求、能源转换技术及资源潜力的详细数据集。
+                          </li>
+                          <li>
+                            <strong>动态趋势可视化</strong>：利用多样化的图表工具（折线图、柱状图、饼图、堆叠面积图），生动展示 2025 年至 2060 年间能源需求、供应、排放及关键技术指标的演变趋势。
+                          </li>
+                          <li>
+                            <strong>深度技术参数剖析</strong>：详细审视各类发电、制氢及能源化工技术的关键参数，包括但不限于效率、容量因子、设备寿命及成本数据，支持精密的模型配置。
+                          </li>
+                          <li>
+                            <strong>综合结果呈现与决策支持</strong>：在结果面板集中查看关键输出，如能源供应结构、各类电源装机容量以及二氧化碳排放总量与构成，为政策制定者和研究人员提供坚实的数据支撑。
+                          </li>
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </AccordionContent>
+                </AccordionItem>
+              </Card>
 
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-medium mb-2">基本操作</h3>
-                    <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-                      <li>在顶部选择情景和省份进行分析</li>
-                      <li>使用左侧导航栏切换不同功能模块</li>
-                      <li>在中栏选择具体的分析对象</li>
-                      <li>在右栏查看相关数据和图表</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              {/* 模型结构 */}
+              <Card className="border shadow-sm hover:shadow transition-all duration-200">
+                <AccordionItem value="model-structure" className="border-none">
+                  <CardHeader className="p-0">
+                    <AccordionTrigger className="px-6 py-4">
+                      <h3 className="text-xl font-semibold">模型结构</h3>
+                    </AccordionTrigger>
+                  </CardHeader>
+                  <AccordionContent>
+                    <CardContent className="px-6 pb-6 pt-2">
+                      <div className="space-y-4">
+                        <p>
+                          平台的核心模型基于长期能源替代规划系统框架构建。通过模块化的设计，系统地模拟了能源系统的复杂互动关系，确保分析的全面性和一致性。
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            <strong>基础驱动：关键假设模块</strong>：设定模型运行的基础条件，涵盖宏观社会经济预测（人口、GDP、产业结构）以及关键技术参数（如部门能源强度、电气化水平、氢能渗透率等）。
+                          </li>
+                          <li>
+                            <strong>能源消费：需求模块</strong>：精细刻画六大终端用能部门（农业、工业、建筑、交通、服务业、居民生活）的能源消费活动，区分不同燃料类型（煤、油、气、电、氢等）的需求。
+                          </li>
+                          <li>
+                            <strong>能源转换：转换模块</strong>：模拟能源从一次能源向二次能源及终端能源转换的全过程，覆盖电力生产（火电、气电、核电、可再生能源发电）、氢气制取（ALK, PEM, SOEC, AEM 等技术）以及能源化工（如煤制油、炼油、焦化）等关键环节。
+                          </li>
+                          <li>
+                            <strong>供应与贸易：资源模块</strong>：追踪各类能源资源的供应潜力、开采、进口与出口情况，包括化石燃料（煤、油、气）、可再生能源（风、光、水、生物质）及其他重要商品（核燃料、氢、成品油等）。
+                          </li>
+                          <li>
+                            <strong>集成系统模拟</strong>：各模块紧密耦合，综合模拟能源在系统中的流动、技术的部署与迭代、以及伴随产生的环境排放，确保各项假设、需求、转换效率和资源约束得到统一考量。
+                          </li>
+                          <li>
+                            <strong>灵活扩展设计</strong>：模型框架具有良好的可扩展性，便于未来根据需要纳入新的能源技术或扩展到更细化的区域分析，适应不断发展的能源研究需求。
+                          </li>
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </AccordionContent>
+                </AccordionItem>
+              </Card>
+
+              {/* 使用说明 */}
+              <Card className="border shadow-sm hover:shadow transition-all duration-200">
+                <AccordionItem value="usage-guide" className="border-none">
+                  <CardHeader className="p-0">
+                    <AccordionTrigger className="px-6 py-4">
+                      <h3 className="text-xl font-semibold">使用说明</h3>
+                    </AccordionTrigger>
+                  </CardHeader>
+                  <AccordionContent>
+                    <CardContent className="px-6 pb-6 pt-2">
+                      <div className="space-y-4">
+                        <p>平台界面设计力求简洁直观，您可以按照以下步骤轻松完成能源系统分析并解读关键结果：</p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            <strong>步骤 1: 定义分析范围</strong>：首先，在页面顶部下拉菜单中选择您想研究的"情景"（如 CN60 碳中和）和"区域"（如北京）。这将设定您后续分析的宏观背景和地理边界。
+                          </li>
+                          <li>
+                            <strong>步骤 2: 访问数据模块</strong>：利用界面左侧的导航菜单，在"分析"、"结果"和"说明"视图间切换。在"分析"视图下，您可以访问"关键假设"、"需求"、"转换"和"资源"四大核心数据模块。
+                          </li>
+                          <li>
+                            <strong>步骤 3: 定位具体数据</strong>：在中间栏的树状目录中，点击展开并选择您感兴趣的具体条目（例如，"人口"、"煤电技术"、"风能资源"等），右侧将加载对应的数据。
+                          </li>
+                          <li>
+                            <strong>步骤 4: 互动分析与编辑</strong>：在右侧面板，您可以查看所选条目的数据表格和自动生成的图表。对于技术类条目，还可切换查看不同参数（如效率、成本）。您可以直接在表格中修改数值，以快速测试不同假设的影响。
+                          </li>
+                          <li>
+                            <strong>步骤 5: 可视化数据洞察</strong>：根据需要，在图表区域选择不同的图表类型（折线、柱状、饼图、堆叠图）来更直观地理解数据随时间的变化趋势或结构占比。
+                          </li>
+                          <li>
+                            <strong>步骤 6: 查看综合结果</strong>：完成数据审阅和调整后，切换到"结果"视图。这里汇总了模型计算的核心输出，如能源供应总量与结构、发电装机容量、分部门/分燃料的 CO2 排放等。
+                          </li>
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </AccordionContent>
+                </AccordionItem>
+              </Card>
+            </Accordion>
           </div>
-        </ScrollArea>
+        </div>
       </div>
     )
   }
