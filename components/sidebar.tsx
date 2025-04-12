@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, BarChart3, FileText, Home, PieChart } from "lucide-react"
+import { ArrowLeft, BarChart3, FileText, PieChart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import type { NavigationItem } from "./energy-platform"
@@ -14,7 +14,6 @@ export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
   const navItems = [
     { id: "analysis" as const, icon: BarChart3, label: "分析" },
     { id: "results" as const, icon: PieChart, label: "结果" },
-    { id: "overview" as const, icon: Home, label: "总览" },
     { id: "note" as const, icon: FileText, label: "说明" },
     { 
       id: "return" as const, 
@@ -51,3 +50,4 @@ export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
     </div>
   )
 }
+

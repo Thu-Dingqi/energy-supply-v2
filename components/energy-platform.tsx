@@ -6,7 +6,7 @@ import MainContent from "./main-content"
 import DataPanel from "./data-panel"
 import ResultPanel from "./result-panel"
 
-export type NavigationItem = "analysis" | "results" | "overview" | "note" | "return"
+export type NavigationItem = "analysis" | "results" | "note" | "return"
 export type ContentSection = "key-assumptions" | "demand" | "transformation" | "resources"
 
 export default function EnergyPlatform() {
@@ -60,3 +60,4 @@ export default function EnergyPlatform() {
     </div>
   )
 }
+

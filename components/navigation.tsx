@@ -12,7 +12,6 @@ export default function Navigation({ activeNav, setActiveNav }: NavigationProps)
   const navItems = [
     { id: "analysis" as const, icon: BarChart3, label: "分析" },
     { id: "results" as const, icon: PieChart, label: "结果" },
-    { id: "overview" as const, icon: Home, label: "总览" },
     { id: "note" as const, icon: FileText, label: "说明" },
     { 
       id: "return" as const, 
@@ -43,3 +42,4 @@ export default function Navigation({ activeNav, setActiveNav }: NavigationProps)
     </div>
   )
 }
+

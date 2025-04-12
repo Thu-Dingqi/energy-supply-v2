@@ -1880,7 +1880,7 @@ export default function DataPanel({
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">
-            {activeNav === "analysis" ? "数据分析" : activeNav === "results" ? "结果展示" : "总览"}
+            {activeNav === "analysis" ? "数据分析" : activeNav === "results" ? "结果展示" : "说明"}
           </h3>
           {nodeTitle && <div className="text-sm text-muted-foreground">当前选择: {nodeTitle}</div>}
         </div>
