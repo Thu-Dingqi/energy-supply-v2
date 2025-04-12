@@ -7,7 +7,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { NavigationItem, ContentSection } from "./energy-platform"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import EditableDataTable from "./editable-data-table"
-import SimpleChart from "./simple-chart"
+import dynamic from 'next/dynamic'
+const RechartsChart = dynamic(() => import('@/components/recharts-chart'), { 
+  ssr: false,
+  loading: () => <div>Loading...</div>  // 添加loading状态
+})
 
 interface DataRow {
   indicator: string
@@ -1952,7 +1956,7 @@ export default function DataPanel({
 
               <Card className="h-[400px]">
                 <CardContent className="p-6">
-                  <SimpleChart type={chartType} data={tableData} title={nodeTitle} />
+                  <RechartsChart type={chartType} data={tableData} title={nodeTitle} />
                 </CardContent>
               </Card>
             </div>
@@ -1966,3 +1970,6 @@ export default function DataPanel({
     </div>
   )
 }
+
+
+

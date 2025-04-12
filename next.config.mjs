@@ -27,6 +27,12 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.devtool = 'source-map';
+    }
+    return config;
+  }
 }
 
 if (userConfig) {
@@ -49,3 +55,4 @@ if (userConfig) {
 }
 
 export default nextConfig
+
