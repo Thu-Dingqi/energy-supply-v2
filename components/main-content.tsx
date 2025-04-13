@@ -335,7 +335,7 @@ export default function MainContent({
       <div className="p-4 border-b border-border">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">能源平台</h2>
+            <h2 className="text-xl font-semibold">全国能源供需平台</h2>
             <div className="flex gap-2">
               <Select value={selectedScenario} onValueChange={setSelectedScenario}>
                 <SelectTrigger className="w-[120px]">
@@ -351,36 +351,6 @@ export default function MainContent({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="national">全国</SelectItem>
-                  <SelectItem value="beijing">北京</SelectItem>
-                  <SelectItem value="tianjin">天津</SelectItem>
-                  <SelectItem value="hebei">河北</SelectItem>
-                  <SelectItem value="shanxi">山西</SelectItem>
-                  <SelectItem value="neimenggu">内蒙古</SelectItem>
-                  <SelectItem value="liaoning">辽宁</SelectItem>
-                  <SelectItem value="jilin">吉林</SelectItem>
-                  <SelectItem value="heilongjiang">黑龙江</SelectItem>
-                  <SelectItem value="shanghai">上海</SelectItem>
-                  <SelectItem value="jiangsu">江苏</SelectItem>
-                  <SelectItem value="zhejiang">浙江</SelectItem>
-                  <SelectItem value="anhui">安徽</SelectItem>
-                  <SelectItem value="fujian">福建</SelectItem>
-                  <SelectItem value="jiangxi">江西</SelectItem>
-                  <SelectItem value="shandong">山东</SelectItem>
-                  <SelectItem value="henan">河南</SelectItem>
-                  <SelectItem value="hubei">湖北</SelectItem>
-                  <SelectItem value="hunan">湖南</SelectItem>
-                  <SelectItem value="guangdong">广东</SelectItem>
-                  <SelectItem value="guangxi">广西</SelectItem>
-                  <SelectItem value="hainan">海南</SelectItem>
-                  <SelectItem value="chongqing">重庆</SelectItem>
-                  <SelectItem value="sichuan">四川</SelectItem>
-                  <SelectItem value="guizhou">贵州</SelectItem>
-                  <SelectItem value="yunnan">云南</SelectItem>
-                  <SelectItem value="shaanxi">陕西</SelectItem>
-                  <SelectItem value="gansu">甘肃</SelectItem>
-                  <SelectItem value="qinghai">青海</SelectItem>
-                  <SelectItem value="ningxia">宁夏</SelectItem>
-                  <SelectItem value="xinjiang">新疆</SelectItem>
                 </SelectContent>
               </Select>
             </div>

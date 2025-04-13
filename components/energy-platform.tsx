@@ -13,7 +13,7 @@ export default function EnergyPlatform() {
   const [activeNav, setActiveNav] = useState<NavigationItem>("overview")
   const [activeSection, setActiveSection] = useState<ContentSection>("key-assumptions")
   const [selectedScenario, setSelectedScenario] = useState("cn60")
-  const [selectedProvince, setSelectedProvince] = useState("beijing")
+  const [selectedProvince, setSelectedProvince] = useState("national")
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
 
   const handleNodeSelect = (nodeId: string) => {
