@@ -345,7 +345,7 @@ export default function MainContent({
       id: "co2-emissions",
       label: "二氧化碳排放",
       children: [
-        { id: "emissions-by-sector", label: "分部门碳排放" }
+        { id: "emissions-by-industry", label: "分行业碳排放" }
       ]
     },
   ]
