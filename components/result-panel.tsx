@@ -6972,43 +6972,49 @@ export default function ResultPanel({
           
           console.log(`尝试匹配行业: ${selectedNode}, 编号: ${industryNumber}, 名称: ${industryName}`)
           
-          // 筛选出该行业的所有数据，采用更灵活的匹配方式
-          // 规范化字符串以处理符号差异（如"."和"、"的区别）
+          // 规范化字符串以处理符号差异
           const normalizeStr = (str: string) => {
             return str.replace(/[.,、]/g, '') // 移除常见的分隔符
                       .replace(/\s+/g, '')    // 移除空格
           }
           
-          const normalizedIndustryName = normalizeStr(industryName)
+          // 根据激活的导航项和节点判断数据源
+          if (activeNav === "results" && selectedNode.match(/^\d+/)) {
+            // 检查该节点是否是从"emissions-by-industry"（分行业碳排放）分类下选择的
+            // 通过查看这个行业数据是否存在于emissions-by-industry中来判断
+            const emissionsData = resultDataSets["emissions-by-industry"].data.filter(
+              row => row.indicator === selectedNode
+            )
+            
+            if (emissionsData.length > 0) {
+              // 如果是碳排放数据，直接显示碳排放数据
+              setTableData(emissionsData)
+              setNodeTitle(`${emissionsData[0].indicator}碳排放`)
+              setChartType("line")
+              setCurrentNode(selectedNode)
+              return // 找到了碳排放数据，直接返回
+            }
+          }
           
-          const industryData = resultDataSets["demand-by-sector-fuel"].data.filter(
+          // 如果不是碳排放数据或未找到碳排放数据，尝试查找需求数据
+          let industryData = resultDataSets["demand-by-sector-fuel"].data.filter(
             row => {
-              // 从indicator中提取行业信息
               const rowMatch = row.indicator.match(/^(\d+)([^-]+)/)
               if (rowMatch && rowMatch[1] === industryNumber) {
-                const rowIndustryName = normalizeStr(rowMatch[2])
-                
-                // 只需要匹配编号，因为名称可能有细微差异
-                const isMatch = rowMatch[1] === industryNumber
-                if (isMatch) {
-                  console.log(`匹配成功: ${row.indicator}`)
-                }
-                return isMatch
+                return true
               }
               return false
             }
           )
           
-          console.log(`找到 ${industryData.length} 条匹配数据`)
-          
           if (industryData.length > 0) {
+            // 使用找到的demand-by-sector-fuel数据
             setTableData(industryData)
             
             // 使用完整的行业名称作为标题
             let displayName = selectedNode
             const firstRow = industryData[0]
             if (firstRow && firstRow.indicator) {
-              // 从第一行数据中提取行业名称，更准确
               const nameMatch = firstRow.indicator.match(/^(\d+[^-]+)/)
               if (nameMatch) {
                 displayName = nameMatch[1]
@@ -7035,7 +7041,7 @@ export default function ResultPanel({
         setCurrentNode(null)
       }
     }
-  }, [selectedNode, currentNode])
+  }, [selectedNode, currentNode, activeNav])
 
   // 数据更新处理函数
   const handleDataChange = (newData: DataRow[]) => {
@@ -7076,7 +7082,14 @@ export default function ResultPanel({
               <p>请在左侧选择具体的行业以查看其分燃料用能需求数据</p>
             </div>
           </div>
-        ) : (selectedNode && tableData.length > 0) ? (
+        ) : selectedNode === "emissions-by-industry" ? (
+          <div className="flex items-center justify-center h-full text-muted-foreground">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-4">分行业碳排放</h3>
+              <p>请在左侧选择具体的行业以查看其碳排放数据</p>
+            </div>
+          </div>
+        ) : tableData.length > 0 ? (
           <>
             {/* 数据表格部分 */}
             <div className="mb-6">

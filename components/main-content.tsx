@@ -46,49 +46,295 @@ export default function MainContent({
       ],
     },
     {
-      id: "sector-parameters",
-      label: "部门参数",
+      id: "industry-parameters",
+      label: "行业参数",
       children: [
-        { id: "agriculture", label: "农业" },
-        { id: "industry", label: "工业" },
-        { id: "construction", label: "建筑业" },
-        { id: "transportation", label: "交通运输" },
-        { id: "service", label: "服务业" },
-        { id: "residential", label: "居民生活" },
+        { id: "sector1-para", label: "1农、林、牧、渔业" },
+        { id: "sector2-para", label: "2煤炭开采和洗选业" },
+        { id: "sector3-para", label: "3石油和天然气开采业" },
+        { id: "sector4-para", label: "4黑色金属矿采选业" },
+        { id: "sector5-para", label: "5有色金属矿采选业" },
+        { id: "sector6-para", label: "6非金属矿采选业" },
+        { id: "sector7-para", label: "7其他采矿业" },
+        { id: "sector8-para", label: "8农副食品加工业" },
+        { id: "sector9-para", label: "9食品制造业" },
+        { id: "sector10-para", label: "10酒.饮料和精制茶制造业" },
+        { id: "sector11-para", label: "11烟草制品业" },
+        { id: "sector12-para", label: "12纺织业" },
+        { id: "sector13-para", label: "13纺织服装.服饰业" },
+        { id: "sector14-para", label: "14皮革.毛皮.羽毛及其制品和制鞋业" },
+        { id: "sector15-para", label: "15木材加工和木.竹.藤.棕.草制品业" },
+        { id: "sector16-para", label: "16家具制造业" },
+        { id: "sector17-para", label: "17造纸和纸制品业" },
+        { id: "sector18-para", label: "18印刷和记录媒介复制业" },
+        { id: "sector19-para", label: "19文教.工美.体育和娱乐用品制造业" },
+        { id: "sector20-para", label: "20石油.煤炭及其他燃料加工业" },
+        { id: "sector21-para", label: "21化学原料和化学制品制造业" },
+        { id: "sector22-para", label: "22医药制造业" },
+        { id: "sector23-para", label: "23化学纤维制造业" },
+        { id: "sector24-para", label: "24橡胶和塑料制品业" },
+        { id: "sector25-para", label: "25非金属矿物制品业" },
+        { id: "sector26-para", label: "26黑色金属冶炼和压延加工业" },
+        { id: "sector27-para", label: "27有色金属冶炼和压延加工业" },
+        { id: "sector28-para", label: "28金属制品业" },
+        { id: "sector29-para", label: "29通用设备制造业" },
+        { id: "sector30-para", label: "30专用设备制造业" },
+        { id: "sector31-para", label: "31汽车制造业" },
+        { id: "sector32-para", label: "32铁路.船舶.航空航天和其他运输设备制造业" },
+        { id: "sector33-para", label: "33电气机械和器材制造业" },
+        { id: "sector34-para", label: "34计算机.通信和其他电子设备制造业" },
+        { id: "sector35-para", label: "35仪器仪表制造业" },
+        { id: "sector36-para", label: "36其他制造业" },
+        { id: "sector37-para", label: "37废弃资利用业" },
+        { id: "sector38-para", label: "38金属制品.机械和设备修理业" },
+        { id: "sector39-para", label: "39电力.热力生产和供应业" },
+        { id: "sector40-para", label: "40燃气生产和供应业" },
+        { id: "sector41-para", label: "41水的生产和供应业" },
+        { id: "sector42-para", label: "42建筑业" },
+        { id: "sector43-para", label: "43交通运输、仓储和邮政业" },
+        { id: "sector44-para", label: "44批发和零售业、住宿和餐饮业" },
+        { id: "sector45-para", label: "45其他行业" },
+        { id: "sector46-para", label: "46城镇居民" },
+        { id: "sector47-para", label: "47乡村居民" },
       ],
     },
   ]
 
   const demandTree: TreeNode[] = [
     {
-      id: "agriculture-demand",
-      label: "农业",
-      children: [{ id: "agriculture-energy", label: "终端用能需求" }],
+      id: "sector1-demand",
+      label: "1农、林、牧、渔业",
+      children: [{ id: "sector1-fe", label: "终端用能需求" }],
     },
     {
-      id: "industry-demand",
-      label: "工业",
-      children: [{ id: "industry-energy", label: "终端用能需求" }],
+      id: "sector2-demand",
+      label: "2煤炭开采和洗选业",
+      children: [{ id: "sector2-fe", label: "终端用能需求" }],
     },
     {
-      id: "construction-demand",
-      label: "建筑业",
-      children: [{ id: "construction-energy", label: "终端用能需求" }],
+      id: "sector3-demand",
+      label: "3石油和天然气开采业",
+      children: [{ id: "sector3-fe", label: "终端用能需求" }],
     },
     {
-      id: "transportation-demand",
-      label: "交通运输",
-      children: [{ id: "transportation-energy", label: "终端用能需求" }],
+      id: "sector4-demand",
+      label: "4黑色金属矿采选业",
+      children: [{ id: "sector4-fe", label: "终端用能需求" }],
     },
     {
-      id: "service-demand",
-      label: "服务业",
-      children: [{ id: "service-energy", label: "终端用能需求" }],
+      id: "sector5-demand",
+      label: "5有色金属矿采选业",
+      children: [{ id: "sector5-fe", label: "终端用能需求" }],
     },
     {
-      id: "residential-demand",
-      label: "居民生活",
-      children: [{ id: "residential-energy", label: "终端用能需求" }],
+      id: "sector6-demand",
+      label: "6非金属矿采选业",
+      children: [{ id: "sector6-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector7-demand",
+      label: "7其他采矿业",
+      children: [{ id: "sector7-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector8-demand",
+      label: "8农副食品加工业",
+      children: [{ id: "sector8-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector9-demand",
+      label: "9食品制造业",
+      children: [{ id: "sector9-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector10-demand",
+      label: "10酒.饮料和精制茶制造业",
+      children: [{ id: "sector10-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector11-demand",
+      label: "11烟草制品业",
+      children: [{ id: "sector11-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector12-demand",
+      label: "12纺织业",
+      children: [{ id: "sector12-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector13-demand",
+      label: "13纺织服装.服饰业",
+      children: [{ id: "sector13-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector14-demand",
+      label: "14皮革.毛皮.羽毛及其制品和制鞋业",
+      children: [{ id: "sector14-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector15-demand",
+      label: "15木材加工和木.竹.藤.棕.草制品业",
+      children: [{ id: "sector15-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector16-demand",
+      label: "16家具制造业",
+      children: [{ id: "sector16-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector17-demand",
+      label: "17造纸和纸制品业",
+      children: [{ id: "sector17-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector18-demand",
+      label: "18印刷和记录媒介复制业",
+      children: [{ id: "sector18-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector19-demand",
+      label: "19文教.工美.体育和娱乐用品制造业",
+      children: [{ id: "sector19-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector20-demand",
+      label: "20石油.煤炭及其他燃料加工业",
+      children: [{ id: "sector20-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector21-demand",
+      label: "21化学原料和化学制品制造业",
+      children: [{ id: "sector21-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector22-demand",
+      label: "22医药制造业",
+      children: [{ id: "sector22-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector23-demand",
+      label: "23化学纤维制造业",
+      children: [{ id: "sector23-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector24-demand",
+      label: "24橡胶和塑料制品业",
+      children: [{ id: "sector24-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector25-demand",
+      label: "25非金属矿物制品业",
+      children: [{ id: "sector25-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector26-demand",
+      label: "26黑色金属冶炼和压延加工业",
+      children: [{ id: "sector26-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector27-demand",
+      label: "27有色金属冶炼和压延加工业",
+      children: [{ id: "sector27-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector28-demand",
+      label: "28金属制品业",
+      children: [{ id: "sector28-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector29-demand",
+      label: "29通用设备制造业",
+      children: [{ id: "sector29-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector30-demand",
+      label: "30专用设备制造业",
+      children: [{ id: "sector30-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector31-demand",
+      label: "31汽车制造业",
+      children: [{ id: "sector31-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector32-demand",
+      label: "32铁路.船舶.航空航天和其他运输设备制造业",
+      children: [{ id: "sector32-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector33-demand",
+      label: "33电气机械和器材制造业",
+      children: [{ id: "sector33-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector34-demand",
+      label: "34计算机.通信和其他电子设备制造业",
+      children: [{ id: "sector34-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector35-demand",
+      label: "35仪器仪表制造业",
+      children: [{ id: "sector35-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector36-demand",
+      label: "36其他制造业",
+      children: [{ id: "sector36-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector37-demand",
+      label: "37废弃资利用业",
+      children: [{ id: "sector37-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector38-demand",
+      label: "38金属制品.机械和设备修理业",
+      children: [{ id: "sector38-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector39-demand",
+      label: "39电力.热力生产和供应业",
+      children: [{ id: "sector39-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector40-demand",
+      label: "40燃气生产和供应业",
+      children: [{ id: "sector40-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector41-demand",
+      label: "41水的生产和供应业",
+      children: [{ id: "sector41-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector42-demand",
+      label: "42建筑业",
+      children: [{ id: "sector42-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector43-demand",
+      label: "43交通运输、仓储和邮政业",
+      children: [{ id: "sector43-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector44-demand",
+      label: "44批发和零售业、住宿和餐饮业",
+      children: [{ id: "sector44-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector45-demand",
+      label: "45其他行业",
+      children: [{ id: "sector45-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector46-demand",
+      label: "46城镇居民",
+      children: [{ id: "sector46-fe", label: "终端用能需求" }],
+    },
+    {
+      id: "sector47-demand",
+      label: "47乡村居民",
+      children: [{ id: "sector47-fe", label: "终端用能需求" }],
     },
   ]
 
@@ -278,6 +524,77 @@ export default function MainContent({
           id: "demand-by-sector-fuel",
           label: "分部门分燃料",
           children: [
+            { id: "1农、林、牧、渔业-FE", label: "1农、林、牧、渔业" },
+            { id: "2煤炭开采和洗选业-FE", label: "2煤炭开采和洗选业" },
+            { id: "3石油和天然气开采业-FE", label: "3石油和天然气开采业" },
+            { id: "4黑色金属矿采选业-FE", label: "4黑色金属矿采选业" },
+            { id: "5有色金属矿采选业-FE", label: "5有色金属矿采选业" },
+            { id: "6非金属矿采选业-FE", label: "6非金属矿采选业" },
+            { id: "7其他采矿业-FE", label: "7其他采矿业" },
+            { id: "8农副食品加工业-FE", label: "8农副食品加工业" },
+            { id: "9食品制造业-FE", label: "9食品制造业" },
+            { id: "10酒.饮料和精制茶制造业-FE", label: "10酒.饮料和精制茶制造业" },
+            { id: "11烟草制品业-FE", label: "11烟草制品业" },
+            { id: "12纺织业-FE", label: "12纺织业" },
+            { id: "13纺织服装.服饰业-FE", label: "13纺织服装.服饰业" },
+            { id: "14皮革.毛皮.羽毛及其制品和制鞋业-FE", label: "14皮革.毛皮.羽毛及其制品和制鞋业" },
+            { id: "15木材加工和木.竹.藤.棕.草制品业-FE", label: "15木材加工和木.竹.藤.棕.草制品业" },
+            { id: "16家具制造业-FE", label: "16家具制造业" },
+            { id: "17造纸和纸制品业-FE", label: "17造纸和纸制品业" },
+            { id: "18印刷和记录媒介复制业-FE", label: "18印刷和记录媒介复制业" },
+            { id: "19文教.工美.体育和娱乐用品制造业-FE", label: "19文教.工美.体育和娱乐用品制造业" },
+            { id: "20石油.煤炭及其他燃料加工业-FE", label: "20石油.煤炭及其他燃料加工业" },
+            { id: "21化学原料和化学制品制造业-FE", label: "21化学原料和化学制品制造业" },
+            { id: "22医药制造业-FE", label: "22医药制造业" },
+            { id: "23化学纤维制造业-FE", label: "23化学纤维制造业" },
+            { id: "24橡胶和塑料制品业-FE", label: "24橡胶和塑料制品业" },
+            { id: "25非金属矿物制品业-FE", label: "25非金属矿物制品业" },
+            { id: "26黑色金属冶炼和压延加工业-FE", label: "26黑色金属冶炼和压延加工业" },
+            { id: "27有色金属冶炼和压延加工业-FE", label: "27有色金属冶炼和压延加工业" },
+            { id: "28金属制品业-FE", label: "28金属制品业" },
+            { id: "29通用设备制造业-FE", label: "29通用设备制造业" },
+            { id: "30专用设备制造业-FE", label: "30专用设备制造业" },
+            { id: "31汽车制造业-FE", label: "31汽车制造业" },
+            { id: "32铁路.船舶.航空航天和其他运输设备制造业-FE", label: "32铁路.船舶.航空航天和其他运输设备制造业" },
+            { id: "33电气机械和器材制造业-FE", label: "33电气机械和器材制造业" },
+            { id: "34计算机.通信和其他电子设备制造业-FE", label: "34计算机.通信和其他电子设备制造业" },
+            { id: "35仪器仪表制造业-FE", label: "35仪器仪表制造业" },
+            { id: "36其他制造业-FE", label: "36其他制造业" },
+            { id: "37废弃资利用业-FE", label: "37废弃资利用业" },
+            { id: "38金属制品.机械和设备修理业-FE", label: "38金属制品.机械和设备修理业" },
+            { id: "39电力.热力生产和供应业-FE", label: "39电力.热力生产和供应业" },
+            { id: "40燃气生产和供应业-FE", label: "40燃气生产和供应业" },
+            { id: "41水的生产和供应业-FE", label: "41水的生产和供应业" },
+            { id: "42建筑业-FE", label: "42建筑业" },
+            { id: "43交通运输、仓储和邮政业-FE", label: "43交通运输、仓储和邮政业" },
+            { id: "44批发和零售业、住宿和餐饮业-FE", label: "44批发和零售业、住宿和餐饮业" },
+            { id: "45其他行业-FE", label: "45其他行业" },
+            { id: "46城镇居民-FE", label: "46城镇居民" },
+            { id: "47乡村居民-FE", label: "47乡村居民" }
+          ]
+        },
+      ]
+    },
+    {
+      id: "energy-supply",
+      label: "能源供应",
+      children: [
+        { id: "power-generation-mix", label: "发电结构" },
+        { id: "installed-power-capacity", label: "电力装机" },
+        { id: "new-installed-capacity", label: "新增电力装机" },
+        { id: "primary-energy-supply", label: "一次能源供应" },
+        { id: "hydrogen-supply", label: "氢能供应" },
+        { id: "net-electricity-export", label: "净调出电量" },
+      ]
+    },
+    {
+      id: "co2-emissions",
+      label: "二氧化碳排放",
+      children: [
+        {
+          id: "emissions-by-industry",
+          label: "分行业碳排放",
+          children: [
             { id: "1农、林、牧、渔业", label: "1农、林、牧、渔业" },
             { id: "2煤炭开采和洗选业", label: "2煤炭开采和洗选业" },
             { id: "3石油和天然气开采业", label: "3石油和天然气开采业" },
@@ -326,26 +643,7 @@ export default function MainContent({
             { id: "46城镇居民", label: "46城镇居民" },
             { id: "47乡村居民", label: "47乡村居民" }
           ]
-        },
-      ]
-    },
-    {
-      id: "energy-supply",
-      label: "能源供应",
-      children: [
-        { id: "power-generation-mix", label: "发电结构" },
-        { id: "installed-power-capacity", label: "电力装机" },
-        { id: "new-installed-capacity", label: "新增电力装机" },
-        { id: "primary-energy-supply", label: "一次能源供应" },
-        { id: "hydrogen-supply", label: "氢能供应" },
-        { id: "net-electricity-export", label: "净调出电量" },
-      ]
-    },
-    {
-      id: "co2-emissions",
-      label: "二氧化碳排放",
-      children: [
-        { id: "emissions-by-industry", label: "分行业碳排放" }
+        }
       ]
     },
   ]
@@ -425,4 +723,5 @@ export default function MainContent({
     </div>
   )
 }
+
 
