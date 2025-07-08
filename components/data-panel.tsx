@@ -1522,22 +1522,22 @@ export default function DataPanel({
     EPLTHYDL: {
       title: "EPLTHYDL (大型水电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTHYDL", 90, 45, 80, 12000, 120, 0.01),
+      techData: generatePowerTechData("EPLTHYDL", 60, 45, 80, 12000, 120, 0.01),
     },
     EPLTWINONS: {
       title: "EPLTWINONS (陆上风电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTWINONS", 100, 25, 25, 7000, 210, 0.02),
+      techData: generatePowerTechData("EPLTWINONS", 45, 25, 25, 7000, 210, 0.02),
     },
     EPLTWINOFS: {
       title: "EPLTWINOFS (海上风电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTWINOFS", 100, 35, 25, 12000, 360, 0.03),
+      techData: generatePowerTechData("EPLTWINOFS", 50, 35, 25, 12000, 360, 0.03),
     },
     EPLTSOLPV: {
       title: "EPLTSOLPV (太阳能光伏)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTSOLPV", 100, 18, 25, 5000, 150, 0.01),
+      techData: generatePowerTechData("EPLTSOLPV", 60, 18, 25, 5000, 150, 0.01),
     },
     ECHPBSL: {
       title: "ECHPBSL (固体生物质燃烧联合供热发电)",
@@ -1597,7 +1597,7 @@ export default function DataPanel({
     HPLTGEO: {
       title: "HPLTGEO (地热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTGEO", 100, 80, 30, 14000, 420, 0.02),
+      techData: generatePowerTechData("HPLTGEO", 34, 80, 30, 14000, 420, 0.02),
     },
 
     // Hydrogen production technologies
@@ -1626,29 +1626,29 @@ export default function DataPanel({
     ATM: {
       title: "ATM (常压蒸馏)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ATM", 90, 92, 30, 10000, 300, 0.02),
+      techData: generatePowerTechData("ATM", 60, 92, 30, 10000, 300, 0.02),
     },
     FCC: {
       title: "FCC (流化催化裂化)",
       isEnergyTech: true,
-      techData: generatePowerTechData("FCC", 85, 90, 25, 12000, 360, 0.025),
+      techData: generatePowerTechData("FCC", 45, 90, 25, 12000, 360, 0.025),
     },
     HYD: {
       title: "HYD (加氢裂化)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HYD", 88, 88, 28, 15000, 450, 0.03),
+      techData: generatePowerTechData("HYD", 56, 88, 28, 15000, 450, 0.03),
     },
 
     // Coking technologies
     CONV: {
       title: "CONV (常规焦炉炼焦)",
       isEnergyTech: true,
-      techData: generatePowerTechData("CONV", 80, 85, 30, 9000, 270, 0.04),
+      techData: generatePowerTechData("CONV", 60, 85, 30, 9000, 270, 0.04),
     },
     HR: {
       title: "HR (热回收焦炉炼焦)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HR", 85, 88, 25, 11000, 330, 0.035),
+      techData: generatePowerTechData("HR", 55, 88, 25, 11000, 330, 0.035),
     },
 
     // 添加能源化工技术的数据
@@ -1683,7 +1683,7 @@ export default function DataPanel({
       isEnergyTech: true,
       techData: generateChemicalTechData(
         "oil-refining",
-        92,    // 转化效率
+        42,    // 转化效率
         90,    // 可用系数
         35,    // 寿期
         8000,  // 投资成本
@@ -1696,7 +1696,7 @@ export default function DataPanel({
       isEnergyTech: true,
       techData: generateChemicalTechData(
         "coking",
-        88,    // 转化效率
+        48,    // 转化效率
         85,    // 可用系数
         30,    // 寿期
         7000,  // 投资成本
@@ -1981,7 +1981,7 @@ export default function DataPanel({
           </h3>
           {nodeTitle && <div className="text-sm text-muted-foreground">当前选择: {nodeTitle}</div>}
         </div>
-        <div className="text-sm text-muted-foreground mb-2">展示 {selectedProvince === "national" ? "全国" : selectedProvince === "beijing" ? "北京" : selectedProvince === "tianjin" ? "天津" : selectedProvince === "hebei" ? "河北" : selectedProvince === "shanxi" ? "山西" : selectedProvince === "neimenggu" ? "内蒙古" : selectedProvince === "liaoning" ? "辽宁" : selectedProvince === "jilin" ? "吉林" : selectedProvince === "heilongjiang" ? "黑龙江" : selectedProvince === "shanghai" ? "上海" : selectedProvince === "jiangsu" ? "江苏" : selectedProvince === "zhejiang" ? "浙江" : selectedProvince === "anhui" ? "安徽" : selectedProvince === "fujian" ? "福建" : selectedProvince === "jiangxi" ? "江西" : selectedProvince === "shandong" ? "山东" : selectedProvince === "henan" ? "河南" : selectedProvince === "hubei" ? "湖北" : selectedProvince === "hunan" ? "湖南" : selectedProvince === "guangdong" ? "广东" : selectedProvince === "guangxi" ? "广西" : selectedProvince === "hainan" ? "海南" : selectedProvince === "chongqing" ? "重庆" : selectedProvince === "sichuan" ? "四川" : selectedProvince === "guizhou" ? "贵州" : selectedProvince === "yunnan" ? "云南" : selectedProvince === "shaanxi" ? "陕西" : selectedProvince === "gansu" ? "甘肃" : selectedProvince === "qinghai" ? "青海" : selectedProvince === "ningxia" ? "宁夏" : selectedProvince === "xinjiang" ? "新疆" : ""} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。</div>
+        <div className="text-sm text-muted-foreground mb-2">展示 {selectedProvince === "beijing" ? "北京" : selectedProvince === "tianjin" ? "天津" : selectedProvince === "hebei" ? "河北" : selectedProvince === "shanxi" ? "山西" : selectedProvince === "neimenggu" ? "内蒙古" : selectedProvince === "liaoning" ? "辽宁" : selectedProvince === "jilin" ? "吉林" : selectedProvince === "heilongjiang" ? "黑龙江" : selectedProvince === "shanghai" ? "上海" : selectedProvince === "jiangsu" ? "江苏" : selectedProvince === "zhejiang" ? "浙江" : selectedProvince === "anhui" ? "安徽" : selectedProvince === "fujian" ? "福建" : selectedProvince === "jiangxi" ? "江西" : selectedProvince === "shandong" ? "山东" : selectedProvince === "henan" ? "河南" : selectedProvince === "hubei" ? "湖北" : selectedProvince === "hunan" ? "湖南" : selectedProvince === "guangdong" ? "广东" : selectedProvince === "guangxi" ? "广西" : selectedProvince === "hainan" ? "海南" : selectedProvince === "chongqing" ? "重庆" : selectedProvince === "sichuan" ? "四川" : selectedProvince === "guizhou" ? "贵州" : selectedProvince === "yunnan" ? "云南" : selectedProvince === "shaanxi" ? "陕西" : selectedProvince === "gansu" ? "甘肃" : selectedProvince === "qinghai" ? "青海" : selectedProvince === "ningxia" ? "宁夏" : selectedProvince === "xinjiang" ? "新疆" : ""} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。</div>
       </div>
 
       <div className="flex-1 flex flex-col p-4 overflow-auto">
