@@ -471,7 +471,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "氢能占比",
+          indicator: "氢气化率",
           unit: "%",
           values: {
             "2025": 0,
@@ -518,7 +518,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "氢能占比",
+          indicator: "氢气化率",
           unit: "%",
           values: {
             "2025": 0,
@@ -565,7 +565,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "氢能占比",
+          indicator: "氢气化率",
           unit: "%",
           values: {
             "2025": 0,
@@ -612,7 +612,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "氢能占比",
+          indicator: "氢气化率",
           unit: "%",
           values: {
             "2025": 0,
@@ -659,7 +659,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "氢能占比",
+          indicator: "氢气化率",
           unit: "%",
           values: {
             "2025": 0,
@@ -706,7 +706,7 @@ export default function DataPanel({
           },
         },
         {
-          indicator: "氢能占比",
+          indicator: "氢气化率",
           unit: "%",
           values: {
             "2025": 0,
@@ -1666,7 +1666,7 @@ export default function DataPanel({
       ),
     },
     CTH: {
-      title: "煤制氢",
+      title: "煤制气",
       isEnergyTech: true,
       techData: generateChemicalTechData(
         "CTH",

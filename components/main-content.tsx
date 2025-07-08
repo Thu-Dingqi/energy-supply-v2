@@ -1,7 +1,10 @@
 "use client"
+import { useState } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 import type { NavigationItem, ContentSection } from "./energy-platform"
 import TreeView from "./tree-view"
 
@@ -34,6 +37,36 @@ export default function MainContent({
   selectedNode,
   onNodeSelect,
 }: MainContentProps) {
+  // 添加新的状态
+  const [isModelRunning, setIsModelRunning] = useState(false)
+  const [isModelComplete, setIsModelComplete] = useState(false)
+  const [showModelDialog, setShowModelDialog] = useState(false)
+
+  // 运行模型的函数
+  const runModel = () => {
+    setIsModelRunning(true)
+    // 3秒后完成
+    setTimeout(() => {
+      setIsModelRunning(false)
+      setIsModelComplete(true)
+      setShowModelDialog(false)
+    }, 3000)
+  }
+
+  // 当切换到结果标签时的处理
+  const handleNavChange = (nav: NavigationItem) => {
+    if (nav === "results" && !isModelComplete) {
+      setShowModelDialog(true)
+    }
+  }
+
+  // 添加一个处理结果按钮点击的函数
+  const handleResultsClick = () => {
+    if (!isModelComplete) {
+      setShowModelDialog(true)
+    }
+  }
+
   // Define tree structures for each section
   const keyAssumptionsTree: TreeNode[] = [
     {
@@ -239,7 +272,7 @@ export default function MainContent({
       label: "能源化工",
       children: [
         { id: "CTL", label: "煤制油" },
-        { id: "CTH", label: "煤制氢" },
+        { id: "CTH", label: "煤制气" },
         { id: "oil-refining", label: "炼油技术" },
         { id: "coking", label: "炼焦技术" }
       ],
@@ -270,26 +303,6 @@ export default function MainContent({
 
   const resultsTree: TreeNode[] = [
     {
-      id: "final-energy-consumption",
-      label: "终端用能需求",
-      children: [
-        { id: "demand-by-sector", label: "分部门" },
-        { id: "demand-by-fuel", label: "分燃料" },
-        {
-          id: "demand-by-sector-fuel",
-          label: "分部门分燃料",
-          children: [
-            { id: "agriculture-fuel", label: "农业" },
-            { id: "industry-fuel", label: "工业" },
-            { id: "construction-fuel", label: "建筑业" },
-            { id: "transportation-fuel", label: "交通运输" },
-            { id: "service-fuel", label: "服务业" },
-            { id: "residential-fuel", label: "居民生活" },
-          ]
-        },
-      ]
-    },
-    {
       id: "energy-supply",
       label: "能源供应",
       children: [
@@ -305,7 +318,9 @@ export default function MainContent({
       id: "co2-emissions",
       label: "二氧化碳排放",
       children: [
-        { id: "emissions-by-sector", label: "分部门碳排放" }
+        { id: "emissions-supply", label: "供应排放" },
+        { id: "emissions-end-use", label: "终端排放" },
+        { id: "emissions-total", label: "总排放" }
       ]
     },
   ]
@@ -331,88 +346,134 @@ export default function MainContent({
   }
 
   return (
-    <div className="w-[25%] flex flex-col border-r border-border overflow-hidden">
-      <div className="p-4 border-b border-border">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">能源平台</h2>
-            <div className="flex gap-2">
-              <Select value={selectedScenario} onValueChange={setSelectedScenario}>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="选择情景" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cn60">CN60碳中和</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={selectedProvince} onValueChange={setSelectedProvince}>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="选择省份" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="national">全国</SelectItem>
-                  <SelectItem value="beijing">北京</SelectItem>
-                  <SelectItem value="tianjin">天津</SelectItem>
-                  <SelectItem value="hebei">河北</SelectItem>
-                  <SelectItem value="shanxi">山西</SelectItem>
-                  <SelectItem value="neimenggu">内蒙古</SelectItem>
-                  <SelectItem value="liaoning">辽宁</SelectItem>
-                  <SelectItem value="jilin">吉林</SelectItem>
-                  <SelectItem value="heilongjiang">黑龙江</SelectItem>
-                  <SelectItem value="shanghai">上海</SelectItem>
-                  <SelectItem value="jiangsu">江苏</SelectItem>
-                  <SelectItem value="zhejiang">浙江</SelectItem>
-                  <SelectItem value="anhui">安徽</SelectItem>
-                  <SelectItem value="fujian">福建</SelectItem>
-                  <SelectItem value="jiangxi">江西</SelectItem>
-                  <SelectItem value="shandong">山东</SelectItem>
-                  <SelectItem value="henan">河南</SelectItem>
-                  <SelectItem value="hubei">湖北</SelectItem>
-                  <SelectItem value="hunan">湖南</SelectItem>
-                  <SelectItem value="guangdong">广东</SelectItem>
-                  <SelectItem value="guangxi">广西</SelectItem>
-                  <SelectItem value="hainan">海南</SelectItem>
-                  <SelectItem value="chongqing">重庆</SelectItem>
-                  <SelectItem value="sichuan">四川</SelectItem>
-                  <SelectItem value="guizhou">贵州</SelectItem>
-                  <SelectItem value="yunnan">云南</SelectItem>
-                  <SelectItem value="shaanxi">陕西</SelectItem>
-                  <SelectItem value="gansu">甘肃</SelectItem>
-                  <SelectItem value="qinghai">青海</SelectItem>
-                  <SelectItem value="ningxia">宁夏</SelectItem>
-                  <SelectItem value="xinjiang">新疆</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {activeNav !== "results" ? (
-            <Tabs
-              value={activeSection}
-              onValueChange={(value) => setActiveSection(value as ContentSection)}
-              className="w-full"
+    <>
+      <Dialog open={showModelDialog} onOpenChange={setShowModelDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>运行模型</DialogTitle>
+            <DialogDescription>
+              需要先运行模型才能查看结果数据。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end">
+            <Button 
+              onClick={runModel} 
+              disabled={isModelRunning}
             >
-              <TabsList className="grid grid-cols-4">
-                <TabsTrigger value="key-assumptions">关键假设</TabsTrigger>
-                <TabsTrigger value="demand">需求</TabsTrigger>
-                <TabsTrigger value="transformation">技术</TabsTrigger>
-                <TabsTrigger value="resources">资源</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          ) : (
-            <div className="p-2 text-center bg-secondary rounded-md">
-              <h3 className="text-md font-medium">结果数据</h3>
-            </div>
-          )}
-        </div>
-      </div>
+              {isModelRunning ? "运行中..." : "运行模型"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-      <ScrollArea className="flex-1">
-        <div className="p-4">
-          <TreeView nodes={getActiveTree()} selectedNodeId={selectedNode} onNodeSelect={onNodeSelect} />
+      <div className="w-[25%] flex flex-col border-r border-border overflow-hidden">
+        <div className="p-4 border-b border-border">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">能源平台</h2>
+              <div className="flex gap-2">
+                <Select value={selectedScenario} onValueChange={setSelectedScenario}>
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="选择情景" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cn60">CN60碳中和</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={selectedProvince} onValueChange={setSelectedProvince}>
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="选择省份" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="national">全国</SelectItem>
+                    <SelectItem value="beijing">北京</SelectItem>
+                    <SelectItem value="tianjin">天津</SelectItem>
+                    <SelectItem value="hebei">河北</SelectItem>
+                    <SelectItem value="shanxi">山西</SelectItem>
+                    <SelectItem value="neimenggu">内蒙古</SelectItem>
+                    <SelectItem value="liaoning">辽宁</SelectItem>
+                    <SelectItem value="jilin">吉林</SelectItem>
+                    <SelectItem value="heilongjiang">黑龙江</SelectItem>
+                    <SelectItem value="shanghai">上海</SelectItem>
+                    <SelectItem value="jiangsu">江苏</SelectItem>
+                    <SelectItem value="zhejiang">浙江</SelectItem>
+                    <SelectItem value="anhui">安徽</SelectItem>
+                    <SelectItem value="fujian">福建</SelectItem>
+                    <SelectItem value="jiangxi">江西</SelectItem>
+                    <SelectItem value="shandong">山东</SelectItem>
+                    <SelectItem value="henan">河南</SelectItem>
+                    <SelectItem value="hubei">湖北</SelectItem>
+                    <SelectItem value="hunan">湖南</SelectItem>
+                    <SelectItem value="guangdong">广东</SelectItem>
+                    <SelectItem value="guangxi">广西</SelectItem>
+                    <SelectItem value="hainan">海南</SelectItem>
+                    <SelectItem value="chongqing">重庆</SelectItem>
+                    <SelectItem value="sichuan">四川</SelectItem>
+                    <SelectItem value="guizhou">贵州</SelectItem>
+                    <SelectItem value="yunnan">云南</SelectItem>
+                    <SelectItem value="shaanxi">陕西</SelectItem>
+                    <SelectItem value="gansu">甘肃</SelectItem>
+                    <SelectItem value="qinghai">青海</SelectItem>
+                    <SelectItem value="ningxia">宁夏</SelectItem>
+                    <SelectItem value="xinjiang">新疆</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <Tabs
+                value={activeNav}
+                className="w-full"
+              >
+                <TabsList className="grid grid-cols-2">
+                  <TabsTrigger value="analysis">分析</TabsTrigger>
+                  <TabsTrigger 
+                    value="results"
+                    onClick={handleResultsClick}
+                  >
+                    结果
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
+            {activeNav !== "results" ? (
+              <Tabs
+                value={activeSection}
+                onValueChange={(value) => setActiveSection(value as ContentSection)}
+                className="w-full"
+              >
+                <TabsList className="grid grid-cols-4">
+                  <TabsTrigger value="key-assumptions">关键假设</TabsTrigger>
+                  <TabsTrigger value="demand">需求</TabsTrigger>
+                  <TabsTrigger value="transformation">技术</TabsTrigger>
+                  <TabsTrigger value="resources">资源</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            ) : (
+              <div className="p-2 text-center bg-secondary rounded-md">
+                <h3 className="text-md font-medium">
+                  {isModelComplete ? "结果数据" : "点击运行模型"}
+                </h3>
+              </div>
+            )}
+          </div>
         </div>
-      </ScrollArea>
-    </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-4">
+            {(!activeNav || activeNav !== "results" || isModelComplete) && (
+              <TreeView 
+                nodes={getActiveTree()} 
+                selectedNodeId={selectedNode} 
+                onNodeSelect={onNodeSelect} 
+              />
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+    </>
   )
 }
 
