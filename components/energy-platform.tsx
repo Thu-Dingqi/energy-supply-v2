@@ -7,11 +7,11 @@ import DataPanel from "./data-panel"
 import ResultPanel from "./result-panel"
 
 export type NavigationItem = "analysis" | "results" | "note" | "return"
-export type ContentSection = "key-assumptions" | "demand" | "transformation" | "resources"
+export type ContentSection = "transformation" | "resources"
 
 export default function EnergyPlatform() {
   const [activeNav, setActiveNav] = useState<NavigationItem>("overview")
-  const [activeSection, setActiveSection] = useState<ContentSection>("key-assumptions")
+  const [activeSection, setActiveSection] = useState<ContentSection>("transformation")
   const [selectedScenario, setSelectedScenario] = useState("cn60")
   const [selectedProvince, setSelectedProvince] = useState("beijing")
   const [selectedNode, setSelectedNode] = useState<string | null>(null)

@@ -60,71 +60,7 @@ export default function MainContent({
     }
   }
 
-  // 添加一个处理结果按钮点击的函数
-  const handleResultsClick = () => {
-    if (!isModelComplete) {
-      setShowModelDialog(true)
-    }
-  }
-
   // Define tree structures for each section
-  const keyAssumptionsTree: TreeNode[] = [
-    {
-      id: "macro",
-      label: "社会经济参数",
-      children: [
-        { id: "population", label: "人口" },
-        { id: "gdp", label: "GDP" },
-        { id: "industry-structure", label: "三产结构" },
-      ],
-    },
-    {
-      id: "sector-parameters",
-      label: "部门参数",
-      children: [
-        { id: "agriculture", label: "农业" },
-        { id: "industry", label: "工业" },
-        { id: "construction", label: "建筑业" },
-        { id: "transportation", label: "交通运输" },
-        { id: "service", label: "服务业" },
-        { id: "residential", label: "居民生活" },
-      ],
-    },
-  ]
-
-  const demandTree: TreeNode[] = [
-    {
-      id: "agriculture-demand",
-      label: "农业",
-      children: [{ id: "agriculture-energy", label: "终端用能需求" }],
-    },
-    {
-      id: "industry-demand",
-      label: "工业",
-      children: [{ id: "industry-energy", label: "终端用能需求" }],
-    },
-    {
-      id: "construction-demand",
-      label: "建筑业",
-      children: [{ id: "construction-energy", label: "终端用能需求" }],
-    },
-    {
-      id: "transportation-demand",
-      label: "交通运输",
-      children: [{ id: "transportation-energy", label: "终端用能需求" }],
-    },
-    {
-      id: "service-demand",
-      label: "服务业",
-      children: [{ id: "service-energy", label: "终端用能需求" }],
-    },
-    {
-      id: "residential-demand",
-      label: "居民生活",
-      children: [{ id: "residential-energy", label: "终端用能需求" }],
-    },
-  ]
-
   const transformationTree: TreeNode[] = [
     {
       id: "power-generation",
@@ -332,10 +268,6 @@ export default function MainContent({
     }
     
     switch (activeSection) {
-      case "key-assumptions":
-        return keyAssumptionsTree
-      case "demand":
-        return demandTree
       case "transformation":
         return transformationTree
       case "resources":
@@ -421,51 +353,43 @@ export default function MainContent({
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Tabs
-                value={activeNav}
-                className="w-full"
-              >
-                <TabsList className="grid grid-cols-2">
-                  <TabsTrigger value="analysis">分析</TabsTrigger>
-                  <TabsTrigger 
-                    value="results"
-                    onClick={handleResultsClick}
-                  >
-                    结果
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-
-            {activeNav !== "results" ? (
+            {/* 根据 activeNav 来显示不同的内容 */}
+            {activeNav === "analysis" ? (
               <Tabs
                 value={activeSection}
                 onValueChange={(value) => setActiveSection(value as ContentSection)}
                 className="w-full"
               >
-                <TabsList className="grid grid-cols-4">
-                  <TabsTrigger value="key-assumptions">关键假设</TabsTrigger>
-                  <TabsTrigger value="demand">需求</TabsTrigger>
+                <TabsList className="grid grid-cols-2">
                   <TabsTrigger value="transformation">技术</TabsTrigger>
                   <TabsTrigger value="resources">资源</TabsTrigger>
                 </TabsList>
               </Tabs>
-            ) : (
-              <div className="p-2 text-center bg-secondary rounded-md">
+            ) : activeNav === "results" ? (
+              <div 
+                className="p-2 text-center bg-secondary rounded-md cursor-pointer hover:bg-secondary/80 transition-colors"
+                onClick={() => !isModelComplete && setShowModelDialog(true)}
+              >
                 <h3 className="text-md font-medium">
                   {isModelComplete ? "结果数据" : "点击运行模型"}
                 </h3>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
 
         <ScrollArea className="flex-1">
           <div className="p-4">
-            {(!activeNav || activeNav !== "results" || isModelComplete) && (
+            {activeNav === "analysis" && (
               <TreeView 
                 nodes={getActiveTree()} 
+                selectedNodeId={selectedNode} 
+                onNodeSelect={onNodeSelect} 
+              />
+            )}
+            {activeNav === "results" && isModelComplete && (
+              <TreeView 
+                nodes={resultsTree} 
                 selectedNodeId={selectedNode} 
                 onNodeSelect={onNodeSelect} 
               />
