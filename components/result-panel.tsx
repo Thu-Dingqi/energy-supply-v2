@@ -788,7 +788,7 @@ export default function ResultPanel({
       data: [
         {
           indicator: "供应排放量",
-          unit: "Mt CO₂",
+          unit: "亿吨 CO₂",
           values: {
             "2025": 800,
             "2030": 660,
@@ -808,7 +808,7 @@ export default function ResultPanel({
       data: [
         {
           indicator: "终端排放量",
-          unit: "Mt CO₂",
+          unit: "亿吨 CO₂",
           values: {
             "2025": 850,
             "2030": 720,
@@ -828,7 +828,7 @@ export default function ResultPanel({
       data: [
         {
           indicator: "总排放量",
-          unit: "Mt CO₂",
+          unit: "亿吨 CO₂",
           values: {
             "2025": 1650,
             "2030": 1380,
