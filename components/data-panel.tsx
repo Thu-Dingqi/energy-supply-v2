@@ -1,14 +1,75 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardHeader, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { NavigationItem, ContentSection } from "./energy-platform"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import EditableDataTable from "./editable-data-table"
 import SimpleChart from "./simple-chart"
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
+import resourceData from "@/data/excel/json/resource.json"
+
+// Define types for resource data
+type YearlyValues = {
+  [year: string]: number;
+}
+
+type ResourceType = {
+  coal: YearlyValues;
+  oil: YearlyValues;
+  gas: YearlyValues;
+  nuclear: YearlyValues;
+  biomass: YearlyValues;
+  wind: YearlyValues;
+  solar: YearlyValues;
+  [key: string]: YearlyValues; // Add index signature for dynamic access
+}
+
+type ResourceDataType = {
+  [provinceCode: string]: ResourceType;
+}
+
+// Type assertion for the imported resourceData
+const typedResourceData = resourceData as ResourceDataType;
+
+// Helper function to generate empty data for energy tech entries
+const getEmptyData = (): DataRow[] => {
+  return [];
+}
+
+// 映射UI中的省份代码到resource.json中的省份代码
+const provinceCodeMap: Record<string, string> = {
+  beijing: "BEIJ",
+  tianjin: "TIAN",
+  hebei: "HEBE",
+  shanxi: "SHNX", 
+  neimenggu: "NEMO",
+  liaoning: "LIAO",
+  jilin: "JILI",
+  heilongjiang: "HEIL",
+  shanghai: "SHAN",
+  jiangsu: "JINU",
+  zhejiang: "ZHEJ",
+  anhui: "ANHU",
+  fujian: "FUJI",
+  jiangxi: "JINX",
+  shandong: "SHAD",
+  henan: "HENA",
+  hubei: "HUBE",
+  hunan: "HUNA",
+  guangdong: "GUAD",
+  guangxi: "GUAX",
+  hainan: "HAIN",
+  chongqing: "CHON",
+  sichuan: "SICH",
+  guizhou: "GUIZ",
+  yunnan: "YUNN",
+  shaanxi: "SHAA",
+  gansu: "GANS",
+  qinghai: "QING",
+  ningxia: "NINX",
+  xinjiang: "XING"
+};
 
 interface DataRow {
   indicator: string
@@ -37,8 +98,68 @@ export default function DataPanel({
   const [currentNode, setCurrentNode] = useState<string | null>(null)
   const [selectedParameter, setSelectedParameter] = useState<string>("EFF")
 
-  // Sample data for the editable table
+  // 结果数据年份
   const years = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"]
+
+  // Function to get data from resourceData based on the selected province
+  const getResourceData = (resourceType: string) => {
+    // Map the resource type to the correct key in resourceData
+    const resourceKey = resourceType === "natural-gas" ? "gas" : 
+                        resourceType === "wind-resource" ? "wind" : 
+                        resourceType === "solar-resource" ? "solar" :
+                        resourceType === "hydro-resource" ? "hydro" :
+                        resourceType === "biomass-resource" ? "biomass" :
+                        resourceType;
+
+    // Get the province code from the map
+    const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
+    
+    // Check if data exists for this province and resource
+    if (typedResourceData[provinceCode] && typedResourceData[provinceCode][resourceKey]) {
+      const resourceValues = typedResourceData[provinceCode][resourceKey];
+      
+      // Create a data row with the values from resourceData
+      return [
+        {
+          indicator: "资源开发潜力上限",
+          unit: resourceKey === "coal" ? "EJ" : 
+                resourceKey === "oil" ? "PJ" : 
+                resourceKey === "gas" ? "PJ" : 
+                resourceKey === "wind" || resourceKey === "solar" ? "GW" : 
+                "GW",
+          values: resourceValues
+        }
+      ];
+    }
+    
+    // Default fallback if data doesn't exist
+    return [
+      {
+        indicator: "资源开发潜力上限",
+        unit: "未知",
+        values: {
+          "2025": 0,
+          "2030": 0,
+          "2035": 0,
+          "2040": 0,
+          "2045": 0,
+          "2050": 0,
+          "2055": 0,
+          "2060": 0,
+        }
+      }
+    ];
+  };
+
+  // Update data when province changes
+  useEffect(() => {
+    if (currentNode) {
+      const resourceTypes = ["coal", "oil", "natural-gas", "wind-resource", "solar-resource", "biomass-resource"];
+      if (resourceTypes.includes(currentNode)) {
+        setTableData(getResourceData(currentNode));
+      }
+    }
+  }, [selectedProvince, currentNode]);
 
   // Power generation technology parameters
   const powerTechParameters = [
@@ -1182,62 +1303,33 @@ export default function DataPanel({
     coal: {
       title: "煤炭",
       defaultChartType: "bar",
-      data: [
-        {
-          indicator: "资源开发潜力上限",
-          unit: "万吨",
-          values: {
-            "2025": 5000,
-            "2030": 5200,
-            "2035": 5400,
-            "2040": 5600,
-            "2045": 5800,
-            "2050": 6000,
-            "2055": 6200,
-            "2060": 6400,
-          },
-        },
-      ],
+      data: getResourceData("coal")
     },
     oil: {
       title: "石油",
       defaultChartType: "bar",
-      data: [
-        {
-          indicator: "资源开发潜力上限",
-          unit: "万吨",
-          values: {
-            "2025": 3000,
-            "2030": 3200,
-            "2035": 3400,
-            "2040": 3600,
-            "2045": 3800,
-            "2050": 4000,
-            "2055": 4200,
-            "2060": 4400,
-          },
-        },
-      ],
+      data: getResourceData("oil")
     },
     "natural-gas": {
       title: "天然气",
       defaultChartType: "bar",
-      data: [
-        {
-          indicator: "资源开发潜力上限",
-          unit: "亿立方米",
-          values: {
-            "2025": 2000,
-            "2030": 2200,
-            "2035": 2400,
-            "2040": 2600,
-            "2045": 2800,
-            "2050": 3000,
-            "2055": 3200,
-            "2060": 3400,
-          },
-        },
-      ],
+      data: getResourceData("natural-gas")
+    },
+    "wind-resource": {
+      title: "风能",
+      data: getResourceData("wind-resource")
+    },
+    "solar-resource": {
+      title: "太阳能",
+      data: getResourceData("solar-resource")
+    },
+    "hydro-resource": {
+      title: "水能",
+      data: getResourceData("hydro-resource")
+    },
+    "biomass-resource": {
+      title: "生物质能",
+      data: getResourceData("biomass-resource")
     },
     "nuclear-fuel": {
       title: "核燃料",
@@ -1613,6 +1705,7 @@ export default function DataPanel({
     CTL: {
       title: "煤制油",
       isEnergyTech: true,
+      data: getEmptyData(),
       techData: generateChemicalTechData(
         "CTL",
         45,    // 转化效率
@@ -1626,6 +1719,7 @@ export default function DataPanel({
     CTH: {
       title: "煤制气",
       isEnergyTech: true,
+      data: getEmptyData(),
       techData: generateChemicalTechData(
         "CTH",
         50,    // 转化效率
@@ -1639,6 +1733,7 @@ export default function DataPanel({
     "oil-refining": {
       title: "炼油",
       isEnergyTech: true,
+      data: getEmptyData(),
       techData: generateChemicalTechData(
         "oil-refining",
         42,    // 转化效率
@@ -1652,6 +1747,7 @@ export default function DataPanel({
     coking: {
       title: "炼焦",
       isEnergyTech: true,
+      data: getEmptyData(),
       techData: generateChemicalTechData(
         "coking",
         48,    // 转化效率
@@ -1662,82 +1758,8 @@ export default function DataPanel({
         0.03   // 可变运维成本
       ),
     },
-    "wind-resource": {
-      title: "风能",
-      data: [
-        {
-          indicator: "资源开发潜力上限",
-          unit: "GW",
-          values: {
-            "2025": 300,
-            "2030": 450,
-            "2035": 600,
-            "2040": 750,
-            "2045": 900,
-            "2050": 1050,
-            "2055": 1200,
-            "2060": 1350,
-          },
-        }
-      ]
-    },
-    "solar-resource": {
-      title: "太阳能",
-      data: [
-        {
-          indicator: "资源开发潜力上限",
-          unit: "GW",
-          values: {
-            "2025": 500,
-            "2030": 800,
-            "2035": 1100,
-            "2040": 1400,
-            "2045": 1700,
-            "2050": 2000,
-            "2055": 2300,
-            "2060": 2600,
-          },
-        },
-      ],
-    },
-    "hydro-resource": {
-      title: "水能",
-      data: [
-        {
-          indicator: "资源开发潜力上限",
-          unit: "GW",
-          values: {
-            "2025": 380,
-            "2030": 400,
-            "2035": 420,
-            "2040": 430,
-            "2045": 440,
-            "2050": 450,
-            "2055": 455,
-            "2060": 460,
-          },
-        },
-      ],
-    },
-    "biomass-resource": {
-      title: "生物质能",
-      data: [
-        {
-          indicator: "资源开发潜力上限",
-          unit: "GW",
-          values: {
-            "2025": 50,
-            "2030": 75,
-            "2035": 100,
-            "2040": 125,
-            "2045": 150,
-            "2050": 175,
-            "2055": 185,
-            "2060": 195,
-          },
-        },
-      ],
-    },
+
+    // ... existing code ...
   }
 
   // Update data when selected node changes

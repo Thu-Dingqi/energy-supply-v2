@@ -7,6 +7,7 @@ import type { NavigationItem, ContentSection } from "./energy-platform"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import EditableDataTable from "./editable-data-table"
 import SimpleChart from "./simple-chart"
+import emissionsData from "@/data/excel/json/emissions.json"
 
 interface DataRow {
   indicator: string
@@ -21,6 +22,40 @@ interface ResultPanelProps {
   selectedProvince: string
 }
 
+// 映射UI中的省份代码到emissions.json中的省份代码
+const provinceCodeMap: Record<string, string> = {
+  beijing: "BEIJ",
+  tianjin: "TIAN",
+  hebei: "HEBE",
+  shanxi: "SHAN",
+  neimenggu: "NEMO",
+  liaoning: "LIAO",
+  jilin: "JILI",
+  heilongjiang: "HEIL",
+  shanghai: "SHAA",
+  jiangsu: "JINU",
+  zhejiang: "ZHEJ",
+  anhui: "ANHU",
+  fujian: "FUJI",
+  jiangxi: "JINX",
+  shandong: "SHAD",
+  henan: "HENA",
+  hubei: "HUBE",
+  hunan: "HUNA",
+  guangdong: "GUAD",
+  guangxi: "GUAX",
+  hainan: "HAIN",
+  chongqing: "CHON",
+  sichuan: "SICH",
+  guizhou: "GUIZ",
+  yunnan: "YUNN",
+  shaanxi: "SHAA",
+  gansu: "GANS",
+  qinghai: "QING",
+  ningxia: "NINX",
+  xinjiang: "XING"
+};
+
 export default function ResultPanel({
   activeNav,
   selectedNode,
@@ -34,6 +69,52 @@ export default function ResultPanel({
 
   // 结果数据年份
   const years = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"]
+
+  // 获取当前省份的排放数据
+  const getEmissionsData = (provinceCode: string) => {
+    const provinceEmissionsCode = provinceCodeMap[provinceCode] || "BEIJ"
+    const provinceData = emissionsData[provinceEmissionsCode] || {
+      FE: {},
+      SUPPLY: {},
+      TOTAL: {}
+    }
+    
+    return {
+      "emissions-supply": {
+        title: "供应排放",
+        defaultChartType: "line",
+        data: [
+          {
+            indicator: "供应排放量",
+            unit: "亿吨 CO₂",
+            values: {...provinceData.SUPPLY}
+          }
+        ]
+      },
+      "emissions-end-use": {
+        title: "终端排放",
+        defaultChartType: "line",
+        data: [
+          {
+            indicator: "终端排放量",
+            unit: "亿吨 CO₂",
+            values: {...provinceData.FE}
+          }
+        ]
+      },
+      "emissions-total": {
+        title: "总排放",
+        defaultChartType: "line",
+        data: [
+          {
+            indicator: "总排放量",
+            unit: "亿吨 CO₂",
+            values: {...provinceData.TOTAL}
+          }
+        ]
+      }
+    }
+  }
 
   // 结果数据集
   const resultDataSets: Record<
@@ -782,71 +863,26 @@ export default function ResultPanel({
       ],
     },
 
-        "emissions-supply": {
-      title: "供应排放",
-      defaultChartType: "line",
-      data: [
-        {
-          indicator: "供应排放量",
-          unit: "亿吨 CO₂",
-          values: {
-            "2025": 800,
-            "2030": 660,
-            "2035": 520,
-            "2040": 380,
-            "2045": 290,
-            "2050": 200,
-            "2055": 110,
-            "2060": 20,
-          }
-        }
-      ]
-    },
-    "emissions-end-use": {
-      title: "终端排放",
-      defaultChartType: "line",
-      data: [
-        {
-          indicator: "终端排放量",
-          unit: "亿吨 CO₂",
-          values: {
-            "2025": 850,
-            "2030": 720,
-            "2035": 580,
-            "2040": 440,
-            "2045": 330,
-            "2050": 220,
-            "2055": 110,
-            "2060": 10,
-          }
-        }
-      ]
-    },
-    "emissions-total": {
-      title: "总排放",
-      defaultChartType: "line",
-      data: [
-        {
-          indicator: "总排放量",
-          unit: "亿吨 CO₂",
-          values: {
-            "2025": 1650,
-            "2030": 1380,
-            "2035": 1100,
-            "2040": 820,
-            "2045": 620,
-            "2050": 420,
-            "2055": 220,
-            "2060": 30,
-          }
-        }
-      ]
-    }
+    // 排放数据会在下面的useEffect中动态更新
+    ...getEmissionsData(selectedProvince)
   }
 
   // 更新数据当选择节点变化时
   useEffect(() => {
     if (selectedNode && selectedNode !== currentNode) {
+      // 如果是排放相关节点，重新获取最新的排放数据
+      if (selectedNode.startsWith("emissions-")) {
+        const emissionsDataSets = getEmissionsData(selectedProvince)
+        if (emissionsDataSets[selectedNode]) {
+          setTableData(emissionsDataSets[selectedNode].data)
+          setNodeTitle(emissionsDataSets[selectedNode].title)
+          setChartType(emissionsDataSets[selectedNode].defaultChartType || "line")
+          setCurrentNode(selectedNode)
+          return
+        }
+      }
+      
+      // 非排放相关节点使用原有逻辑
       if (resultDataSets[selectedNode]) {
         setTableData(resultDataSets[selectedNode].data)
         setNodeTitle(resultDataSets[selectedNode].title)
@@ -864,20 +900,23 @@ export default function ResultPanel({
         setCurrentNode(null)
       }
     }
-  }, [selectedNode, currentNode])
+  }, [selectedNode, currentNode, selectedProvince])
+
+  // 当省份改变时，如果当前正在显示排放数据，则更新显示
+  useEffect(() => {
+    if (currentNode && currentNode.startsWith("emissions-")) {
+      const emissionsDataSets = getEmissionsData(selectedProvince)
+      if (emissionsDataSets[currentNode]) {
+        setTableData(emissionsDataSets[currentNode].data)
+      }
+    }
+  }, [selectedProvince, currentNode])
 
   // 数据更新处理函数
   const handleDataChange = (newData: DataRow[]) => {
     setTableData(newData)
     
-    // 可以在这里添加保存到本地或后端的逻辑
-    if (currentNode && resultDataSets[currentNode]) {
-      // 保存更新后的数据
-      resultDataSets[currentNode].data = newData
-      
-      // 这里可以添加数据持久化的逻辑，例如:
-      // saveResultData(selectedScenario, selectedProvince, currentNode, newData)
-    }
+    // 这里不再修改resultDataSets，因为排放数据是动态生成的
   }
 
   // 在组件内部添加省份映射函数
