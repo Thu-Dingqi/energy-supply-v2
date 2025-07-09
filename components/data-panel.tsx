@@ -168,9 +168,9 @@ export default function DataPanel({
     { id: "EFF", label: "效率", unit: "%" },
     { id: "AF", label: "可用系数", unit: "%" },
     { id: "LIFETIME", label: "寿期", unit: "年" },
-    { id: "NCAP_COST", label: "投资成本", unit: "元/kW" },
-    { id: "NCAP_FOM", label: "固定运维成本", unit: "元/kW/年" },
-    { id: "ACT_COST", label: "可变运维成本", unit: "元/kWh" },
+    { id: "NCAP_COST", label: "投资成本", unit: "美元/kW" },
+    { id: "NCAP_FOM", label: "固定运维成本", unit: "美元/kW/年" },
+    { id: "ACT_COST", label: "可变运维成本", unit: "美元/kWh" },
   ]
 
   // 获取参数对应的单位
@@ -260,7 +260,7 @@ export default function DataPanel({
       data: [
         {
           indicator: "投资成本",
-          unit: "元/kW",
+          unit: "美元/kW",
           values: {
             "2025": Number.parseFloat(baseNCAPCost.toFixed(1)),
             "2030": Number.parseFloat((baseNCAPCost * 0.95).toFixed(1)),
@@ -280,7 +280,7 @@ export default function DataPanel({
       data: [
         {
           indicator: "固定运维成本",
-          unit: "元/kW/年",
+          unit: "美元/kW/年",
           values: {
             "2025": Number.parseFloat(baseNCAPFOM.toFixed(1)),
             "2030": Number.parseFloat((baseNCAPFOM * 0.98).toFixed(1)),
@@ -300,7 +300,7 @@ export default function DataPanel({
       data: [
         {
           indicator: "可变运维成本",
-          unit: "元/kWh",
+          unit: "美元/kWh",
           values: {
             "2025": Number.parseFloat(baseACTCost.toFixed(3)),
             "2030": Number.parseFloat((baseACTCost * 0.98).toFixed(3)),
@@ -343,13 +343,13 @@ export default function DataPanel({
           unit: "%",
           values: {
             "2025": Number.parseFloat(baseEfficiency.toFixed(1)),
-            "2030": Number.parseFloat((baseEfficiency * 1.05).toFixed(1)),
-            "2035": Number.parseFloat((baseEfficiency * 1.1).toFixed(1)),
-            "2040": Number.parseFloat((baseEfficiency * 1.15).toFixed(1)),
-            "2045": Number.parseFloat((baseEfficiency * 1.18).toFixed(1)),
-            "2050": Number.parseFloat((baseEfficiency * 1.2).toFixed(1)),
-            "2055": Number.parseFloat((baseEfficiency * 1.22).toFixed(1)),
-            "2060": Number.parseFloat((baseEfficiency * 1.25).toFixed(1)),
+            "2030": Number.parseFloat((baseEfficiency * 1.03).toFixed(1)),
+            "2035": Number.parseFloat((baseEfficiency * 1.04).toFixed(1)),
+            "2040": Number.parseFloat((baseEfficiency * 1.03).toFixed(1)),
+            "2045": Number.parseFloat((baseEfficiency * 1.04).toFixed(1)),
+            "2050": Number.parseFloat((baseEfficiency * 1.02).toFixed(1)),
+            "2055": Number.parseFloat((baseEfficiency * 1.02).toFixed(1)),
+            "2060": Number.parseFloat((baseEfficiency * 1.02).toFixed(1)),
           },
         },
       ],
@@ -400,7 +400,7 @@ export default function DataPanel({
       data: [
         {
           indicator: "投资成本",
-          unit: "元/kW",
+          unit: "美元/kW",
           values: {
             "2025": Number.parseFloat(baseNCAPCost.toFixed(1)),
             "2030": Number.parseFloat((baseNCAPCost * 0.95).toFixed(1)),
@@ -420,7 +420,7 @@ export default function DataPanel({
       data: [
         {
           indicator: "固定运维成本",
-          unit: "元/kW/年",
+          unit: "美元/kW/年",
           values: {
             "2025": Number.parseFloat(baseNCAPFOM.toFixed(1)),
             "2030": Number.parseFloat((baseNCAPFOM * 0.98).toFixed(1)),
@@ -440,7 +440,7 @@ export default function DataPanel({
       data: [
         {
           indicator: "可变运维成本",
-          unit: "元/kWh",
+          unit: "美元/kWh",
           values: {
             "2025": Number.parseFloat(baseACTCost.toFixed(3)),
             "2030": Number.parseFloat((baseACTCost * 0.98).toFixed(3)),
@@ -476,831 +476,8 @@ export default function DataPanel({
       techData?: any
     }
   > = {
-    population: {
-      title: "人口",
-      data: [
-        {
-          indicator: "人口",
-          unit: "百万",
-          values: {
-            "2025": 22,
-            "2030": 23,
-            "2035": 24,
-            "2040": 24.5,
-            "2045": 25,
-            "2050": 25.5,
-            "2055": 26,
-            "2060": 26.5,
-          },
-        },
-      ],
-    },
-    gdp: {
-      title: "GDP",
-      data: [
-        {
-          indicator: "GDP",
-          unit: "十亿元",
-          values: {
-            "2025": 4500,
-            "2030": 5800,
-            "2035": 7200,
-            "2040": 8600,
-            "2045": 10000,
-            "2050": 11500,
-            "2055": 13000,
-            "2060": 14500,
-          },
-        },
-      ],
-    },
-    "industry-structure": {
-      title: "三产结构",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "第一产业",
-          unit: "%",
-          values: {
-            "2025": 2.5,
-            "2030": 2.3,
-            "2035": 2.1,
-            "2040": 1.9,
-            "2045": 1.7,
-            "2050": 1.5,
-            "2055": 1.3,
-            "2060": 1.1,
-          },
-        },
-        {
-          indicator: "第二产业",
-          unit: "%",
-          values: {
-            "2025": 25,
-            "2030": 23,
-            "2035": 21,
-            "2040": 19,
-            "2045": 17,
-            "2050": 15,
-            "2055": 14,
-            "2060": 13,
-          },
-        },
-        {
-          indicator: "第三产业",
-          unit: "%",
-          values: {
-            "2025": 72.5,
-            "2030": 74.7,
-            "2035": 76.9,
-            "2040": 79.1,
-            "2045": 81.3,
-            "2050": 83.5,
-            "2055": 84.7,
-            "2060": 85.9,
-          },
-        },
-      ],
-    },
-    agriculture: {
-      title: "农业",
-      data: [
-        {
-          indicator: "能源强度",
-          unit: "吨标煤/万元",
-          values: {
-            "2025": 0.35,
-            "2030": 0.32,
-            "2035": 0.29,
-            "2040": 0.26,
-            "2045": 0.23,
-            "2050": 0.2,
-            "2055": 0.18,
-            "2060": 0.16,
-          },
-        },
-        {
-          indicator: "电气化率",
-          unit: "%",
-          values: {
-            "2025": 30,
-            "2030": 35,
-            "2035": 40,
-            "2040": 45,
-            "2045": 50,
-            "2050": 55,
-            "2055": 60,
-            "2060": 65,
-          },
-        },
-        {
-          indicator: "氢气化率",
-          unit: "%",
-          values: {
-            "2025": 0,
-            "2030": 1,
-            "2035": 2,
-            "2040": 3,
-            "2045": 4,
-            "2050": 5,
-            "2055": 6,
-            "2060": 7,
-          },
-        },
-      ],
-    },
-    industry: {
-      title: "工业",
-      data: [
-        {
-          indicator: "能源强度",
-          unit: "吨标煤/万元",
-          values: {
-            "2025": 0.65,
-            "2030": 0.58,
-            "2035": 0.52,
-            "2040": 0.46,
-            "2045": 0.41,
-            "2050": 0.36,
-            "2055": 0.32,
-            "2060": 0.28,
-          },
-        },
-        {
-          indicator: "电气化率",
-          unit: "%",
-          values: {
-            "2025": 25,
-            "2030": 30,
-            "2035": 35,
-            "2040": 40,
-            "2045": 45,
-            "2050": 50,
-            "2055": 55,
-            "2060": 60,
-          },
-        },
-        {
-          indicator: "氢气化率",
-          unit: "%",
-          values: {
-            "2025": 0,
-            "2030": 2,
-            "2035": 4,
-            "2040": 6,
-            "2045": 8,
-            "2050": 10,
-            "2055": 12,
-            "2060": 15,
-          },
-        },
-      ],
-    },
-    construction: {
-      title: "建筑业",
-      data: [
-        {
-          indicator: "能源强度",
-          unit: "吨标煤/万元",
-          values: {
-            "2025": 0.45,
-            "2030": 0.41,
-            "2035": 0.37,
-            "2040": 0.33,
-            "2045": 0.3,
-            "2050": 0.27,
-            "2055": 0.24,
-            "2060": 0.22,
-          },
-        },
-        {
-          indicator: "电气化率",
-          unit: "%",
-          values: {
-            "2025": 20,
-            "2030": 25,
-            "2035": 30,
-            "2040": 35,
-            "2045": 40,
-            "2050": 45,
-            "2055": 50,
-            "2060": 55,
-          },
-        },
-        {
-          indicator: "氢气化率",
-          unit: "%",
-          values: {
-            "2025": 0,
-            "2030": 1,
-            "2035": 2,
-            "2040": 3,
-            "2045": 4,
-            "2050": 5,
-            "2055": 6,
-            "2060": 7,
-          },
-        },
-      ],
-    },
-    transportation: {
-      title: "交通运输",
-      data: [
-        {
-          indicator: "能源强度",
-          unit: "吨标煤/万元",
-          values: {
-            "2025": 0.55,
-            "2030": 0.49,
-            "2035": 0.44,
-            "2040": 0.39,
-            "2045": 0.35,
-            "2050": 0.31,
-            "2055": 0.28,
-            "2060": 0.25,
-          },
-        },
-        {
-          indicator: "电气化率",
-          unit: "%",
-          values: {
-            "2025": 15,
-            "2030": 25,
-            "2035": 35,
-            "2040": 45,
-            "2045": 55,
-            "2050": 65,
-            "2055": 75,
-            "2060": 85,
-          },
-        },
-        {
-          indicator: "氢气化率",
-          unit: "%",
-          values: {
-            "2025": 0,
-            "2030": 2,
-            "2035": 4,
-            "2040": 6,
-            "2045": 8,
-            "2050": 10,
-            "2055": 12,
-            "2060": 15,
-          },
-        },
-      ],
-    },
-    service: {
-      title: "服务业",
-      data: [
-        {
-          indicator: "能源强度",
-          unit: "吨标煤/万元",
-          values: {
-            "2025": 0.25,
-            "2030": 0.22,
-            "2035": 0.2,
-            "2040": 0.18,
-            "2045": 0.16,
-            "2050": 0.14,
-            "2055": 0.13,
-            "2060": 0.12,
-          },
-        },
-        {
-          indicator: "电气化率",
-          unit: "%",
-          values: {
-            "2025": 40,
-            "2030": 45,
-            "2035": 50,
-            "2040": 55,
-            "2045": 60,
-            "2050": 65,
-            "2055": 70,
-            "2060": 75,
-          },
-        },
-        {
-          indicator: "氢气化率",
-          unit: "%",
-          values: {
-            "2025": 0,
-            "2030": 1,
-            "2035": 2,
-            "2040": 3,
-            "2045": 4,
-            "2050": 5,
-            "2055": 6,
-            "2060": 7,
-          },
-        },
-      ],
-    },
-    residential: {
-      title: "居民生活",
-      data: [
-        {
-          indicator: "能源强度",
-          unit: "吨标煤/户",
-          values: {
-            "2025": 1.2,
-            "2030": 1.1,
-            "2035": 1.0,
-            "2040": 0.9,
-            "2045": 0.8,
-            "2050": 0.7,
-            "2055": 0.65,
-            "2060": 0.6,
-          },
-        },
-        {
-          indicator: "电气化率",
-          unit: "%",
-          values: {
-            "2025": 35,
-            "2030": 40,
-            "2035": 45,
-            "2040": 50,
-            "2045": 55,
-            "2050": 60,
-            "2055": 65,
-            "2060": 70,
-          },
-        },
-        {
-          indicator: "氢气化率",
-          unit: "%",
-          values: {
-            "2025": 0,
-            "2030": 0.5,
-            "2035": 1,
-            "2040": 1.5,
-            "2045": 2,
-            "2050": 2.5,
-            "2055": 3,
-            "2060": 3.5,
-          },
-        },
-      ],
-    },
-    // Energy demand data for each sector with fuel breakdown
-    "agriculture-energy": {
-      title: "农业终端用能需求",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤炭",
-          unit: "万吨标煤",
-          values: {
-            "2025": 30,
-            "2030": 25,
-            "2035": 20,
-            "2040": 15,
-            "2045": 10,
-            "2050": 5,
-            "2055": 3,
-            "2060": 1,
-          },
-        },
-        {
-          indicator: "石油",
-          unit: "万吨标煤",
-          values: {
-            "2025": 40,
-            "2030": 35,
-            "2035": 30,
-            "2040": 25,
-            "2045": 20,
-            "2050": 15,
-            "2055": 10,
-            "2060": 5,
-          },
-        },
-        {
-          indicator: "天然气",
-          unit: "万吨标煤",
-          values: {
-            "2025": 10,
-            "2030": 15,
-            "2035": 20,
-            "2040": 25,
-            "2045": 20,
-            "2050": 15,
-            "2055": 10,
-            "2060": 5,
-          },
-        },
-        {
-          indicator: "电力",
-          unit: "万吨标煤",
-          values: {
-            "2025": 40,
-            "2030": 48,
-            "2035": 56,
-            "2040": 64,
-            "2045": 80,
-            "2050": 95,
-            "2055": 110,
-            "2060": 125,
-          },
-        },
-        {
-          indicator: "氢能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 2,
-            "2035": 4,
-            "2040": 6,
-            "2045": 10,
-            "2050": 15,
-            "2055": 17,
-            "2060": 19,
-          },
-        },
-      ],
-    },
-    "industry-energy": {
-      title: "工业终端用能需求",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤炭",
-          unit: "万吨标煤",
-          values: {
-            "2025": 1200,
-            "2030": 1000,
-            "2035": 800,
-            "2040": 600,
-            "2045": 400,
-            "2050": 300,
-            "2055": 200,
-            "2060": 100,
-          },
-        },
-        {
-          indicator: "石油",
-          unit: "万吨标煤",
-          values: {
-            "2025": 500,
-            "2030": 450,
-            "2035": 400,
-            "2040": 350,
-            "2045": 300,
-            "2050": 250,
-            "2055": 200,
-            "2060": 150,
-          },
-        },
-        {
-          indicator: "天然气",
-          unit: "万吨标煤",
-          values: {
-            "2025": 300,
-            "2030": 350,
-            "2035": 400,
-            "2040": 450,
-            "2045": 400,
-            "2050": 350,
-            "2055": 300,
-            "2060": 250,
-          },
-        },
-        {
-          indicator: "电力",
-          unit: "万吨标煤",
-          values: {
-            "2025": 500,
-            "2030": 550,
-            "2035": 600,
-            "2040": 650,
-            "2045": 800,
-            "2050": 900,
-            "2055": 1000,
-            "2060": 1100,
-          },
-        },
-        {
-          indicator: "氢能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 50,
-            "2035": 100,
-            "2040": 150,
-            "2045": 200,
-            "2050": 200,
-            "2055": 200,
-            "2060": 200,
-          },
-        },
-      ],
-    },
-    "construction-energy": {
-      title: "建筑业终端用能需求",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤炭",
-          unit: "万吨标煤",
-          values: {
-            "2025": 100,
-            "2030": 90,
-            "2035": 80,
-            "2040": 70,
-            "2045": 60,
-            "2050": 50,
-            "2055": 40,
-            "2060": 30,
-          },
-        },
-        {
-          indicator: "石油",
-          unit: "万吨标煤",
-          values: {
-            "2025": 120,
-            "2030": 110,
-            "2035": 100,
-            "2040": 90,
-            "2045": 80,
-            "2050": 70,
-            "2055": 60,
-            "2060": 50,
-          },
-        },
-        {
-          indicator: "天然气",
-          unit: "万吨标煤",
-          values: {
-            "2025": 50,
-            "2030": 60,
-            "2035": 70,
-            "2040": 80,
-            "2045": 70,
-            "2050": 60,
-            "2055": 50,
-            "2060": 40,
-          },
-        },
-        {
-          indicator: "电力",
-          unit: "万吨标煤",
-          values: {
-            "2025": 80,
-            "2030": 95,
-            "2035": 110,
-            "2040": 125,
-            "2045": 160,
-            "2050": 195,
-            "2055": 230,
-            "2060": 265,
-          },
-        },
-        {
-          indicator: "氢能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 5,
-            "2035": 10,
-            "2040": 15,
-            "2045": 20,
-            "2050": 25,
-            "2055": 30,
-            "2060": 35,
-          },
-        },
-      ],
-    },
-    "transportation-energy": {
-      title: "交通运输终端用能需求",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤炭",
-          unit: "万吨标煤",
-          values: {
-            "2025": 50,
-            "2030": 40,
-            "2035": 30,
-            "2040": 20,
-            "2045": 10,
-            "2050": 5,
-            "2055": 0,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "石油",
-          unit: "万吨标煤",
-          values: {
-            "2025": 900,
-            "2030": 800,
-            "2035": 700,
-            "2040": 600,
-            "2045": 500,
-            "2050": 400,
-            "2055": 300,
-            "2060": 200,
-          },
-        },
-        {
-          indicator: "天然气",
-          unit: "万吨标煤",
-          values: {
-            "2025": 50,
-            "2030": 100,
-            "2035": 150,
-            "2040": 200,
-            "2045": 150,
-            "2050": 100,
-            "2055": 50,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "电力",
-          unit: "万吨标煤",
-          values: {
-            "2025": 200,
-            "2030": 300,
-            "2035": 400,
-            "2040": 500,
-            "2045": 700,
-            "2050": 900,
-            "2055": 1100,
-            "2060": 1300,
-          },
-        },
-        {
-          indicator: "氢能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 60,
-            "2035": 120,
-            "2040": 180,
-            "2045": 240,
-            "2050": 295,
-            "2055": 350,
-            "2060": 400,
-          },
-        },
-      ],
-    },
-    "service-energy": {
-      title: "服务业终端用能需求",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤炭",
-          unit: "万吨标煤",
-          values: {
-            "2025": 150,
-            "2030": 120,
-            "2035": 90,
-            "2040": 60,
-            "2045": 30,
-            "2050": 15,
-            "2055": 5,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "石油",
-          unit: "万吨标煤",
-          values: {
-            "2025": 200,
-            "2030": 180,
-            "2035": 160,
-            "2040": 140,
-            "2045": 120,
-            "2050": 100,
-            "2055": 80,
-            "2060": 60,
-          },
-        },
-        {
-          indicator: "天然气",
-          unit: "万吨标煤",
-          values: {
-            "2025": 150,
-            "2030": 170,
-            "2035": 190,
-            "2040": 210,
-            "2045": 190,
-            "2050": 170,
-            "2055": 150,
-            "2060": 130,
-          },
-        },
-        {
-          indicator: "电力",
-          unit: "万吨标煤",
-          values: {
-            "2025": 300,
-            "2030": 350,
-            "2035": 400,
-            "2040": 450,
-            "2045": 550,
-            "2050": 650,
-            "2055": 750,
-            "2060": 850,
-          },
-        },
-        {
-          indicator: "氢能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 30,
-            "2035": 60,
-            "2040": 90,
-            "2045": 110,
-            "2050": 115,
-            "2055": 115,
-            "2060": 110,
-          },
-        },
-      ],
-    },
-    "residential-energy": {
-      title: "居民生活终端用能需求",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤炭",
-          unit: "万吨标煤",
-          values: {
-            "2025": 200,
-            "2030": 150,
-            "2035": 100,
-            "2040": 50,
-            "2045": 25,
-            "2050": 10,
-            "2055": 5,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "石油",
-          unit: "万吨标煤",
-          values: {
-            "2025": 150,
-            "2030": 130,
-            "2035": 110,
-            "2040": 90,
-            "2045": 70,
-            "2050": 50,
-            "2055": 30,
-            "2060": 10,
-          },
-        },
-        {
-          indicator: "天然气",
-          unit: "万吨标煤",
-          values: {
-            "2025": 250,
-            "2030": 270,
-            "2035": 290,
-            "2040": 310,
-            "2045": 290,
-            "2050": 270,
-            "2055": 250,
-            "2060": 230,
-          },
-        },
-        {
-          indicator: "电力",
-          unit: "万吨标煤",
-          values: {
-            "2025": 300,
-            "2030": 350,
-            "2035": 400,
-            "2040": 450,
-            "2045": 550,
-            "2050": 650,
-            "2055": 750,
-            "2060": 850,
-          },
-        },
-        {
-          indicator: "氢能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 50,
-            "2035": 100,
-            "2040": 150,
-            "2045": 165,
-            "2050": 170,
-            "2055": 165,
-            "2060": 160,
-          },
-        },
-      ],
-    },
+
+ 
     // Resource potential data
     coal: {
       title: "煤炭",
@@ -1509,198 +686,236 @@ export default function DataPanel({
     ECHPCOA: {
       title: "ECHPCOA (煤基联合供热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ECHPCOA", 42, 85, 30, 8000, 240, 0.05),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ECHPCOA", 65, 56, 40, 871, 34.9, 1.02),
     },
     EPLTCOAUSC: {
       title: "EPLTCOAUSC (超超临界煤电 - 空气冷却)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTCOAUSC", 45, 88, 35, 7500, 225, 0.045),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTCOAUSC", 40, 41, 40, 500, 25.2, 0.85),
     },
     HPLTCOA: {
       title: "HPLTCOA (煤基高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTCOA", 48, 90, 40, 9000, 270, 0.055),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTCOA", 60, 52, 40, 499, 25, 0.9),
     },
     ECHPCOACCS: {
       title: "ECHPCOACCS (带CCS的煤基联合供热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ECHPCOACCS", 38, 82, 30, 12000, 360, 0.07),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ECHPCOACCS", 45.5, 50, 40, 1364, 81.8, 3.0),
     },
     EPLTCUSCCCS: {
       title: "EPLTCUSCCCS (带CCS的超超临界煤电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTCUSCCCS", 40, 85, 35, 11500, 345, 0.065),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTCUSCCCS", 33.26, 60, 30, 1062, 63.7, 3.0),
     },
     HPLTCOACCS: {
       title: "HPLTCOACCS (带CCS的煤基高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTCOACCS", 43, 87, 40, 13000, 390, 0.075),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTCOACCS", 55, 50, 30, 799, 48, 2.5),
     },
     ECHPNGA: {
       title: "ECHPNGA (天然气联合供热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ECHPNGA", 50, 87, 25, 6000, 180, 0.04),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ECHPNGA", 69, 58, 30, 883, 31.3, 1.0),
     },
     EPLTNGANGCC: {
       title: "EPLTNGANGCC (天然气联合循环发电 - 空气冷却)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTNGANGCC", 55, 90, 30, 5500, 165, 0.035),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTNGANGCC", 33, 55, 25, 559, 22.4, 1.0),
     },
     HPLTGAS: {
       title: "HPLTGAS (燃气高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTGAS", 58, 92, 35, 7000, 210, 0.045),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTGAS", 79, 31, 20, 461, 23, 1.1),
     },
     ECHPNGACCS: {
       title: "ECHPNGACCS (带CCS的天然气联合供热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ECHPNGACCS", 45, 85, 25, 9000, 270, 0.06),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ECHPNGACCS", 52, 58, 25, 1108, 66.5, 2.5),
     },
     EPLTNGACCS: {
       title: "EPLTNGACCS (带CCS的天然气联合循环发电 - 空气冷却)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTNGACCS", 50, 88, 30, 8500, 255, 0.055),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTNGACCS", 44.27, 58, 30, 921, 55.2, 2.5),
     },
     HPLTGASCCS: {
       title: "HPLTGASCCS (带CCS的燃气高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTGASCCS", 53, 90, 35, 10000, 300, 0.065),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTGASCCS", 75, 50, 20, 692, 41.5, 2.0),
     },
     EPLTNUC: {
       title: "EPLTNUC (核电 - 一次性冷却)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTNUC", 33, 90, 60, 15000, 450, 0.03),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTNUC", 33, 85, 40, 1995, 199.5, 4.0),
     },
     EPLTHYDL: {
       title: "EPLTHYDL (大型水电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTHYDL", 60, 45, 80, 12000, 120, 0.01),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTHYDL", 50, 45, 60, 1066, 42.6, 2.0),
     },
     EPLTWINONS: {
       title: "EPLTWINONS (陆上风电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTWINONS", 45, 25, 25, 7000, 210, 0.02),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTWINONS", 70, 20, 20, 1095, 32.8, 1.0),
     },
     EPLTWINOFS: {
       title: "EPLTWINOFS (海上风电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTWINOFS", 50, 35, 25, 12000, 360, 0.03),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTWINOFS", 70, 20, 25, 1980, 79.2, 1.0),
     },
     EPLTSOLPV: {
       title: "EPLTSOLPV (太阳能光伏)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTSOLPV", 60, 18, 25, 5000, 150, 0.01),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTSOLPV", 40, 20, 25, 754, 22.6, 1.0),
     },
     ECHPBSL: {
       title: "ECHPBSL (固体生物质燃烧联合供热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ECHPBSL", 35, 80, 25, 9000, 270, 0.06),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ECHPBSL", 35, 40, 20, 1748, 69.9, 6.0),
     },
     HPLTBSL: {
       title: "HPLTBSL (固体生物质高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTBSL", 40, 82, 30, 10000, 300, 0.065),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTBSL", 60, 57, 20, 571, 28.6, 3.0),
     },
     EPLTBIOSLDC: {
       title: "EPLTBIOSLDC (固体生物质混烧发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTBIOSLDC", 38, 85, 30, 8500, 255, 0.055),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTBIOSLDC", 38, 51.78, 30, 1350, 55.0, 6.0),
     },
     ECHPBIOBSLDCCS: {
       title: "ECHPBIOBSLDCCS (带CCS的固体生物质燃烧联合供热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ECHPBIOBSLDCCS", 32, 78, 25, 12000, 360, 0.08),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ECHPBIOBSLDCCS", 30, 50, 20, 2128, 85.1, 8.0),
     },
     EPLTBSLDCCS: {
       title: "EPLTBSLDCCS (固体生物质直接燃烧带CCS发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTBSLDCCS", 35, 80, 30, 11500, 345, 0.075),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTBSLDCCS", 30, 56.47, 25, 2128, 145.0, 16.0),
     },
     EPLTCBECCS: {
       title: "EPLTCBECCS20-100 (固体生物质与煤混烧BECCS，比例20%-100%)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTCBECCS", 37, 82, 30, 12000, 360, 0.07),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTCBECCS", 33.4, 56.47, 25, 1182, 118.2, 10.0),
     },
     HPLTBSLCCS: {
       title: "HPLTBSLCCS (带CCS的固体生物质高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTBSLCCS", 38, 83, 30, 12500, 375, 0.075),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTBSLCCS", 35, 57, 20, 913, 45.7, 7.5),
     },
     ECHPOIL: {
       title: "ECHPOIL (油基联合供热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ECHPOIL", 40, 85, 25, 7000, 210, 0.05),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ECHPOIL", 69, 56.47, 30, 803, 32.1, 1.2),
     },
     EPLTOILST: {
       title: "EPLTOILST (油蒸汽轮机发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("EPLTOILST", 42, 87, 30, 6500, 195, 0.045),
+      data: getEmptyData(),
+      techData: generatePowerTechData("EPLTOILST", 33, 50, 30, 673, 25.9, 0.85),
     },
     HPLTOIL: {
       title: "HPLTOIL (油基高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTOIL", 45, 88, 35, 8000, 240, 0.055),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTOIL", 75, 52, 20, 499, 25.0, 1.0),
     },
     HPLTOILCCS: {
       title: "HPLTOILCCS (带CCS的油基高温发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTOILCCS", 40, 85, 35, 11000, 330, 0.07),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTOILCCS", 70, 52, 20, 799, 40.0, 2.0),
     },
     HPLTGEO: {
       title: "HPLTGEO (地热发电)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HPLTGEO", 34, 80, 30, 14000, 420, 0.02),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HPLTGEO", 10, 92, 20, 1427, 71.4, 2.0),
     },
 
     // Hydrogen production technologies
     ALK: {
       title: "ALK (碱性电解水制氢)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ALK", 65, 85, 20, 5000, 150, 0.03),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ALK", 65, 85, 20, 800, 40.0, 1.5),
     },
     SOEC: {
       title: "SOEC (固体氧化物电解水制氢)",
       isEnergyTech: true,
-      techData: generatePowerTechData("SOEC", 75, 80, 15, 8000, 240, 0.04),
+      data: getEmptyData(),
+      techData: generatePowerTechData("SOEC", 75, 80, 15, 1200, 60.0, 2.0),
     },
     AEM: {
       title: "AEM (阴离子交换膜制氢)",
       isEnergyTech: true,
-      techData: generatePowerTechData("AEM", 70, 82, 18, 6000, 180, 0.035),
+      data: getEmptyData(),
+      techData: generatePowerTechData("AEM", 70, 82, 18, 900, 45.0, 1.8),
     },
     PEM: {
       title: "PEM (质子交换膜电解水制氢)",
       isEnergyTech: true,
-      techData: generatePowerTechData("PEM", 68, 88, 20, 7000, 210, 0.038),
+      data: getEmptyData(),
+      techData: generatePowerTechData("PEM", 68, 88, 20, 1000, 50.0, 1.9),
     },
 
     // Oil refining technologies
     ATM: {
       title: "ATM (常压蒸馏)",
       isEnergyTech: true,
-      techData: generatePowerTechData("ATM", 60, 92, 30, 10000, 300, 0.02),
+      data: getEmptyData(),
+      techData: generatePowerTechData("ATM", 60, 92, 30, 600, 30.0, 1.0),
     },
     FCC: {
       title: "FCC (流化催化裂化)",
       isEnergyTech: true,
-      techData: generatePowerTechData("FCC", 45, 90, 25, 12000, 360, 0.025),
+      data: getEmptyData(),
+      techData: generatePowerTechData("FCC", 45, 90, 25, 800, 40.0, 1.2),
     },
     HYD: {
       title: "HYD (加氢裂化)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HYD", 56, 88, 28, 15000, 450, 0.03),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HYD", 56, 88, 28, 900, 45.0, 1.5),
     },
 
     // Coking technologies
     CONV: {
       title: "CONV (常规焦炉炼焦)",
       isEnergyTech: true,
-      techData: generatePowerTechData("CONV", 60, 85, 30, 9000, 270, 0.04),
+      data: getEmptyData(),
+      techData: generatePowerTechData("CONV", 60, 85, 30, 700, 35.0, 1.4),
     },
     HR: {
       title: "HR (热回收焦炉炼焦)",
       isEnergyTech: true,
-      techData: generatePowerTechData("HR", 55, 88, 25, 11000, 330, 0.035),
+      data: getEmptyData(),
+      techData: generatePowerTechData("HR", 55, 88, 25, 850, 42.5, 1.6),
     },
 
     // 添加能源化工技术的数据
@@ -1713,9 +928,9 @@ export default function DataPanel({
         45,    // 转化效率
         85,    // 可用系数
         30,    // 寿期
-        12000, // 投资成本
-        360,   // 固定运维成本
-        0.05   // 可变运维成本
+        1200,  // 投资成本
+        60.0,  // 固定运维成本
+        2.0    // 可变运维成本
       ),
     },
     CTH: {
@@ -1727,9 +942,9 @@ export default function DataPanel({
         50,    // 转化效率
         88,    // 可用系数
         30,    // 寿期
-        10000, // 投资成本
-        300,   // 固定运维成本
-        0.04   // 可变运维成本
+        1000,  // 投资成本
+        50.0,  // 固定运维成本
+        1.8    // 可变运维成本
       ),
     },
     "oil-refining": {
@@ -1741,9 +956,9 @@ export default function DataPanel({
         42,    // 转化效率
         90,    // 可用系数
         35,    // 寿期
-        8000,  // 投资成本
-        240,   // 固定运维成本
-        0.03   // 可变运维成本
+        800,   // 投资成本
+        40.0,  // 固定运维成本
+        1.5    // 可变运维成本
       ),
     },
     coking: {
@@ -1755,9 +970,9 @@ export default function DataPanel({
         48,    // 转化效率
         85,    // 可用系数
         30,    // 寿期
-        7000,  // 投资成本
-        210,   // 固定运维成本
-        0.03   // 可变运维成本
+        700,   // 投资成本
+        35.0,  // 固定运维成本
+        1.4    // 可变运维成本
       ),
     },
 
@@ -1773,9 +988,9 @@ export default function DataPanel({
         42,    // 发电效率
         85,    // 可用系数
         30,    // 寿期
-        4500,  // 投资成本
-        120,   // 固定运维成本
-        0.006  // 可变运维成本
+        500,   // 投资成本
+        25.0,  // 固定运维成本
+        0.85   // 可变运维成本
       ),
     },
     "gas-power": {
@@ -1787,9 +1002,9 @@ export default function DataPanel({
         55,    // 发电效率
         85,    // 可用系数
         25,    // 寿期
-        3200,  // 投资成本
-        80,    // 固定运维成本
-        0.003  // 可变运维成本
+        559,   // 投资成本
+        22.4,  // 固定运维成本
+        1.0    // 可变运维成本
       ),
     },
     "nuclear-power": {
@@ -1801,9 +1016,9 @@ export default function DataPanel({
         33,    // 发电效率
         90,    // 可用系数
         60,    // 寿期
-        13500, // 投资成本
-        300,   // 固定运维成本
-        0.005  // 可变运维成本
+        1995,  // 投资成本
+        199.5, // 固定运维成本
+        4.0    // 可变运维成本
       ),
     },
     "wind-power": {
@@ -1815,9 +1030,9 @@ export default function DataPanel({
         100,   // 发电效率
         28,    // 可用系数
         25,    // 寿期
-        5000,  // 投资成本
-        150,   // 固定运维成本
-        0.001  // 可变运维成本
+        1095,  // 投资成本
+        32.8,  // 固定运维成本
+        1.0    // 可变运维成本
       ),
     },
     "solar-power": {
@@ -1829,9 +1044,9 @@ export default function DataPanel({
         100,   // 发电效率
         18,    // 可用系数
         25,    // 寿期
-        3800,  // 投资成本
-        100,   // 固定运维成本
-        0.001  // 可变运维成本
+        754,   // 投资成本
+        22.6,  // 固定运维成本
+        1.0    // 可变运维成本
       ),
     },
     "biomass-power": {
@@ -1843,9 +1058,9 @@ export default function DataPanel({
         35,    // 发电效率
         80,    // 可用系数
         25,    // 寿期
-        6000,  // 投资成本
-        180,   // 固定运维成本
-        0.004  // 可变运维成本
+        1748,  // 投资成本
+        69.9,  // 固定运维成本
+        6.0    // 可变运维成本
       ),
     },
     "hydro-power": {
@@ -1857,9 +1072,9 @@ export default function DataPanel({
         100,   // 发电效率
         45,    // 可用系数
         60,    // 寿期
-        8000,  // 投资成本
-        200,   // 固定运维成本
-        0.002  // 可变运维成本
+        1066,  // 投资成本
+        42.6,  // 固定运维成本
+        2.0    // 可变运维成本
       ),
     },
     "geothermal-power": {
@@ -1871,9 +1086,9 @@ export default function DataPanel({
         100,   // 发电效率
         80,    // 可用系数
         30,    // 寿期
-        6500,  // 投资成本
-        180,   // 固定运维成本
-        0.003  // 可变运维成本
+        1427,  // 投资成本
+        71.4,  // 固定运维成本
+        2.0    // 可变运维成本
       ),
     },
     "ocean-power": {
@@ -1885,9 +1100,9 @@ export default function DataPanel({
         100,   // 发电效率
         40,    // 可用系数
         25,    // 寿期
-        7000,  // 投资成本
-        210,   // 固定运维成本
-        0.004  // 可变运维成本
+        1500,  // 投资成本
+        75.0,  // 固定运维成本
+        2.5    // 可变运维成本
       ),
     },
     "hydrogen-power": {
@@ -1899,9 +1114,9 @@ export default function DataPanel({
         60,    // 发电效率
         85,    // 可用系数
         20,    // 寿期
-        4500,  // 投资成本
-        130,   // 固定运维成本
-        0.002  // 可变运维成本
+        900,   // 投资成本
+        45.0,  // 固定运维成本
+        1.8    // 可变运维成本
       ),
     },
   }
