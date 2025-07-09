@@ -156,7 +156,7 @@ export default function DataPanel({
   // Update data when province changes
   useEffect(() => {
     if (currentNode) {
-      const resourceTypes = ["coal", "oil", "natural-gas", "wind-resource", "solar-resource", "biomass-resource"];
+      const resourceTypes = ["coal", "oil", "natural-gas", "wind-resource", "solar-resource", "biomass-resource", "hydro-resource"];
       if (resourceTypes.includes(currentNode)) {
         setTableData(getResourceData(currentNode));
       }
@@ -1159,7 +1159,7 @@ export default function DataPanel({
       const paramData = dataSets[currentNode].techData[selectedParameter].data
 
       // 创建新的数据对象，确保指标名称与所选参数匹配
-      const updatedData = paramData.map((row) => ({
+      const updatedData = paramData.map((row: DataRow) => ({
         ...row,
         indicator: getLabelForParameter(selectedParameter),
         unit: getUnitForParameter(selectedParameter),
