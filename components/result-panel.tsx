@@ -3,11 +3,17 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import type { NavigationItem, ContentSection } from "./energy-platform"
+import type { NavigationItem } from "./energy-platform"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import EditableDataTable from "./editable-data-table"
 import SimpleChart from "./simple-chart"
 import emissionsData from "@/data/excel/json/emissions.json"
+import elcMixData from "@/data/excel/json/elc_mix.json"
+import capData from "@/data/excel/json/cap.json"
+import newCapData from "@/data/excel/json/newcap.json"
+import peData from "@/data/excel/json/pe.json"
+import h2nData from "@/data/excel/json/h2n.json"
+import elcTransData from "@/data/excel/json/elc_trans.json"
 
 interface DataRow {
   indicator: string
@@ -22,17 +28,17 @@ interface ResultPanelProps {
   selectedProvince: string
 }
 
-// 映射UI中的省份代码到emissions.json中的省份代码
+// 映射UI中的省份代码到JSON文件中的省份代码
 const provinceCodeMap: Record<string, string> = {
   beijing: "BEIJ",
   tianjin: "TIAN",
   hebei: "HEBE",
-  shanxi: "SHAN",
+  shanxi: "SHNX",
   neimenggu: "NEMO",
   liaoning: "LIAO",
   jilin: "JILI",
   heilongjiang: "HEIL",
-  shanghai: "SHAA",
+  shanghai: "SHAN",
   jiangsu: "JINU",
   zhejiang: "ZHEJ",
   anhui: "ANHU",
@@ -53,7 +59,111 @@ const provinceCodeMap: Record<string, string> = {
   gansu: "GANS",
   qinghai: "QING",
   ningxia: "NINX",
-  xinjiang: "XING"
+  xinjiang: "XINJ"
+};
+
+const years = ["2020", "2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
+
+// Helper function to create a data row
+const createDataRow = (indicator: string, unit: string, values: any): DataRow => ({
+  indicator,
+  unit,
+  values: values || {}
+});
+
+// Indicator mappings
+const elcMixIndicatorMap: Record<string, string> = {
+  coal: "煤",
+  "coal ccs": "煤CCS",
+  oil: "油",
+  gas: "气",
+  "gas ccs": "气CCS",
+  nuclear: "核电",
+  hydro: "水电",
+  biomass: "生物质",
+  "biomass ccs": "生物质CCS",
+  "co-firing beccs": "生物质与煤混烧 (BECCS)",
+  wind: "风电",
+  pv: "太阳能"
+};
+
+const capIndicatorMap = elcMixIndicatorMap;
+const newCapIndicatorMap = elcMixIndicatorMap;
+
+const peIndicatorMap: Record<string, string> = {
+  Coal: "煤炭",
+  Oil: "石油",
+  Gas: "天然气",
+  Nuclear: "核能",
+  Hydro: "水电",
+  Biomass: "生物质",
+  Wind: "风电",
+  PV: "太阳能"
+};
+
+const h2nIndicatorMap: Record<string, string> = {
+  ELC: "电解水制氢",
+  solar: "太阳能制氢",
+  onshore: "陆上风电制氢",
+  offshore: "海上风电制氢"
+};
+
+// Data processing functions
+const getElcMixData = (provinceData: any) => {
+  if (!provinceData) return [];
+  return Object.entries(elcMixIndicatorMap).map(([key, indicator]) =>
+    createDataRow(indicator, "亿千瓦时", provinceData[key])
+  ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+};
+
+const getCapData = (provinceData: any) => {
+  if (!provinceData) return [];
+  return Object.entries(capIndicatorMap).map(([key, indicator]) =>
+    createDataRow(indicator, "吉瓦", provinceData[key])
+  ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+};
+
+const getNewCapData = (provinceData: any) => {
+  if (!provinceData) return [];
+  return Object.entries(newCapIndicatorMap).map(([key, indicator]) =>
+    createDataRow(indicator, "吉瓦", provinceData[key])
+  ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+};
+
+const getPeData = (provinceData: any) => {
+  if (!provinceData) return [];
+  const combinedData: Record<string, any> = {};
+
+  for (const type of ["Coal", "Oil", "Gas", "Biomass"]) {
+    combinedData[type] = {};
+    for (const year of years) {
+      combinedData[type][year] = (provinceData[type]?.[year] || 0) + (provinceData[`${type} CCS`]?.[year] || 0);
+    }
+  }
+
+  const dataRows = Object.entries(peIndicatorMap).map(([key, indicator]) => {
+      let values = {};
+      if (combinedData[key]) {
+          values = combinedData[key];
+      } else if (provinceData[key]) {
+          values = provinceData[key];
+      }
+      return createDataRow(indicator, "万吨标准煤", values);
+  });
+
+  return dataRows.filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+};
+
+const getH2nData = (provinceData: any) => {
+  if (!provinceData) return [];
+  return Object.entries(h2nIndicatorMap).map(([key, indicator]) =>
+    createDataRow(indicator, "万吨", provinceData[key])
+  ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+};
+
+const getElcTransData = (provinceData: any) => {
+  if (!provinceData) return [];
+  return [createDataRow("净调出电量", "亿千瓦时", provinceData["ELC_TRA"])];
 };
 
 export default function ResultPanel({
@@ -66,967 +176,153 @@ export default function ResultPanel({
   const [tableData, setTableData] = useState<DataRow[]>([])
   const [nodeTitle, setNodeTitle] = useState<string>("")
   const [currentNode, setCurrentNode] = useState<string | null>(null)
+  const [resultDataSets, setResultDataSets] = useState<Record<string, any>>({});
 
-  // 结果数据年份
-  const years = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"]
-
-  // 获取当前省份的排放数据
-  const getEmissionsData = (provinceCode: string) => {
-    const provinceEmissionsCode = provinceCodeMap[provinceCode] || "BEIJ"
-    const provinceData = emissionsData[provinceEmissionsCode] || {
-      FE: {},
-      SUPPLY: {},
-      TOTAL: {}
-    }
+  useEffect(() => {
+    const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
     
-    return {
-      "emissions-supply": {
-        title: "供应排放",
-        defaultChartType: "line",
-        data: [
-          {
-            indicator: "供应排放量",
-            unit: "亿吨 CO₂",
-            values: {...provinceData.SUPPLY}
-          }
-        ]
-      },
-      "emissions-end-use": {
-        title: "终端排放",
-        defaultChartType: "line",
-        data: [
-          {
-            indicator: "终端排放量",
-            unit: "亿吨 CO₂",
-            values: {...provinceData.FE}
-          }
-        ]
-      },
-      "emissions-total": {
-        title: "总排放",
-        defaultChartType: "line",
-        data: [
-          {
-            indicator: "总排放量",
-            unit: "亿吨 CO₂",
-            values: {...provinceData.TOTAL}
-          }
-        ]
-      }
-    }
-  }
+    const newResultDataSets = {
+        "emissions-supply": {
+          title: "供应排放",
+          defaultChartType: "line",
+          data: [createDataRow("供应排放量", "亿吨 CO₂", (emissionsData as any)[provinceCode]?.SUPPLY)]
+        },
+        "emissions-end-use": {
+          title: "终端排放",
+          defaultChartType: "line",
+          data: [createDataRow("终端排放量", "亿吨 CO₂", (emissionsData as any)[provinceCode]?.FE)]
+        },
+        "emissions-total": {
+          title: "总排放",
+          defaultChartType: "line",
+          data: [createDataRow("总排放量", "亿吨 CO₂", (emissionsData as any)[provinceCode]?.TOTAL)]
+        },
+        "power-generation-mix": {
+          title: "发电结构",
+          defaultChartType: "line",
+          data: getElcMixData((elcMixData as any)[provinceCode])
+        },
+        "installed-power-capacity": {
+          title: "电力装机",
+          defaultChartType: "line",
+          data: getCapData((capData as any)[provinceCode])
+        },
+        "new-power-capacity": {
+          title: "新增电力装机",
+          defaultChartType: "line",
+          data: getNewCapData((newCapData as any)[provinceCode])
+        },
+        "primary-energy-supply": {
+          title: "一次能源供应",
+          defaultChartType: "line",
+          data: getPeData((peData as any)[provinceCode])
+        },
+        "hydrogen-supply": {
+          title: "氢能供应",
+          defaultChartType: "line",
+          data: getH2nData((h2nData as any)[provinceCode])
+        },
+        "net-power-export": {
+          title: "净调出电量",
+          defaultChartType: "line",
+          data: getElcTransData((elcTransData as any)[provinceCode])
+        }
+    };
+    setResultDataSets(newResultDataSets);
+  }, [selectedProvince]);
 
-  // 结果数据集
-  const resultDataSets: Record<
-    string,
-    {
-      title: string
-      data: DataRow[]
-      defaultChartType?: "line" | "bar" | "pie" | "stacked"
-    }
-  > = {
-    // 能源供应相关结果
-    "power-generation-mix": {
-      title: "发电结构",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 2400,
-            "2030": 2000,
-            "2035": 1700,
-            "2040": 1400,
-            "2045": 1100,
-            "2050": 800,
-            "2055": 500,
-            "2060": 200,
-          },
-        },
-        {
-          indicator: "煤CCS",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 0,
-            "2030": 100,
-            "2035": 200,
-            "2040": 300,
-            "2045": 200,
-            "2050": 100,
-            "2055": 50,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "油",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 1910,
-            "2030": 1705,
-            "2035": 1500,
-            "2040": 1295,
-            "2045": 1090,
-            "2050": 885,
-            "2055": 680,
-            "2060": 475,
-          },
-        },
-        {
-          indicator: "气",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 800,
-            "2030": 950,
-            "2035": 1100,
-            "2040": 1250,
-            "2045": 1100,
-            "2050": 950,
-            "2055": 800,
-            "2060": 650,
-          },
-        },
-        {
-          indicator: "核电",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 400,
-            "2030": 600,
-            "2035": 800,
-            "2040": 1000,
-            "2045": 1200,
-            "2050": 1400,
-            "2055": 1600,
-            "2060": 1800,
-          },
-        },
-        {
-          indicator: "水电",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 800,
-            "2030": 850,
-            "2035": 900,
-            "2040": 950,
-            "2045": 1000,
-            "2050": 1050,
-            "2055": 1100,
-            "2060": 1150,
-          },
-        },
-        {
-          indicator: "风电",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 600,
-            "2030": 900,
-            "2035": 1200,
-            "2040": 1500,
-            "2045": 1800,
-            "2050": 2100,
-            "2055": 2400,
-            "2060": 2700,
-          },
-        },
-        {
-          indicator: "太阳能",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 400,
-            "2030": 700,
-            "2035": 1000,
-            "2040": 1300,
-            "2045": 1600,
-            "2050": 1900,
-            "2055": 2200,
-            "2060": 2500,
-          },
-        },
-      ],
-    },
-    "installed-power-capacity": {
-      title: "电力装机",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤",
-          unit: "GW",
-          values: {
-            "2025": 1000,
-            "2030": 900,
-            "2035": 800,
-            "2040": 700,
-            "2045": 600,
-            "2050": 500,
-            "2055": 400,
-            "2060": 300,
-          },
-        },
-        {
-          indicator: "煤CCS",
-          unit: "GW",
-          values: {
-            "2025": 0,
-            "2030": 20,
-            "2035": 40,
-            "2040": 60,
-            "2045": 80,
-            "2050": 100,
-            "2055": 100,
-            "2060": 100,
-          },
-        },
-        {
-          indicator: "油",
-          unit: "GW",
-          values: {
-            "2025": 30,
-            "2030": 25,
-            "2035": 20,
-            "2040": 15,
-            "2045": 10,
-            "2050": 5,
-            "2055": 0,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "油CCS",
-          unit: "GW",
-          values: {
-            "2025": 0,
-            "2030": 5,
-            "2035": 10,
-            "2040": 15,
-            "2045": 10,
-            "2050": 5,
-            "2055": 0,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "气",
-          unit: "GW",
-          values: {
-            "2025": 130,
-            "2030": 140,
-            "2035": 150,
-            "2040": 160,
-            "2045": 150,
-            "2050": 140,
-            "2055": 130,
-            "2060": 110,
-          },
-        },
-        {
-          indicator: "气CCS",
-          unit: "GW",
-          values: {
-            "2025": 0,
-            "2030": 20,
-            "2035": 40,
-            "2040": 60,
-            "2045": 50,
-            "2050": 40,
-            "2055": 30,
-            "2060": 10,
-          },
-        },
-        {
-          indicator: "核电",
-          unit: "GW",
-          values: {
-            "2025": 70,
-            "2030": 100,
-            "2035": 130,
-            "2040": 160,
-            "2045": 190,
-            "2050": 220,
-            "2055": 250,
-            "2060": 280,
-          },
-        },
-        {
-          indicator: "地热",
-          unit: "GW",
-          values: {
-            "2025": 2,
-            "2030": 5,
-            "2035": 8,
-            "2040": 12,
-            "2045": 15,
-            "2050": 18,
-            "2055": 22,
-            "2060": 25,
-          },
-        },
-        {
-          indicator: "生物质-煤",
-          unit: "GW",
-          values: {
-            "2025": 10,
-            "2030": 15,
-            "2035": 20,
-            "2040": 25,
-            "2045": 20,
-            "2050": 15,
-            "2055": 10,
-            "2060": 5,
-          },
-        },
-        {
-          indicator: "生物质-煤CCS",
-          unit: "GW",
-          values: {
-            "2025": 0,
-            "2030": 5,
-            "2035": 10,
-            "2040": 15,
-            "2045": 20,
-            "2050": 25,
-            "2055": 30,
-            "2060": 35,
-          },
-        },
-        {
-          indicator: "生物质",
-          unit: "GW",
-          values: {
-            "2025": 20,
-            "2030": 25,
-            "2035": 30,
-            "2040": 35,
-            "2045": 40,
-            "2050": 45,
-            "2055": 50,
-            "2060": 55,
-          },
-        },
-        {
-          indicator: "生物质CCS",
-          unit: "GW",
-          values: {
-            "2025": 0,
-            "2030": 5,
-            "2035": 10,
-            "2040": 15,
-            "2045": 25,
-            "2050": 35,
-            "2055": 45,
-            "2060": 55,
-          },
-        },
-        {
-          indicator: "水电",
-          unit: "GW",
-          values: {
-            "2025": 380,
-            "2030": 400,
-            "2035": 420,
-            "2040": 440,
-            "2045": 460,
-            "2050": 480,
-            "2055": 490,
-            "2060": 500,
-          },
-        },
-        {
-          indicator: "海洋能",
-          unit: "GW",
-          values: {
-            "2025": 0,
-            "2030": 2,
-            "2035": 5,
-            "2040": 8,
-            "2045": 12,
-            "2050": 15,
-            "2055": 18,
-            "2060": 22,
-          },
-        },
-        {
-          indicator: "风能",
-          unit: "GW",
-          values: {
-            "2025": 300,
-            "2030": 450,
-            "2035": 600,
-            "2040": 750,
-            "2045": 900,
-            "2050": 1050,
-            "2055": 1200,
-            "2060": 1350,
-          },
-        },
-        {
-          indicator: "太阳能",
-          unit: "GW",
-          values: {
-            "2025": 400,
-            "2030": 650,
-            "2035": 900,
-            "2040": 1150,
-            "2045": 1400,
-            "2050": 1650,
-            "2055": 1900,
-            "2060": 2150,
-          },
-        },
-      ],
-    },
-    "new-installed-capacity": {
-      title: "新增电力装机",
-      defaultChartType: "bar",
-      data: [
-        {
-          indicator: "煤电",
-          unit: "GW",
-          values: {
-            "2025": 20,
-            "2030": 10,
-            "2035": 5,
-            "2040": 0,
-            "2045": 0,
-            "2050": 0,
-            "2055": 0,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "气电",
-          unit: "GW",
-          values: {
-            "2025": 20,
-            "2030": 30,
-            "2035": 30,
-            "2040": 30,
-            "2045": 0,
-            "2050": 0,
-            "2055": 0,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "核电",
-          unit: "GW",
-          values: {
-            "2025": 10,
-            "2030": 30,
-            "2035": 30,
-            "2040": 30,
-            "2045": 30,
-            "2050": 30,
-            "2055": 30,
-            "2060": 30,
-          },
-        },
-        {
-          indicator: "水电",
-          unit: "GW",
-          values: {
-            "2025": 10,
-            "2030": 20,
-            "2035": 20,
-            "2040": 20,
-            "2045": 20,
-            "2050": 20,
-            "2055": 10,
-            "2060": 10,
-          },
-        },
-        {
-          indicator: "风电",
-          unit: "GW",
-          values: {
-            "2025": 50,
-            "2030": 150,
-            "2035": 150,
-            "2040": 150,
-            "2045": 150,
-            "2050": 150,
-            "2055": 150,
-            "2060": 150,
-          },
-        },
-        {
-          indicator: "太阳能",
-          unit: "GW",
-          values: {
-            "2025": 100,
-            "2030": 250,
-            "2035": 250,
-            "2040": 250,
-            "2045": 250,
-            "2050": 250,
-            "2055": 250,
-            "2060": 250,
-          },
-        },
-        {
-          indicator: "生物质能",
-          unit: "GW",
-          values: {
-            "2025": 10,
-            "2030": 20,
-            "2035": 20,
-            "2040": 20,
-            "2045": 20,
-            "2050": 20,
-            "2055": 20,
-            "2060": 20,
-          },
-        },
-      ],
-    },
-    "hydrogen-supply": {
-      title: "氢能供应",
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤制气",
-          unit: "万吨",
-          values: {
-            "2025": 100,
-            "2030": 150,
-            "2035": 200,
-            "2040": 250,
-            "2045": 200,
-            "2050": 150,
-            "2055": 100,
-            "2060": 50,
-          },
-        },
-        {
-          indicator: "气制氢",
-          unit: "万吨",
-          values: {
-            "2025": 50,
-            "2030": 70,
-            "2035": 90,
-            "2040": 110,
-            "2045": 90,
-            "2050": 70,
-            "2055": 50,
-            "2060": 30,
-          },
-        },
-        {
-          indicator: "电解水制氢",
-          unit: "万吨",
-          values: {
-            "2025": 10,
-            "2030": 50,
-            "2035": 90,
-            "2040": 130,
-            "2045": 180,
-            "2050": 230,
-            "2055": 280,
-            "2060": 330,
-          },
-        },
-        {
-          indicator: "生物质制氢",
-          unit: "万吨",
-          values: {
-            "2025": 5,
-            "2030": 15,
-            "2035": 25,
-            "2040": 35,
-            "2045": 45,
-            "2050": 55,
-            "2055": 65,
-            "2060": 75,
-          },
-        },
-      ],
-    },
-    "primary-energy-supply": {
-      title: "一次能源供应", 
-      defaultChartType: "stacked",
-      data: [
-        {
-          indicator: "煤",
-          unit: "万吨标煤",
-          values: {
-            "2025": 3900,
-            "2030": 3400,
-            "2035": 2900,
-            "2040": 2400,
-            "2045": 1900,
-            "2050": 1400,
-            "2055": 900,
-            "2060": 400,
-          },
-        },
-        {
-          indicator: "煤CCS",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 100,
-            "2035": 200,
-            "2040": 300,
-            "2045": 200,
-            "2050": 100,
-            "2055": 50,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "油",
-          unit: "万吨标煤",
-          values: {
-            "2025": 2500,
-            "2030": 2300,
-            "2035": 2100,
-            "2040": 1900,
-            "2045": 1700,
-            "2050": 1500,
-            "2055": 1300,
-            "2060": 1100,
-          },
-        },
-        {
-          indicator: "油CCS",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 50,
-            "2035": 100,
-            "2040": 150,
-            "2045": 100,
-            "2050": 50,
-            "2055": 25,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "气",
-          unit: "万吨标煤",
-          values: {
-            "2025": 1200,
-            "2030": 1300,
-            "2035": 1400,
-            "2040": 1500,
-            "2045": 1400,
-            "2050": 1300,
-            "2055": 1200,
-            "2060": 1100,
-          },
-        },
-        {
-          indicator: "气CCS",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 50,
-            "2035": 100,
-            "2040": 150,
-            "2045": 100,
-            "2050": 50,
-            "2055": 25,
-            "2060": 0,
-          },
-        },
-        {
-          indicator: "核能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 400,
-            "2030": 600,
-            "2035": 800,
-            "2040": 1000,
-            "2045": 1200,
-            "2050": 1400,
-            "2055": 1600,
-            "2060": 1800,
-          },
-        },
-        {
-          indicator: "地热能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 20,
-            "2030": 30,
-            "2035": 40,
-            "2040": 50,
-            "2045": 60,
-            "2050": 70,
-            "2055": 80,
-            "2060": 90,
-          },
-        },
-        {
-          indicator: "生物质",
-          unit: "万吨标煤",
-          values: {
-            "2025": 120,
-            "2030": 160,
-            "2035": 200,
-            "2040": 240,
-            "2045": 280,
-            "2050": 320,
-            "2055": 360,
-            "2060": 400,
-          },
-        },
-        {
-          indicator: "生物质CCS",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 40,
-            "2035": 80,
-            "2040": 120,
-            "2045": 160,
-            "2050": 200,
-            "2055": 240,
-            "2060": 280,
-          },
-        },
-        {
-          indicator: "水能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 800,
-            "2030": 850,
-            "2035": 900,
-            "2040": 950,
-            "2045": 1000,
-            "2050": 1050,
-            "2055": 1100,
-            "2060": 1150,
-          },
-        },
-        {
-          indicator: "海洋能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 0,
-            "2030": 10,
-            "2035": 20,
-            "2040": 30,
-            "2045": 40,
-            "2050": 50,
-            "2055": 60,
-            "2060": 70,
-          },
-        },
-        {
-          indicator: "风能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 600,
-            "2030": 900,
-            "2035": 1200,
-            "2040": 1500,
-            "2045": 1800,
-            "2050": 2100,
-            "2055": 2400,
-            "2060": 2700,
-          },
-        },
-        {
-          indicator: "太阳能",
-          unit: "万吨标煤",
-          values: {
-            "2025": 400,
-            "2030": 700,
-            "2035": 1000,
-            "2040": 1300,
-            "2045": 1600,
-            "2050": 1900,
-            "2055": 2200,
-            "2060": 2500,
-          },
-        },
-      ],
-    },
-    "net-electricity-export": {
-      title: "净调出电量",
-      defaultChartType: "line",
-      data: [
-        {
-          indicator: "净调出电量",
-          unit: "亿千瓦时",
-          values: {
-            "2025": 100,
-            "2030": 150,
-            "2035": 200,
-            "2040": 250,
-            "2045": 300,
-            "2050": 350,
-            "2055": 400,
-            "2060": 450,
-          },
-        },
-      ],
-    },
 
-    // 排放数据会在下面的useEffect中动态更新
-    ...getEmissionsData(selectedProvince)
-  }
-
-  // 更新数据当选择节点变化时
   useEffect(() => {
-    if (selectedNode && selectedNode !== currentNode) {
-      // 如果是排放相关节点，重新获取最新的排放数据
-      if (selectedNode.startsWith("emissions-")) {
-        const emissionsDataSets = getEmissionsData(selectedProvince)
-        if (emissionsDataSets[selectedNode]) {
-          setTableData(emissionsDataSets[selectedNode].data)
-          setNodeTitle(emissionsDataSets[selectedNode].title)
-          setChartType(emissionsDataSets[selectedNode].defaultChartType || "line")
-          setCurrentNode(selectedNode)
-          return
-        }
-      }
-      
-      // 非排放相关节点使用原有逻辑
-      if (resultDataSets[selectedNode]) {
-        setTableData(resultDataSets[selectedNode].data)
-        setNodeTitle(resultDataSets[selectedNode].title)
-        
-        if (resultDataSets[selectedNode].defaultChartType) {
-          setChartType(resultDataSets[selectedNode].defaultChartType)
-        } else {
-          setChartType("line")
-        }
-        
-        setCurrentNode(selectedNode)
+    if (selectedNode && resultDataSets[selectedNode]) {
+      const { title, data, defaultChartType } = resultDataSets[selectedNode]
+      setNodeTitle(title)
+      setTableData(data)
+      setChartType(defaultChartType || "line")
+      setCurrentNode(selectedNode)
+    } else if (activeNav) {
+      const firstNode =
+        activeNav.children && activeNav.children.length > 0
+          ? activeNav.children[0].id
+          : null
+      if (firstNode && resultDataSets[firstNode]) {
+        const { title, data, defaultChartType } = resultDataSets[firstNode]
+        setNodeTitle(title)
+        setTableData(data)
+        setChartType(defaultChartType || "line")
+        setCurrentNode(firstNode)
       } else {
-        setTableData([])
         setNodeTitle("")
-        setCurrentNode(null)
+        setTableData([])
       }
     }
-  }, [selectedNode, currentNode, selectedProvince])
+  }, [selectedNode, activeNav, resultDataSets])
 
-  // 当省份改变时，如果当前正在显示排放数据，则更新显示
-  useEffect(() => {
-    if (currentNode && currentNode.startsWith("emissions-")) {
-      const emissionsDataSets = getEmissionsData(selectedProvince)
-      if (emissionsDataSets[currentNode]) {
-        setTableData(emissionsDataSets[currentNode].data)
-      }
-    }
-  }, [selectedProvince, currentNode])
-
-  // 数据更新处理函数
   const handleDataChange = (newData: DataRow[]) => {
     setTableData(newData)
-    
-    // 这里不再修改resultDataSets，因为排放数据是动态生成的
+    // Update the main dataset
+    if (currentNode) {
+      const newResultDataSets = { ...resultDataSets }
+      newResultDataSets[currentNode].data = newData
+      setResultDataSets(newResultDataSets)
+    }
   }
 
-  // 在组件内部添加省份映射函数
   const getProvinceLabel = (provinceCode: string): string => {
-    const provinceMap: Record<string, string> = {
-      beijing: "北京",
-      tianjin: "天津", 
-      hebei: "河北",
-      shanxi: "山西",
-      neimenggu: "内蒙古",
-      liaoning: "辽宁",
-      jilin: "吉林",
-      heilongjiang: "黑龙江",
-      shanghai: "上海",
-      jiangsu: "江苏",
-      zhejiang: "浙江",
-      anhui: "安徽",
-      fujian: "福建",
-      jiangxi: "江西",
-      shandong: "山东",
-      henan: "河南",
-      hubei: "湖北",
-      hunan: "湖南",
-      guangdong: "广东",
-      guangxi: "广西",
-      hainan: "海南",
-      chongqing: "重庆",
-      sichuan: "四川",
-      guizhou: "贵州",
-      yunnan: "云南",
-      shaanxi: "陕西",
-      gansu: "甘肃",
-      qinghai: "青海",
-      ningxia: "宁夏",
-      xinjiang: "新疆"
-    };
-    
-    return provinceMap[provinceCode] || provinceCode;
-  };
+    const provinceName = Object.keys(provinceCodeMap).find(key => provinceCodeMap[key] === provinceCodeMap[provinceCode]);
+    return provinceName ? provinceName.charAt(0).toUpperCase() + provinceName.slice(1) : provinceCode;
+  }
+
+  const provinceName = Object.entries(provinceCodeMap).find(([name, code]) => code === provinceCodeMap[selectedProvince])?.[0] || selectedProvince
 
   return (
-    <div className="w-[65%] border-l border-border flex flex-col">
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">结果展示</h3>
-          {nodeTitle && <div className="text-sm text-muted-foreground">当前选择: {nodeTitle}</div>}
-        </div>
-        <div className="text-sm text-muted-foreground mb-2">
-          展示 {getProvinceLabel(selectedProvince)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : selectedScenario} 情景下的结果。
-        </div>
-      </div>
-
-      <div className="flex-1 flex flex-col p-4 overflow-auto">
-        {selectedNode === "demand-by-sector-fuel" ? (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
-            请在左侧选择具体的部门以查看分燃料用能需求数据
+    <Card className="h-full flex flex-col">
+      <CardContent className="flex-1 flex flex-col p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">{nodeTitle}</h2>
+          <div className="flex space-x-2">
+            <Button
+              variant={chartType === "line" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => setChartType("line")}
+            >
+              折线图
+            </Button>
+            <Button
+              variant={chartType === "bar" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => setChartType("bar")}
+            >
+              柱状图
+            </Button>
+            <Button
+              variant={chartType === "stacked" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => setChartType("stacked")}
+            >
+              堆叠图
+            </Button>
+            <Button
+              variant={chartType === "pie" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => setChartType("pie")}
+            >
+              饼图
+            </Button>
           </div>
-        ) : selectedNode && tableData.length > 0 ? (
-          <>
-            {/* 数据表格部分 */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium">{nodeTitle}数据</h4>
-                <div className="text-sm text-muted-foreground">点击单元格可编辑数值</div>
-              </div>
-              <EditableDataTable data={tableData} years={years} onDataChange={handleDataChange} />
-            </div>
-
-            {/* 图表部分 */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium">图表展示</h4>
-                <div className="flex gap-2">
-                  <Button
-                    variant={chartType === "line" ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => setChartType("line")}
-                  >折线图</Button>
-                  <Button
-                    variant={chartType === "bar" ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => setChartType("bar")}
-                  >柱状图</Button>
-                  <Button
-                    variant={chartType === "pie" ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => setChartType("pie")}
-                  >饼图</Button>
-                  <Button
-                    variant={chartType === "stacked" ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => setChartType("stacked")}
-                  >堆叠图</Button>
-                </div>
-              </div>
-
-              <Card className="h-[400px]">
-                <CardContent className="p-6">
-                  <SimpleChart type={chartType} data={tableData} title={nodeTitle} />
-                </CardContent>
-              </Card>
-            </div>
-          </>
-        ) : (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
-            请在左侧选择一个结果节点以查看数据
-          </div>
-        )}
-      </div>
-    </div>
+        </div>
+        <div className="mb-4">
+          <SimpleChart type={chartType} data={tableData} />
+        </div>
+        <div className="h-[300px]">
+          <ScrollArea className="h-full">
+            <EditableDataTable data={tableData} onDataChange={handleDataChange} years={years} />
+          </ScrollArea>
+        </div>
+        <div className="text-sm text-muted-foreground mt-2">
+           展示 {provinceName.charAt(0).toUpperCase() + provinceName.slice(1)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 

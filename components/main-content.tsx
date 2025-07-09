@@ -244,10 +244,10 @@ export default function MainContent({
       children: [
         { id: "power-generation-mix", label: "发电结构" },
         { id: "installed-power-capacity", label: "电力装机" },
-        { id: "new-installed-capacity", label: "新增电力装机" },
+        { id: "new-power-capacity", label: "新增电力装机" },
         { id: "primary-energy-supply", label: "一次能源供应" },
         { id: "hydrogen-supply", label: "氢能供应" },
-        { id: "net-electricity-export", label: "净调出电量" },
+        { id: "net-power-export", label: "净调出电量" },
       ]
     },
     {
