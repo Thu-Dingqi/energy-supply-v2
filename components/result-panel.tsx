@@ -14,6 +14,7 @@ import newCapData from "@/data/excel/json/newcap.json"
 import peData from "@/data/excel/json/pe.json"
 import h2nData from "@/data/excel/json/h2n.json"
 import elcTransData from "@/data/excel/json/elc_trans.json"
+import type { ContentSection } from "./energy-platform"
 
 interface DataRow {
   indicator: string
@@ -22,7 +23,8 @@ interface DataRow {
 }
 
 interface ResultPanelProps {
-  activeNav: NavigationItem
+  activeNav: "results"
+  activeSection: ContentSection
   selectedNode: string | null
   selectedScenario: string
   selectedProvince: string
@@ -204,6 +206,7 @@ const getElcTransData = (provinceData: any) => {
 // 移除 getEmissionsData 函数，将逻辑直接内联到 useEffect 中
 export default function ResultPanel({
   activeNav,
+  activeSection,
   selectedNode,
   selectedScenario,
   selectedProvince,

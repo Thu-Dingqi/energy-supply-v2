@@ -8,9 +8,18 @@ import type { NavigationItem } from "./energy-platform"
 interface SidebarProps {
   activeNav: NavigationItem
   setActiveNav: (nav: NavigationItem) => void
+  isModelComplete: boolean
+  setIsModelComplete: (isComplete: boolean) => void
+  onRunModel: () => void
 }
 
-export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
+export default function Sidebar({
+  activeNav,
+  setActiveNav,
+  isModelComplete,
+  setIsModelComplete,
+  onRunModel,
+}: SidebarProps) {
   const navItems = [
     { id: "analysis" as const, icon: BarChart3, label: "分析" },
     { id: "results" as const, icon: PieChart, label: "结果" },
@@ -24,7 +33,7 @@ export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
   ]
 
   return (
-    <div className="w-1/5 bg-muted/30 border-r border-border flex flex-col items-center py-6">
+    <div className="w-[130px] bg-muted/30 border-r border-border flex flex-col items-center py-6">
       <TooltipProvider>
         <div className="flex flex-col gap-6">
           {navItems.map((item) => (
