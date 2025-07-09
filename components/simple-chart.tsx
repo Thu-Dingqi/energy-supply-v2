@@ -9,9 +9,10 @@ interface DataRow {
 }
 
 interface SimpleChartProps {
-  type: "line" | "bar" | "pie" | "stacked"
   data: DataRow[]
-  title: string
+  type: "line" | "bar" | "pie" | "stacked"
+  title?: string
+  unit?: string
 }
 
 export default function SimpleChart({ type, data, title }: SimpleChartProps) {

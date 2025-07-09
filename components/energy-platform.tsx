@@ -20,12 +20,13 @@ export default function EnergyPlatform() {
     setSelectedNode(nodeId)
   }
 
+  // 恢复到更接近原始设计的布局
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Left Column - Navigation (smaller width) */}
       <Navigation activeNav={activeNav} setActiveNav={setActiveNav} />
 
-      {/* Middle Column - Main Content (reduced by 30%) */}
+      {/* Middle Column - Main Content */}
       {activeNav !== "note" && (
         <MainContent
           activeNav={activeNav}
@@ -40,23 +41,25 @@ export default function EnergyPlatform() {
         />
       )}
 
-      {/* Right Column - Data/Charts/Explanation (increased proportionally) */}
-      {activeNav === "results" ? (
-        <ResultPanel
-          activeNav={activeNav}
-          selectedNode={selectedNode}
-          selectedScenario={selectedScenario}
-          selectedProvince={selectedProvince}
-        />
-      ) : (
-        <DataPanel
-          activeNav={activeNav}
-          activeSection={activeSection}
-          selectedNode={selectedNode}
-          selectedScenario={selectedScenario}
-          selectedProvince={selectedProvince}
-        />
-      )}
+      {/* Right Column - Data/Charts/Explanation */}
+      <div className="flex-1">
+        {activeNav === "results" ? (
+          <ResultPanel
+            activeNav={activeNav}
+            selectedNode={selectedNode}
+            selectedScenario={selectedScenario}
+            selectedProvince={selectedProvince}
+          />
+        ) : (
+          <DataPanel
+            activeNav={activeNav}
+            activeSection={activeSection}
+            selectedNode={selectedNode}
+            selectedScenario={selectedScenario}
+            selectedProvince={selectedProvince}
+          />
+        )}
+      </div>
     </div>
   )
 }

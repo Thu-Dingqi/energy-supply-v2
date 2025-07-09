@@ -64,6 +64,15 @@ const provinceCodeMap: Record<string, string> = {
 
 const years = ["2020", "2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
 
+// 修改单位为英文并修改 createDataRow 函数
+const unitMap: Record<string, string> = {
+  "亿吨 CO₂": "亿吨 CO₂",
+  "亿千瓦时": "100M kWh",
+  "吉瓦": "GW",
+  "万吨标准煤": "万吨标煤",
+  "万吨": "10K t"
+};
+
 // Helper function to create a data row with formatted values (2 decimal places)
 const createDataRow = (indicator: string, unit: string, values: any): DataRow => {
   // Format values to 2 decimal places if they are numbers
@@ -78,9 +87,12 @@ const createDataRow = (indicator: string, unit: string, values: any): DataRow =>
     });
   }
   
+  // Map Chinese units to English units
+  const englishUnit = unitMap[unit] || unit;
+  
   return {
     indicator,
-    unit,
+    unit: englishUnit,
     values: formattedValues
   };
 };
@@ -289,7 +301,7 @@ export default function ResultPanel({
   const provinceName = Object.entries(provinceCodeMap).find(([name, code]) => code === provinceCodeMap[selectedProvince])?.[0] || selectedProvince
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full w-full flex flex-col">
       <CardContent className="flex-1 flex flex-col p-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">{nodeTitle}</h2>
@@ -324,8 +336,13 @@ export default function ResultPanel({
             </Button>
                 </div>
               </div>
-        <div className="mb-4">
-          <SimpleChart type={chartType} data={tableData} />
+        <div className="mb-4 h-[400px] w-full">
+          <SimpleChart 
+            type={chartType} 
+            data={tableData} 
+            title={nodeTitle} 
+            unit={tableData.length > 0 ? tableData[0].unit : ""} 
+          />
         </div>
         <div className="h-[300px]">
           <ScrollArea className="h-full">
