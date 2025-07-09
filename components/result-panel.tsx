@@ -66,10 +66,12 @@ const provinceCodeMap: Record<string, string> = {
 const years = ["2020", "2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
 // Special years array for emissions data (without 2020)
 const emissionsYears = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
+// Special years array for hydrogen and new capacity data (without 2020)
+const from2025Years = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
 
 // 1-2. 修正单位映射
 const unitMap: Record<string, string> = {
-  "亿吨 CO₂": "亿吨", // 改为“亿吨”
+  "亿吨 CO₂": "亿吨", // 改为"亿吨"
   "亿千瓦时": "TWh",
   "吉瓦": "GW",
   "万吨标准煤": "万吨标煤",
@@ -160,8 +162,18 @@ const getCapData = (provinceData: any) => {
 
 const getNewCapData = (provinceData: any) => {
   if (!provinceData) return [];
+  // 过滤数据，只保留2025年及以后的数据
+  const filteredData: Record<string, any> = {};
+  Object.entries(provinceData).forEach(([key, values]) => {
+    if (values && typeof values === 'object') {
+      filteredData[key] = Object.fromEntries(
+        Object.entries(values as Record<string, any>).filter(([year]) => parseInt(year) >= 2025)
+      );
+    }
+  });
+  
   return Object.entries(newCapIndicatorMap).map(([key, indicator]) =>
-    createDataRow(indicator, "吉瓦", provinceData[key])
+    createDataRow(indicator, "吉瓦", filteredData[key])
   ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
 };
 
@@ -191,8 +203,18 @@ const getPeData = (provinceData: any) => {
 
 const getH2nData = (provinceData: any) => {
   if (!provinceData) return [];
+  // 过滤数据，只保留2025年及以后的数据
+  const filteredData: Record<string, any> = {};
+  Object.entries(provinceData).forEach(([key, values]) => {
+    if (values && typeof values === 'object') {
+      filteredData[key] = Object.fromEntries(
+        Object.entries(values as Record<string, any>).filter(([year]) => parseInt(year) >= 2025)
+      );
+    }
+  });
+  
   return Object.entries(h2nIndicatorMap).map(([key, indicator]) =>
-    createDataRow(indicator, "万吨", provinceData[key])
+    createDataRow(indicator, "万吨", filteredData[key])
   ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
 };
 
@@ -288,6 +310,8 @@ export default function ResultPanel({
       // Set appropriate years array based on the selected node
       if (selectedNode.startsWith('emissions-')) {
         setCurrentYears(emissionsYears);
+      } else if (selectedNode === 'hydrogen-supply' || selectedNode === 'new-power-capacity') {
+        setCurrentYears(from2025Years);
       } else {
         setCurrentYears(years);
       }
@@ -307,6 +331,8 @@ export default function ResultPanel({
         // Set appropriate years array based on the first node
         if (firstNode.startsWith('emissions-')) {
           setCurrentYears(emissionsYears);
+        } else if (firstNode === 'hydrogen-supply' || firstNode === 'new-power-capacity') {
+          setCurrentYears(from2025Years);
         } else {
           setCurrentYears(years);
         }
@@ -340,7 +366,7 @@ export default function ResultPanel({
       <div className="h-full w-full flex items-center justify-center bg-muted/30">
         <div className="text-center">
           <h3 className="text-lg font-semibold text-muted-foreground">请运行模型以展示结果</h3>
-          <p className="text-sm text-muted-foreground/80">点击左侧“结果数据”按钮来运行模型。</p>
+          <p className="text-sm text-muted-foreground/80">点击左侧"结果数据"按钮来运行模型。</p>
         </div>
       </div>
     )
@@ -402,4 +428,3 @@ export default function ResultPanel({
               </Card>
   )
 }
-
