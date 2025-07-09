@@ -52,17 +52,37 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
       // Calculate scales
       const xScale = (width - 2 * padding) / (years.length - 1)
       const allValues = data.flatMap((row) => Object.values(row.values).map((v) => Number(v)))
-      const yMax = Math.max(...allValues) * 1.1
-      const yScale = (height - 2 * padding) / yMax
+      const yMax = Math.max(...allValues, 0) * 1.1
+      const yMin = Math.min(...allValues, 0) * 1.1
+      
+      // Calculate the full range and scale
+      const yRange = yMax - yMin
+      const yScale = (height - 2 * padding) / yRange
+      
+      // Calculate the position of y=0 on the chart
+      const zeroY = height - padding - (-yMin * yScale)
 
       // Draw grid lines
       ctx.strokeStyle = "#e2e8f0"
       ctx.lineWidth = 0.5
 
+      // Draw zero line if we have negative values
+      if (yMin < 0) {
+        ctx.beginPath()
+        ctx.moveTo(padding, zeroY)
+        ctx.lineTo(width - padding, zeroY)
+        ctx.strokeStyle = "#94a3b8"
+        ctx.lineWidth = 1
+        ctx.stroke()
+        ctx.strokeStyle = "#e2e8f0"
+        ctx.lineWidth = 0.5
+      }
+
       // Horizontal grid lines
       const yTicks = 5
       for (let i = 0; i <= yTicks; i++) {
-        const y = height - padding - ((yMax * i) / yTicks) * yScale
+        const yValue = yMin + (yRange * i) / yTicks
+        const y = height - padding - (yValue - yMin) * yScale
         ctx.beginPath()
         ctx.moveTo(padding, y)
         ctx.lineTo(width - padding, y)
@@ -85,7 +105,8 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
         ctx.beginPath()
         years.forEach((year, i) => {
           const x = padding + i * xScale
-          const y = height - padding - Number(row.values[year]) * yScale
+          const value = Number(row.values[year])
+          const y = height - padding - (value - yMin) * yScale
 
           if (i === 0) {
             ctx.moveTo(x, y)
@@ -100,7 +121,8 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
         // Draw points
         years.forEach((year, i) => {
           const x = padding + i * xScale
-          const y = height - padding - Number(row.values[year]) * yScale
+          const value = Number(row.values[year])
+          const y = height - padding - (value - yMin) * yScale
 
           ctx.beginPath()
           ctx.arc(x, y, 5, 0, Math.PI * 2)
@@ -122,9 +144,9 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
       ctx.textAlign = "right"
       ctx.textBaseline = "middle"
       for (let i = 0; i <= yTicks; i++) {
-        const value = Math.round((yMax * i) / yTicks)
-        const y = height - padding - value * yScale
-        ctx.fillText(value.toString(), padding - 10, y)
+        const value = yMin + (yRange * i) / yTicks
+        const y = height - padding - (value - yMin) * yScale
+        ctx.fillText(value.toFixed(1), padding - 10, y)
       }
 
       // Draw title
@@ -173,19 +195,39 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
       const barWidth = (groupWidth * 0.8) / barCount
       const barSpacing = (groupWidth * 0.2) / (barCount + 1)
 
-      // Calculate max value for y-axis
+      // Calculate max and min values for y-axis
       const allValues = data.flatMap((row) => Object.values(row.values).map((v) => Number(v)))
-      const yMax = Math.max(...allValues) * 1.1
-      const yScale = (height - 2 * padding) / yMax
+      const yMax = Math.max(...allValues, 0) * 1.1
+      const yMin = Math.min(...allValues, 0) * 1.1
+      
+      // Calculate the full range and scale
+      const yRange = yMax - yMin
+      const yScale = (height - 2 * padding) / yRange
+      
+      // Calculate the position of y=0 on the chart
+      const zeroY = height - padding - (-yMin * yScale)
 
       // Draw grid lines
       ctx.strokeStyle = "#e2e8f0"
       ctx.lineWidth = 0.5
+      
+      // Draw zero line if we have negative values
+      if (yMin < 0) {
+        ctx.beginPath()
+        ctx.moveTo(padding, zeroY)
+        ctx.lineTo(width - padding, zeroY)
+        ctx.strokeStyle = "#94a3b8"
+        ctx.lineWidth = 1
+        ctx.stroke()
+        ctx.strokeStyle = "#e2e8f0"
+        ctx.lineWidth = 0.5
+      }
 
       // Horizontal grid lines
       const yTicks = 5
       for (let i = 0; i <= yTicks; i++) {
-        const y = height - padding - ((yMax * i) / yTicks) * yScale
+        const yValue = yMin + (yRange * i) / yTicks
+        const y = height - padding - (yValue - yMin) * yScale
         ctx.beginPath()
         ctx.moveTo(padding, y)
         ctx.lineTo(width - padding, y)
@@ -200,8 +242,17 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
         data.forEach((row, rowIndex) => {
           const x = padding + yearIndex * groupWidth + barSpacing * (rowIndex + 1) + rowIndex * barWidth
           const value = Number(row.values[year])
-          const y = height - padding - value * yScale
-          const barHeight = value * yScale
+          
+          // Calculate bar position and height based on value (positive or negative)
+          let y, barHeight;
+          
+          if (value >= 0) {
+            barHeight = value * yScale;
+            y = zeroY - barHeight;
+          } else {
+            barHeight = -value * yScale;
+            y = zeroY;
+          }
 
           ctx.fillStyle = colors[rowIndex % colors.length]
           ctx.fillRect(x, y, barWidth, barHeight)
@@ -221,9 +272,9 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
       ctx.textAlign = "right"
       ctx.textBaseline = "middle"
       for (let i = 0; i <= yTicks; i++) {
-        const value = Math.round((yMax * i) / yTicks)
-        const y = height - padding - value * yScale
-        ctx.fillText(value.toString(), padding - 10, y)
+        const value = yMin + (yRange * i) / yTicks
+        const y = height - padding - (value - yMin) * yScale
+        ctx.fillText(value.toFixed(1), padding - 10, y)
       }
 
       // Draw title
@@ -260,22 +311,62 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
       const barWidth = groupWidth * 0.8
       const barSpacing = groupWidth * 0.1
 
-      // Calculate max total value for y-axis
-      const totalsByYear: Record<string, number> = {}
-      years.forEach((year) => {
-        totalsByYear[year] = data.reduce((sum, row) => sum + Number(row.values[year]), 0)
+      // Separate positive and negative values for stacking
+      const positiveByYearAndRow: Record<string, Record<number, number>> = {}
+      const negativeByYearAndRow: Record<string, Record<number, number>> = {}
+      
+      years.forEach(year => {
+        positiveByYearAndRow[year] = {}
+        negativeByYearAndRow[year] = {}
+        
+        data.forEach((row, rowIndex) => {
+          const value = Number(row.values[year])
+          if (value >= 0) {
+            positiveByYearAndRow[year][rowIndex] = value
+          } else {
+            negativeByYearAndRow[year][rowIndex] = value
+          }
+        })
       })
-      const yMax = Math.max(...Object.values(totalsByYear)) * 1.1
-      const yScale = (height - 2 * padding) / yMax
+      
+      // Calculate max total for positive and min total for negative values
+      const totalPositiveByYear: Record<string, number> = {}
+      const totalNegativeByYear: Record<string, number> = {}
+      
+      years.forEach((year) => {
+        totalPositiveByYear[year] = Object.values(positiveByYearAndRow[year]).reduce((sum, val) => sum + val, 0)
+        totalNegativeByYear[year] = Object.values(negativeByYearAndRow[year]).reduce((sum, val) => sum + val, 0)
+      })
+      
+      const yMaxPositive = Math.max(...Object.values(totalPositiveByYear), 0) * 1.1
+      const yMinNegative = Math.min(...Object.values(totalNegativeByYear), 0) * 1.1
+      
+      // Calculate the full range and scale
+      const yRange = yMaxPositive - yMinNegative
+      const yScale = (height - 2 * padding) / yRange
+      
+      // Calculate the position of y=0 on the chart
+      const zeroY = height - padding - (-yMinNegative * yScale)
 
       // Draw grid lines
+      ctx.strokeStyle = "#e2e8f0"
+      ctx.lineWidth = 0.5
+
+      // Draw zero line
+      ctx.beginPath()
+      ctx.moveTo(padding, zeroY)
+      ctx.lineTo(width - padding, zeroY)
+      ctx.strokeStyle = "#94a3b8"
+      ctx.lineWidth = 1
+      ctx.stroke()
       ctx.strokeStyle = "#e2e8f0"
       ctx.lineWidth = 0.5
 
       // Horizontal grid lines
       const yTicks = 5
       for (let i = 0; i <= yTicks; i++) {
-        const y = height - padding - ((yMax * i) / yTicks) * yScale
+        const yValue = yMinNegative + (yRange * i) / yTicks
+        const y = height - padding - (yValue - yMinNegative) * yScale
         ctx.beginPath()
         ctx.moveTo(padding, y)
         ctx.lineTo(width - padding, y)
@@ -287,18 +378,32 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
 
       // Draw stacked bars for each year
       years.forEach((year, yearIndex) => {
-        let yOffset = 0
+        // Positive values stack up from zero
+        let positiveYOffset = 0
+        // Negative values stack down from zero
+        let negativeYOffset = 0
 
         data.forEach((row, rowIndex) => {
           const x = padding + yearIndex * groupWidth + barSpacing
           const value = Number(row.values[year])
-          const barHeight = value * yScale
-          const y = height - padding - barHeight - yOffset
-
-          ctx.fillStyle = colors[rowIndex % colors.length]
-          ctx.fillRect(x, y, barWidth, barHeight)
-
-          yOffset += barHeight
+          
+          if (value >= 0) {
+            const barHeight = value * yScale
+            const y = zeroY - barHeight - positiveYOffset
+            
+            ctx.fillStyle = colors[rowIndex % colors.length]
+            ctx.fillRect(x, y, barWidth, barHeight)
+            
+            positiveYOffset += barHeight
+          } else {
+            const barHeight = -value * yScale
+            const y = zeroY + negativeYOffset
+            
+            ctx.fillStyle = colors[rowIndex % colors.length]
+            ctx.fillRect(x, y, barWidth, barHeight)
+            
+            negativeYOffset += barHeight
+          }
         })
       })
 
@@ -315,9 +420,9 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
       ctx.textAlign = "right"
       ctx.textBaseline = "middle"
       for (let i = 0; i <= yTicks; i++) {
-        const value = Math.round((yMax * i) / yTicks)
-        const y = height - padding - value * yScale
-        ctx.fillText(value.toString(), padding - 10, y)
+        const value = yMinNegative + (yRange * i) / yTicks
+        const y = height - padding - (value - yMinNegative) * yScale
+        ctx.fillText(value.toFixed(1), padding - 10, y)
       }
 
       // Draw title
@@ -326,26 +431,28 @@ export default function SimpleChart({ type, data, title }: SimpleChartProps) {
       ctx.font = "14px sans-serif"
       ctx.fillText(`${title} (${data[0].unit})`, width / 2, 20)
 
-      // Draw legend
-      const legendX = width - 150
-      const legendY = 30
-      const legendSpacing = 25
+      // Draw legend if multiple indicators
+      if (data.length > 1) {
+        const legendX = width - 150
+        const legendY = 30
+        const legendSpacing = 25
 
-      data.forEach((row, i) => {
-        const y = legendY + i * legendSpacing
-        const color = colors[i % colors.length]
+        data.forEach((row, i) => {
+          const y = legendY + i * legendSpacing
+          const color = colors[i % colors.length]
 
-        // Draw color box
-        ctx.fillStyle = color
-        ctx.fillRect(legendX, y, 16, 16)
+          // Draw color box
+          ctx.fillStyle = color
+          ctx.fillRect(legendX, y, 16, 16)
 
-        // Draw label
-        ctx.fillStyle = "#334155"
-        ctx.textAlign = "left"
-        ctx.textBaseline = "middle"
-        ctx.font = "12px sans-serif"
-        ctx.fillText(row.indicator, legendX + 24, y + 8)
-      })
+          // Draw label
+          ctx.fillStyle = "#334155"
+          ctx.textAlign = "left"
+          ctx.textBaseline = "middle"
+          ctx.font = "12px sans-serif"
+          ctx.fillText(row.indicator, legendX + 24, y + 8)
+        })
+      }
     } else if (type === "pie") {
       // For pie chart - we'll use the last year's data
       const lastYear = years[years.length - 1]
