@@ -24,6 +24,8 @@ interface MainContentProps {
   setSelectedProvince: (province: string) => void
   selectedNode: string | null
   onNodeSelect: (nodeId: string) => void
+  isModelComplete: boolean
+  onModelComplete: () => void
 }
 
 export default function MainContent({
@@ -36,10 +38,11 @@ export default function MainContent({
   setSelectedProvince,
   selectedNode,
   onNodeSelect,
+  isModelComplete,
+  onModelComplete,
 }: MainContentProps) {
   // 添加新的状态
   const [isModelRunning, setIsModelRunning] = useState(false)
-  const [isModelComplete, setIsModelComplete] = useState(false)
   const [showModelDialog, setShowModelDialog] = useState(false)
 
   // 运行模型的函数
@@ -48,7 +51,7 @@ export default function MainContent({
     // 3秒后完成
     setTimeout(() => {
       setIsModelRunning(false)
-      setIsModelComplete(true)
+      onModelComplete() // Call the parent's onModelComplete function
       setShowModelDialog(false)
     }, 3000)
   }

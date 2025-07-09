@@ -26,6 +26,7 @@ interface ResultPanelProps {
   selectedNode: string | null
   selectedScenario: string
   selectedProvince: string
+  isModelComplete: boolean
 }
 
 // 映射UI中的省份代码到JSON文件中的省份代码
@@ -206,6 +207,7 @@ export default function ResultPanel({
   selectedNode,
   selectedScenario,
   selectedProvince,
+  isModelComplete,
 }: ResultPanelProps) {
   const [chartType, setChartType] = useState<"line" | "bar" | "pie" | "stacked">("line")
   const [tableData, setTableData] = useState<DataRow[]>([])
@@ -332,6 +334,17 @@ export default function ResultPanel({
   }
 
   const provinceName = Object.entries(provinceCodeMap).find(([name, code]) => code === provinceCodeMap[selectedProvince])?.[0] || selectedProvince
+
+  if (!isModelComplete) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-muted/30">
+        <div className="text-center">
+          <h3 className="text-lg font-semibold text-muted-foreground">请运行模型以展示结果</h3>
+          <p className="text-sm text-muted-foreground/80">点击左侧“结果数据”按钮来运行模型。</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <Card className="h-full w-full flex flex-col">

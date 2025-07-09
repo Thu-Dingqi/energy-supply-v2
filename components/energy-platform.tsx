@@ -10,11 +10,12 @@ export type NavigationItem = "analysis" | "results" | "note" | "return"
 export type ContentSection = "transformation" | "resources"
 
 export default function EnergyPlatform() {
-  const [activeNav, setActiveNav] = useState<NavigationItem>("overview")
+  const [activeNav, setActiveNav] = useState<NavigationItem>("analysis")
   const [activeSection, setActiveSection] = useState<ContentSection>("transformation")
   const [selectedScenario, setSelectedScenario] = useState("cn60")
   const [selectedProvince, setSelectedProvince] = useState("beijing")
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
+  const [isModelComplete, setIsModelComplete] = useState(false)
 
   const handleNodeSelect = (nodeId: string) => {
     setSelectedNode(nodeId)
@@ -39,6 +40,8 @@ export default function EnergyPlatform() {
             setSelectedProvince={setSelectedProvince}
             selectedNode={selectedNode}
             onNodeSelect={handleNodeSelect}
+            isModelComplete={isModelComplete}
+            onModelComplete={() => setIsModelComplete(true)}
           />
         </div>
       )}
@@ -51,6 +54,7 @@ export default function EnergyPlatform() {
             selectedNode={selectedNode}
             selectedScenario={selectedScenario}
             selectedProvince={selectedProvince}
+            isModelComplete={isModelComplete}
           />
         ) : (
           <DataPanel
