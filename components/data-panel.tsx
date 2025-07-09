@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import type { NavigationItem, ContentSection } from "./energy-platform"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import EditableDataTable from "./editable-data-table"
@@ -22,17 +24,17 @@ type ResourceType = {
   biomass: YearlyValues;
   wind: YearlyValues;
   solar: YearlyValues;
-  [key: string]: YearlyValues; // Add index signature for dynamic access
+  [key: string]: YearlyValues;
 }
 
 type ResourceDataType = {
   [provinceCode: string]: ResourceType;
 }
 
-// Type assertion for the imported resourceData
+// Type assertion for resourceData
 const typedResourceData = resourceData as ResourceDataType;
 
-// Helper function to generate empty data for energy tech entries
+// Helper function to create empty data array
 const getEmptyData = (): DataRow[] => {
   return [];
 }
@@ -1760,6 +1762,148 @@ export default function DataPanel({
     },
 
     // ... existing code ...
+
+    // 电力技术
+    "coal-power": {
+      title: "煤电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "coal-power",
+        42,    // 发电效率
+        85,    // 可用系数
+        30,    // 寿期
+        4500,  // 投资成本
+        120,   // 固定运维成本
+        0.006  // 可变运维成本
+      ),
+    },
+    "gas-power": {
+      title: "气电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "gas-power",
+        55,    // 发电效率
+        85,    // 可用系数
+        25,    // 寿期
+        3200,  // 投资成本
+        80,    // 固定运维成本
+        0.003  // 可变运维成本
+      ),
+    },
+    "nuclear-power": {
+      title: "核电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "nuclear-power",
+        33,    // 发电效率
+        90,    // 可用系数
+        60,    // 寿期
+        13500, // 投资成本
+        300,   // 固定运维成本
+        0.005  // 可变运维成本
+      ),
+    },
+    "wind-power": {
+      title: "风电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "wind-power",
+        100,   // 发电效率
+        28,    // 可用系数
+        25,    // 寿期
+        5000,  // 投资成本
+        150,   // 固定运维成本
+        0.001  // 可变运维成本
+      ),
+    },
+    "solar-power": {
+      title: "光伏",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "solar-power",
+        100,   // 发电效率
+        18,    // 可用系数
+        25,    // 寿期
+        3800,  // 投资成本
+        100,   // 固定运维成本
+        0.001  // 可变运维成本
+      ),
+    },
+    "biomass-power": {
+      title: "生物质发电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "biomass-power",
+        35,    // 发电效率
+        80,    // 可用系数
+        25,    // 寿期
+        6000,  // 投资成本
+        180,   // 固定运维成本
+        0.004  // 可变运维成本
+      ),
+    },
+    "hydro-power": {
+      title: "水电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "hydro-power",
+        100,   // 发电效率
+        45,    // 可用系数
+        60,    // 寿期
+        8000,  // 投资成本
+        200,   // 固定运维成本
+        0.002  // 可变运维成本
+      ),
+    },
+    "geothermal-power": {
+      title: "地热发电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "geothermal-power",
+        100,   // 发电效率
+        80,    // 可用系数
+        30,    // 寿期
+        6500,  // 投资成本
+        180,   // 固定运维成本
+        0.003  // 可变运维成本
+      ),
+    },
+    "ocean-power": {
+      title: "海洋能发电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "ocean-power",
+        100,   // 发电效率
+        40,    // 可用系数
+        25,    // 寿期
+        7000,  // 投资成本
+        210,   // 固定运维成本
+        0.004  // 可变运维成本
+      ),
+    },
+    "hydrogen-power": {
+      title: "氢能发电",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "hydrogen-power",
+        60,    // 发电效率
+        85,    // 可用系数
+        20,    // 寿期
+        4500,  // 投资成本
+        130,   // 固定运维成本
+        0.002  // 可变运维成本
+      ),
+    },
   }
 
   // Update data when selected node changes
