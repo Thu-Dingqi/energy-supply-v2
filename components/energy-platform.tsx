@@ -20,7 +20,7 @@ export default function EnergyPlatform() {
     setSelectedNode(nodeId)
   }
 
-  // 恢复到更接近原始设计的布局
+  // 3. 确保"分析"和"结果"使用相同的三栏布局
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Left Column - Navigation (smaller width) */}
@@ -28,17 +28,19 @@ export default function EnergyPlatform() {
 
       {/* Middle Column - Main Content */}
       {activeNav !== "note" && (
-        <MainContent
-          activeNav={activeNav}
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-          selectedScenario={selectedScenario}
-          setSelectedScenario={setSelectedScenario}
-          selectedProvince={selectedProvince}
-          setSelectedProvince={setSelectedProvince}
-          selectedNode={selectedNode}
-          onNodeSelect={handleNodeSelect}
-        />
+        <div className="w-[360px] border-r border-border overflow-hidden flex-shrink-0">
+          <MainContent
+            activeNav={activeNav}
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+            selectedScenario={selectedScenario}
+            setSelectedScenario={setSelectedScenario}
+            selectedProvince={selectedProvince}
+            setSelectedProvince={setSelectedProvince}
+            selectedNode={selectedNode}
+            onNodeSelect={handleNodeSelect}
+          />
+        </div>
       )}
 
       {/* Right Column - Data/Charts/Explanation */}

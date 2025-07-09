@@ -298,7 +298,7 @@ export default function MainContent({
         </DialogContent>
       </Dialog>
 
-      <div className="w-[25%] flex flex-col border-r border-border overflow-hidden">
+      <div className="flex flex-col h-full overflow-hidden">
         <div className="p-4 border-b border-border">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">

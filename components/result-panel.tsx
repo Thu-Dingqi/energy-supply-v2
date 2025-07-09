@@ -59,18 +59,20 @@ const provinceCodeMap: Record<string, string> = {
   gansu: "GANS",
   qinghai: "QING",
   ningxia: "NINX",
-  xinjiang: "XINJ"
+  xinjiang: "XING"
 };
 
 const years = ["2020", "2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
+// Special years array for emissions data (without 2020)
+const emissionsYears = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
 
-// 修改单位为英文并修改 createDataRow 函数
+// 1-2. 修正单位映射
 const unitMap: Record<string, string> = {
-  "亿吨 CO₂": "亿吨 CO₂",
-  "亿千瓦时": "100M kWh",
+  "亿吨 CO₂": "亿吨", // 改为“亿吨”
+  "亿千瓦时": "TWh",
   "吉瓦": "GW",
   "万吨标准煤": "万吨标煤",
-  "万吨": "10K t"
+  "万吨": "万吨"
 };
 
 // Helper function to create a data row with formatted values (2 decimal places)
@@ -81,8 +83,14 @@ const createDataRow = (indicator: string, unit: string, values: any): DataRow =>
     Object.entries(values).forEach(([year, value]) => {
       if (typeof value === 'number') {
         formattedValues[year] = Number(value.toFixed(2));
-      } else {
-        formattedValues[year] = value;
+      } else if (value !== undefined && value !== null) {
+        // Handle non-numeric values safely
+        // Make sure we don't add empty objects as values
+        if (typeof value === 'object' && Object.keys(value).length === 0) {
+          formattedValues[year] = "";
+        } else {
+          formattedValues[year] = String(value);
+        }
       }
     });
   }
@@ -189,9 +197,10 @@ const getH2nData = (provinceData: any) => {
 
 const getElcTransData = (provinceData: any) => {
   if (!provinceData) return [];
-  return [createDataRow("净调出电量", "亿千瓦时", provinceData["ELC_TRA"])];
+  return [createDataRow("净调入电量", "亿千瓦时", provinceData["ELC_TRA"])];
 };
 
+// 移除 getEmissionsData 函数，将逻辑直接内联到 useEffect 中
 export default function ResultPanel({
   activeNav,
   selectedNode,
@@ -203,25 +212,33 @@ export default function ResultPanel({
   const [nodeTitle, setNodeTitle] = useState<string>("")
   const [currentNode, setCurrentNode] = useState<string | null>(null)
   const [resultDataSets, setResultDataSets] = useState<Record<string, any>>({});
+  // Track which years array to use based on the selected node
+  const [currentYears, setCurrentYears] = useState<string[]>(years);
 
   useEffect(() => {
     const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
-    
+
+    // 格式化排放数据并移除2020年
+    const emissionsResult = (emissionsData as any)[provinceCode] || {};
+    const filteredSupply = Object.fromEntries(Object.entries(emissionsResult.SUPPLY || {}).filter(([year]) => parseInt(year) >= 2025));
+    const filteredFE = Object.fromEntries(Object.entries(emissionsResult.FE || {}).filter(([year]) => parseInt(year) >= 2025));
+    const filteredTotal = Object.fromEntries(Object.entries(emissionsResult.TOTAL || {}).filter(([year]) => parseInt(year) >= 2025));
+
     const newResultDataSets = {
         "emissions-supply": {
           title: "供应排放",
           defaultChartType: "line",
-          data: [createDataRow("供应排放量", "亿吨 CO₂", (emissionsData as any)[provinceCode]?.SUPPLY)]
+          data: [createDataRow("供应排放量", "亿吨 CO₂", filteredSupply)]
         },
         "emissions-end-use": {
           title: "终端排放",
           defaultChartType: "line",
-          data: [createDataRow("终端排放量", "亿吨 CO₂", (emissionsData as any)[provinceCode]?.FE)]
+          data: [createDataRow("终端排放量", "亿吨 CO₂", filteredFE)]
         },
         "emissions-total": {
           title: "总排放",
           defaultChartType: "line",
-          data: [createDataRow("总排放量", "亿吨 CO₂", (emissionsData as any)[provinceCode]?.TOTAL)]
+          data: [createDataRow("总排放量", "亿吨 CO₂", filteredTotal)]
         },
         "power-generation-mix": {
           title: "发电结构",
@@ -249,7 +266,7 @@ export default function ResultPanel({
           data: getH2nData((h2nData as any)[provinceCode])
         },
         "net-power-export": {
-      title: "净调出电量",
+      title: "净调入电量",
       defaultChartType: "line",
           data: getElcTransData((elcTransData as any)[provinceCode])
         }
@@ -264,21 +281,37 @@ export default function ResultPanel({
       setNodeTitle(title)
       setTableData(data)
       setChartType(defaultChartType || "line")
-        setCurrentNode(selectedNode)
-    } else if (activeNav) {
-      const firstNode =
-        activeNav.children && activeNav.children.length > 0
-          ? activeNav.children[0].id
-          : null
+      setCurrentNode(selectedNode)
+      
+      // Set appropriate years array based on the selected node
+      if (selectedNode.startsWith('emissions-')) {
+        setCurrentYears(emissionsYears);
+      } else {
+        setCurrentYears(years);
+      }
+    } else if (activeNav === 'results') {
+      // Since NavigationItem doesn't have children, we need a different approach
+      // for selecting the first node based on activeNav
+      const resultsNodes = Object.keys(resultDataSets);
+      const firstNode = resultsNodes.length > 0 ? resultsNodes[0] : null;
+      
       if (firstNode && resultDataSets[firstNode]) {
         const { title, data, defaultChartType } = resultDataSets[firstNode]
         setNodeTitle(title)
         setTableData(data)
         setChartType(defaultChartType || "line")
         setCurrentNode(firstNode)
+        
+        // Set appropriate years array based on the first node
+        if (firstNode.startsWith('emissions-')) {
+          setCurrentYears(emissionsYears);
+        } else {
+          setCurrentYears(years);
+        }
       } else {
         setNodeTitle("")
         setTableData([])
+        setCurrentYears(years);
       }
     }
   }, [selectedNode, activeNav, resultDataSets])
@@ -346,7 +379,7 @@ export default function ResultPanel({
         </div>
         <div className="h-[300px]">
           <ScrollArea className="h-full">
-            <EditableDataTable data={tableData} onDataChange={handleDataChange} years={years} />
+            <EditableDataTable data={tableData} onDataChange={handleDataChange} years={currentYears} />
           </ScrollArea>
         </div>
         <div className="text-sm text-muted-foreground mt-2">
