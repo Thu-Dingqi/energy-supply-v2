@@ -64,12 +64,26 @@ const provinceCodeMap: Record<string, string> = {
 
 const years = ["2020", "2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
 
-// Helper function to create a data row
-const createDataRow = (indicator: string, unit: string, values: any): DataRow => ({
-  indicator,
-  unit,
-  values: values || {}
-});
+// Helper function to create a data row with formatted values (2 decimal places)
+const createDataRow = (indicator: string, unit: string, values: any): DataRow => {
+  // Format values to 2 decimal places if they are numbers
+  const formattedValues: { [year: string]: string | number } = {};
+  if (values) {
+    Object.entries(values).forEach(([year, value]) => {
+      if (typeof value === 'number') {
+        formattedValues[year] = Number(value.toFixed(2));
+      } else {
+        formattedValues[year] = value;
+      }
+    });
+  }
+  
+  return {
+    indicator,
+    unit,
+    values: formattedValues
+  };
+};
 
 // Indicator mappings
 const elcMixIndicatorMap: Record<string, string> = {
@@ -201,14 +215,14 @@ export default function ResultPanel({
           title: "发电结构",
           defaultChartType: "line",
           data: getElcMixData((elcMixData as any)[provinceCode])
-        },
-        "installed-power-capacity": {
-          title: "电力装机",
+    },
+    "installed-power-capacity": {
+      title: "电力装机",
           defaultChartType: "line",
           data: getCapData((capData as any)[provinceCode])
         },
         "new-power-capacity": {
-          title: "新增电力装机",
+      title: "新增电力装机",
           defaultChartType: "line",
           data: getNewCapData((newCapData as any)[provinceCode])
         },
@@ -216,15 +230,15 @@ export default function ResultPanel({
           title: "一次能源供应",
           defaultChartType: "line",
           data: getPeData((peData as any)[provinceCode])
-        },
-        "hydrogen-supply": {
-          title: "氢能供应",
+    },
+    "hydrogen-supply": {
+      title: "氢能供应",
           defaultChartType: "line",
           data: getH2nData((h2nData as any)[provinceCode])
         },
         "net-power-export": {
-          title: "净调出电量",
-          defaultChartType: "line",
+      title: "净调出电量",
+      defaultChartType: "line",
           data: getElcTransData((elcTransData as any)[provinceCode])
         }
     };
@@ -238,7 +252,7 @@ export default function ResultPanel({
       setNodeTitle(title)
       setTableData(data)
       setChartType(defaultChartType || "line")
-      setCurrentNode(selectedNode)
+        setCurrentNode(selectedNode)
     } else if (activeNav) {
       const firstNode =
         activeNav.children && activeNav.children.length > 0
@@ -280,17 +294,17 @@ export default function ResultPanel({
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">{nodeTitle}</h2>
           <div className="flex space-x-2">
-            <Button
+                  <Button
               variant={chartType === "line" ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setChartType("line")}
+                    size="sm"
+                    onClick={() => setChartType("line")}
             >
               折线图
             </Button>
-            <Button
+                  <Button
               variant={chartType === "bar" ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setChartType("bar")}
+                    size="sm"
+                    onClick={() => setChartType("bar")}
             >
               柱状图
             </Button>
@@ -301,15 +315,15 @@ export default function ResultPanel({
             >
               堆叠图
             </Button>
-            <Button
+                  <Button
               variant={chartType === "pie" ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setChartType("pie")}
+                    size="sm"
+                    onClick={() => setChartType("pie")}
             >
               饼图
             </Button>
-          </div>
-        </div>
+                </div>
+              </div>
         <div className="mb-4">
           <SimpleChart type={chartType} data={tableData} />
         </div>
@@ -321,8 +335,8 @@ export default function ResultPanel({
         <div className="text-sm text-muted-foreground mt-2">
            展示 {provinceName.charAt(0).toUpperCase() + provinceName.slice(1)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
         </div>
-      </CardContent>
-    </Card>
+                </CardContent>
+              </Card>
   )
 }
 
