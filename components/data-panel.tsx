@@ -1339,7 +1339,7 @@ export default function DataPanel({
             {/* Data Table Section */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium">{nodeTitle}数据</h4>
+                <h4 className="text-sm font-medium">数据表格</h4>
                 <div className="text-sm text-muted-foreground">点击单元格可编辑数值</div>
               </div>
               <EditableDataTable data={tableData} years={years} onDataChange={handleDataChange} />

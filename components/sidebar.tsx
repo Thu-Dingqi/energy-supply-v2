@@ -42,10 +42,10 @@ export default function Sidebar({
                 <Button
                   variant={activeNav === item.id ? "secondary" : "ghost"}
                   size="icon"
-                  className="h-12 w-12"
+                  className="h-16 w-16"
                   onClick={item.onClick || (() => setActiveNav(item.id))}
                 >
-                  <item.icon className="h-5 w-5" />
+                  <item.icon className="h-10 w-10" />
                   <span className="sr-only">{item.label}</span>
                 </Button>
               </TooltipTrigger>
