@@ -197,6 +197,15 @@ export default function MainContent({
       ],
     },
     {
+      id: "chp-generation",
+      label: "热电联产",
+      children: [
+        { id: "CHPCOA", label: "煤基热电联产机组" },
+        { id: "CHPNGA", label: "燃气热电联产机组" },
+        { id: "CHPBIO", label: "生物质热电联产机组" },
+      ],
+    },
+    {
       id: "hydrogen-production",
       label: "制氢技术",
       children: [
@@ -204,6 +213,15 @@ export default function MainContent({
         { id: "SOEC", label: "固体氧化物电解 (SOEC)" },
         { id: "AEM", label: "阴离子交换膜 (AEM)" },
         { id: "PEM", label: "质子交换膜电解 (PEM)" },
+      ],
+    },
+    {
+      id: "heating-technology",
+      label: "供热技术",
+      children: [
+        { id: "HTELB", label: "电热锅炉" },
+        { id: "HTHP", label: "热泵" },
+        { id: "HTDH", label: "区域供热" },
       ],
     },
     {

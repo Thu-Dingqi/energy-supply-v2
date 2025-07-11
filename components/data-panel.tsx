@@ -976,8 +976,6 @@ export default function DataPanel({
       ),
     },
 
-    // ... existing code ...
-
     // 电力技术
     "coal-power": {
       title: "煤电",
@@ -1117,6 +1115,92 @@ export default function DataPanel({
         900,   // 投资成本
         45.0,  // 固定运维成本
         1.8    // 可变运维成本
+      ),
+    },
+    // 供热技术
+    HTELB: {
+      title: "HTELB (电热锅炉)",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "HTELB",
+        95,    // 效率
+        80,    // 可用系数
+        15,    // 寿期
+        600,   // 投资成本
+        30.0,  // 固定运维成本
+        1.0    // 可变运维成本
+      ),
+    },
+    HTHP: {
+      title: "HTHP (热泵)",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "HTHP",
+        300,   // 效率 (COP值)
+        75,    // 可用系数
+        15,    // 寿期
+        800,   // 投资成本
+        40.0,  // 固定运维成本
+        1.2    // 可变运维成本
+      ),
+    },
+    HTDH: {
+      title: "HTDH (区域供热)",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "HTDH",
+        85,    // 效率
+        70,    // 可用系数
+        30,    // 寿期
+        1200,  // 投资成本
+        60.0,  // 固定运维成本
+        1.5    // 可变运维成本
+      ),
+    },
+    // 热电联产技术
+    CHPCOA: {
+      title: "CHPCOA (煤基热电联产机组)",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "CHPCOA",
+        75,    // 效率 (热电联合效率)
+        65,    // 可用系数
+        30,    // 寿期
+        1200,  // 投资成本
+        60.0,  // 固定运维成本
+        1.8    // 可变运维成本
+      ),
+    },
+    CHPNGA: {
+      title: "CHPNGA (燃气热电联产机组)",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "CHPNGA",
+        85,    // 效率 (热电联合效率)
+        70,    // 可用系数
+        25,    // 寿期
+        900,   // 投资成本
+        45.0,  // 固定运维成本
+        1.5    // 可变运维成本
+      ),
+    },
+    CHPBIO: {
+      title: "CHPBIO (生物质热电联产机组)",
+      isEnergyTech: true,
+      data: getEmptyData(),
+      techData: generatePowerTechData(
+        "CHPBIO",
+        70,    // 效率 (热电联合效率)
+        60,    // 可用系数
+        20,    // 寿期
+        1500,  // 投资成本
+        75.0,  // 固定运维成本
+        2.2    // 可变运维成本
       ),
     },
   }
