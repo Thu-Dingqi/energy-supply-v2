@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import EditableDataTable from "./editable-data-table"
 import SimpleChart from "./simple-chart"
 import resourceData from "@/data/excel/json/resource.json"
+import nationData from "@/data/excel/json/nation.json"
 
 // Define types for resource data
 type YearlyValues = {
@@ -41,6 +42,7 @@ const getEmptyData = (): DataRow[] => {
 
 // 映射UI中的省份代码到resource.json中的省份代码
 const provinceCodeMap: Record<string, string> = {
+  nation: "NATION", // 新增全国选项
   beijing: "BEIJ",
   tianjin: "TIAN",
   hebei: "HEBE",
@@ -114,7 +116,14 @@ export default function DataPanel({
                         resourceType; 
     
     const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
-    const provinceData = (typedResourceData as ResourceDataType)[provinceCode];
+    let provinceData;
+
+    if (provinceCode === "NATION") {
+      const nationJson = (nationData as any).NATION;
+      provinceData = nationJson.resource || {};
+    } else {
+      provinceData = (typedResourceData as ResourceDataType)[provinceCode];
+    }
     
     // Check if data exists for this province and resource
     if (provinceData && provinceData[resourceKey]) {
@@ -1261,6 +1270,8 @@ export default function DataPanel({
     setSelectedParameter(param)
   }
 
+  const [modelType, setModelType] = useState<"national" | "provincial">("provincial")
+
   if (activeNav === "note") {
     return (
       <div className="w-[65%] border-l border-border flex flex-col">
@@ -1270,6 +1281,15 @@ export default function DataPanel({
         
         <div className="flex-1 p-6">
           <div className="max-w-4xl mx-auto">
+            <div className="mb-6">
+              <Tabs value={modelType} onValueChange={(value) => setModelType(value as "national" | "provincial")}>
+                <TabsList className="grid grid-cols-2 w-[400px] mb-4">
+                  <TabsTrigger value="national">全国模型</TabsTrigger>
+                  <TabsTrigger value="provincial">省区模型</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            
             <Accordion type="single" collapsible className="w-full space-y-6">
               {/* 功能介绍 */}
               <Card className="border shadow-sm hover:shadow transition-all duration-200">
@@ -1289,11 +1309,17 @@ export default function DataPanel({
                           <li>
                             <strong>情景对比与影响评估</strong>：轻松比较不同政策与技术假设下的能源系统表现（例如 CN60 碳中和情景），量化分析其对能源消费、生产结构及碳排放的具体影响。
                           </li>
+                          {modelType === "provincial" ? (
+                            <li>
+                              <strong>精细化区域分析</strong>：支持超过 30 个中国省份的选择，允许用户聚焦特定区域，结合当地资源禀赋、能源需求和基础设施特点，获得定制化的深度洞察。
+                            </li>
+                          ) : (
+                            <li>
+                              <strong>全国尺度分析</strong>：聚焦中国整体能源系统，基于47个行业的详细划分，结合国家资源禀赋、能源需求和基础设施特点，提供宏观层面的系统性洞察。
+                            </li>
+                          )}
                           <li>
-                            <strong>精细化区域分析</strong>：支持超过 30 个中国省份的选择，允许用户聚焦特定区域，结合当地资源禀赋、能源需求和基础设施特点，获得定制化的深度洞察。
-                          </li>
-                          <li>
-                            <strong>直观数据交互</strong>：通过清晰的树状目录结构和可编辑的数据表格，便捷地浏览和修改覆盖社会经济指标、分部门能源需求、能源转换技术及资源潜力的详细数据集。
+                            <strong>直观数据交互</strong>：通过清晰的树状目录结构和可编辑的数据表格，便捷地浏览和修改覆盖社会经济指标、{modelType === "provincial" ? "分部门" : "分行业"}能源需求、能源转换技术及资源潜力的详细数据集。
                           </li>
                           <li>
                             <strong>动态趋势可视化</strong>：利用多样化的图表工具（折线图、柱状图、饼图、堆叠面积图），生动展示 2025 年至 2060 年间能源需求、供应、排放及关键技术指标的演变趋势。
@@ -1327,11 +1353,17 @@ export default function DataPanel({
                         </p>
                         <ul className="list-disc pl-5 space-y-2">
                           <li>
-                            <strong>基础驱动：关键假设模块</strong>：设定模型运行的基础条件，涵盖宏观社会经济预测（人口、GDP、产业结构）以及关键技术参数（如部门能源强度、电气化水平、氢能渗透率等）。
+                            <strong>基础驱动：关键假设模块</strong>：设定模型运行的基础条件，涵盖宏观社会经济预测（人口、GDP、产业结构）以及关键技术参数（如{modelType === "provincial" ? "部门" : "行业"}能源强度、电气化水平、氢能渗透率等）。
                           </li>
-                          <li>
-                            <strong>能源消费：需求模块</strong>：精细刻画六大终端用能部门（农业、工业、建筑、交通、服务业、居民生活）的能源消费活动，区分不同燃料类型（煤、油、气、电、氢等）的需求。
-                          </li>
+                          {modelType === "provincial" ? (
+                            <li>
+                              <strong>能源消费：需求模块</strong>：精细刻画六大终端用能部门（农业、工业、建筑、交通、服务业、居民生活）的能源消费活动，区分不同燃料类型（煤、油、气、电、氢等）的需求。
+                            </li>
+                          ) : (
+                            <li>
+                              <strong>能源消费：需求模块</strong>：精细刻画全国47个行业的能源消费活动，区分不同燃料类型（煤、油、气、电、氢等）的需求，提供高度细化的能源消费结构分析。
+                            </li>
+                          )}
                           <li>
                             <strong>能源转换：转换模块</strong>：模拟能源从一次能源向二次能源及终端能源转换的全过程，覆盖电力生产（火电、气电、核电、可再生能源发电）、氢气制取（ALK, PEM, SOEC, AEM 等技术）以及能源化工（如煤制油、炼油、焦化）等关键环节。
                           </li>
@@ -1341,9 +1373,15 @@ export default function DataPanel({
                           <li>
                             <strong>集成系统模拟</strong>：各模块紧密耦合，综合模拟能源在系统中的流动、技术的部署与迭代、以及伴随产生的环境排放，确保各项假设、需求、转换效率和资源约束得到统一考量。
                           </li>
-                          <li>
-                            <strong>灵活扩展设计</strong>：模型框架具有良好的可扩展性，便于未来根据需要纳入新的能源技术或扩展到更细化的区域分析，适应不断发展的能源研究需求。
-                          </li>
+                          {modelType === "provincial" ? (
+                            <li>
+                              <strong>灵活扩展设计</strong>：模型框架具有良好的可扩展性，便于未来根据需要纳入新的能源技术或扩展到更细化的区域分析，适应不断发展的能源研究需求。
+                            </li>
+                          ) : (
+                            <li>
+                              <strong>灵活扩展设计</strong>：模型框架具有良好的可扩展性，便于未来根据需要纳入新的能源技术或扩展到区域分析，适应不断发展的能源研究需求。
+                            </li>
+                          )}
                         </ul>
                       </div>
                     </CardContent>
@@ -1364,9 +1402,15 @@ export default function DataPanel({
                       <div className="space-y-4">
                         <p>平台界面设计力求简洁直观，您可以按照以下步骤轻松完成能源系统分析并解读关键结果：</p>
                         <ul className="list-disc pl-5 space-y-2">
-                          <li>
-                            <strong>步骤 1: 定义分析范围</strong>：首先，在页面顶部下拉菜单中选择您想研究的"情景"（如 CN60 碳中和）和"区域"（如北京）。这将设定您后续分析的宏观背景和地理边界。
-                          </li>
+                          {modelType === "provincial" ? (
+                            <li>
+                              <strong>步骤 1: 定义分析范围</strong>：首先，在页面顶部下拉菜单中选择您想研究的"情景"（如 CN60 碳中和）和"区域"（如北京）。这将设定您后续分析的宏观背景和地理边界。
+                            </li>
+                          ) : (
+                            <li>
+                              <strong>步骤 1: 定义分析范围</strong>：首先，在页面顶部下拉菜单中选择您想研究的"情景"（如 CN60 碳中和）。这将设定您后续分析的宏观背景。
+                            </li>
+                          )}
                           <li>
                             <strong>步骤 2: 访问数据模块</strong>：利用界面左侧的导航菜单，在"分析"、"结果"和"说明"视图间切换。在"分析"视图下，您可以访问"关键假设"、"需求"、"转换"和"资源"四大核心数据模块。
                           </li>
@@ -1380,7 +1424,7 @@ export default function DataPanel({
                             <strong>步骤 5: 可视化数据洞察</strong>：根据需要，在图表区域选择不同的图表类型（折线、柱状、饼图、堆叠图）来更直观地理解数据随时间的变化趋势或结构占比。
                           </li>
                           <li>
-                            <strong>步骤 6: 查看综合结果</strong>：完成数据审阅和调整后，切换到"结果"视图。这里汇总了模型计算的核心输出，如能源供应总量与结构、发电装机容量、分部门/分燃料的 CO2 排放等。
+                            <strong>步骤 6: 查看综合结果</strong>：完成数据审阅和调整后，切换到"结果"视图。这里汇总了模型计算的核心输出，如能源供应结构、各类电源装机容量以及二氧化碳排放总量与构成，为政策制定者和研究人员提供坚实的数据支撑。
                           </li>
                         </ul>
                       </div>
@@ -1403,7 +1447,9 @@ export default function DataPanel({
             <h3 className="text-lg font-medium">{nodeTitle}</h3>
             <div className="text-sm text-muted-foreground">当前选择: {nodeTitle}</div>
           </div>
-          <div className="text-sm text-muted-foreground mb-2">展示 {selectedProvince === "beijing" ? "北京" : selectedProvince === "tianjin" ? "天津" : selectedProvince === "hebei" ? "河北" : selectedProvince === "shanxi" ? "山西" : selectedProvince === "neimenggu" ? "内蒙古" : selectedProvince === "liaoning" ? "辽宁" : selectedProvince === "jilin" ? "吉林" : selectedProvince === "heilongjiang" ? "黑龙江" : selectedProvince === "shanghai" ? "上海" : selectedProvince === "jiangsu" ? "江苏" : selectedProvince === "zhejiang" ? "浙江" : selectedProvince === "anhui" ? "安徽" : selectedProvince === "fujian" ? "福建" : selectedProvince === "jiangxi" ? "江西" : selectedProvince === "shandong" ? "山东" : selectedProvince === "henan" ? "河南" : selectedProvince === "hubei" ? "湖北" : selectedProvince === "hunan" ? "湖南" : selectedProvince === "guangdong" ? "广东" : selectedProvince === "guangxi" ? "广西" : selectedProvince === "hainan" ? "海南" : selectedProvince === "chongqing" ? "重庆" : selectedProvince === "sichuan" ? "四川" : selectedProvince === "guizhou" ? "贵州" : selectedProvince === "yunnan" ? "云南" : selectedProvince === "shaanxi" ? "陕西" : selectedProvince === "gansu" ? "甘肃" : selectedProvince === "qinghai" ? "青海" : selectedProvince === "ningxia" ? "宁夏" : selectedProvince === "xinjiang" ? "新疆" : ""} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。</div>
+          <div className="text-sm text-muted-foreground mb-2">
+            展示 {selectedProvince === 'nation' ? '全国' : (Object.keys(provinceCodeMap).find(key => provinceCodeMap[key] === provinceCodeMap[selectedProvince]) || selectedProvince)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
+          </div>
           <div className="flex-1">
             {/* Parameter Tabs for Power Generation Technologies */}
             {dataSets[selectedNode]?.isEnergyTech && (

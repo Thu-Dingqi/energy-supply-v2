@@ -335,10 +335,10 @@ export default function MainContent({
                 </Select>
                 <Select value={selectedProvince} onValueChange={setSelectedProvince}>
                   <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="选择省份" />
+                    <SelectValue placeholder="选择区域" />
                   </SelectTrigger>
                   <SelectContent>
-          
+                    <SelectItem value="nation">全国</SelectItem>
                     <SelectItem value="beijing">北京</SelectItem>
                     <SelectItem value="tianjin">天津</SelectItem>
                     <SelectItem value="hebei">河北</SelectItem>

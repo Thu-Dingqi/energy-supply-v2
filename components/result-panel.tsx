@@ -14,6 +14,7 @@ import newCapData from "@/data/excel/json/newcap.json"
 import peData from "@/data/excel/json/pe.json"
 import h2nData from "@/data/excel/json/h2n.json"
 import elcTransData from "@/data/excel/json/elc_trans.json"
+import nationData from "@/data/excel/json/nation.json"
 
 interface DataRow {
   indicator: string
@@ -31,6 +32,7 @@ interface ResultPanelProps {
 
 // 映射UI中的省份代码到JSON文件中的省份代码
 const provinceCodeMap: Record<string, string> = {
+  nation: "NATION", // 新增全国选项
   beijing: "BEIJ",
   tianjin: "TIAN",
   hebei: "HEBE",
@@ -241,9 +243,29 @@ export default function ResultPanel({
 
   useEffect(() => {
     const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
+    
+    let emissionsResult, elcMixResult, capResult, newCapResult, peResult, h2nResult, elcTransResult;
+
+    if (provinceCode === "NATION") {
+      const nationJson = (nationData as any).NATION;
+      emissionsResult = nationJson.emissions || {};
+      elcMixResult = nationJson.elc_mix || {};
+      capResult = nationJson.cap || {};
+      newCapResult = nationJson.newcap || {};
+      peResult = nationJson.pe || {};
+      h2nResult = nationJson.h2n || {};
+      elcTransResult = nationJson.elc_trans || {};
+    } else {
+      emissionsResult = (emissionsData as any)[provinceCode] || {};
+      elcMixResult = (elcMixData as any)[provinceCode] || {};
+      capResult = (capData as any)[provinceCode] || {};
+      newCapResult = (newCapData as any)[provinceCode] || {};
+      peResult = (peData as any)[provinceCode] || {};
+      h2nResult = (h2nData as any)[provinceCode] || {};
+      elcTransResult = (elcTransData as any)[provinceCode] || {};
+    }
 
     // 格式化排放数据并移除2020年
-    const emissionsResult = (emissionsData as any)[provinceCode] || {};
     const filteredSupply = Object.fromEntries(Object.entries(emissionsResult.SUPPLY || {}).filter(([year]) => parseInt(year) >= 2025));
     const filteredFE = Object.fromEntries(Object.entries(emissionsResult.FE || {}).filter(([year]) => parseInt(year) >= 2025));
     const filteredTotal = Object.fromEntries(Object.entries(emissionsResult.TOTAL || {}).filter(([year]) => parseInt(year) >= 2025));
@@ -267,32 +289,32 @@ export default function ResultPanel({
         "power-generation-mix": {
           title: "发电结构",
           defaultChartType: "line",
-          data: getElcMixData((elcMixData as any)[provinceCode])
+          data: getElcMixData(elcMixResult)
     },
     "installed-power-capacity": {
       title: "电力装机",
           defaultChartType: "line",
-          data: getCapData((capData as any)[provinceCode])
+          data: getCapData(capResult)
         },
         "new-power-capacity": {
       title: "新增电力装机",
           defaultChartType: "line",
-          data: getNewCapData((newCapData as any)[provinceCode])
+          data: getNewCapData(newCapResult)
         },
         "primary-energy-supply": {
           title: "一次能源供应",
           defaultChartType: "line",
-          data: getPeData((peData as any)[provinceCode])
+          data: getPeData(peResult)
     },
     "hydrogen-supply": {
       title: "氢能供应",
           defaultChartType: "line",
-          data: getH2nData((h2nData as any)[provinceCode])
+          data: getH2nData(h2nResult)
         },
         "net-power-export": {
       title: "净调入电量",
       defaultChartType: "line",
-          data: getElcTransData((elcTransData as any)[provinceCode])
+          data: getElcTransData(elcTransResult)
         }
     };
     setResultDataSets(newResultDataSets);
@@ -422,7 +444,7 @@ export default function ResultPanel({
           </ScrollArea>
         </div>
         <div className="text-sm text-muted-foreground mt-2">
-           展示 {provinceName.charAt(0).toUpperCase() + provinceName.slice(1)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
+           展示 {selectedProvince === 'nation' ? '全国' : provinceName.charAt(0).toUpperCase() + provinceName.slice(1)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
         </div>
                 </CardContent>
               </Card>

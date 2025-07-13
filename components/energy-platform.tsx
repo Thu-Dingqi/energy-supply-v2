@@ -15,7 +15,7 @@ export default function EnergyPlatform() {
   const [activeSection, setActiveSection] = useState<ContentSection>("transformation")
   const [selectedNode, setSelectedNode] = useState<string | null>("ECHPCOA")
   const [selectedScenario, setSelectedScenario] = useState<string>("cn60")
-  const [selectedProvince, setSelectedProvince] = useState<string>("beijing")
+  const [selectedProvince, setSelectedProvince] = useState<string>("nation")
   const [isModelComplete, setIsModelComplete] = useState(false)
 
   const handleNodeSelect = (nodeId: string) => {
