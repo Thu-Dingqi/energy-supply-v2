@@ -11,6 +11,8 @@ import EditableDataTable from "./editable-data-table"
 import SimpleChart from "./simple-chart"
 import resourceData from "@/data/excel/json/resource.json"
 import nationData from "@/data/excel/json/nation.json"
+import fossilData2020 from "@/data/excel/json/2020_pe_fossil.json"
+import cnFossilData2020 from "@/data/excel/json/2020_cn_fossil.json"
 
 // Define types for resource data
 type YearlyValues = {
@@ -32,8 +34,58 @@ type ResourceDataType = {
   [provinceCode: string]: ResourceType;
 }
 
+// Type for 2020 fossil data for provinces
+type FossilDataType = {
+  [provinceCode: string]: {
+    coal: {
+      extraction: number;
+      import: number;
+      export: number;
+    };
+    oil: {
+      extraction: number;
+      import: number;
+      export: number;
+    };
+    gas: {
+      extraction: number;
+      import: number;
+      export: number;
+    };
+  };
+}
+
+// Type for 2020 national fossil data
+type NationalFossilDataType = {
+  national: {
+    coal: {
+      extraction: number;
+      import: number;
+      export: number;
+      extraction_cost: number;
+      import_price: number;
+    };
+    oil: {
+      extraction: number;
+      import: number;
+      export: number;
+      extraction_cost: number;
+      import_price: number;
+    };
+    gas: {
+      extraction: number;
+      import: number;
+      export: number;
+      extraction_cost: number;
+      import_price: number;
+    };
+  };
+}
+
 // Type assertion for resourceData
 const typedResourceData = resourceData as ResourceDataType;
+const typedFossilData = fossilData2020 as FossilDataType;
+const typedCnFossilData = cnFossilData2020 as NationalFossilDataType;
 
 // Helper function to create empty data array
 const getEmptyData = (): DataRow[] => {
@@ -116,6 +168,131 @@ interface DataRow {
   values: { [year: string]: string | number }
 }
 
+// 新增化石能源2020年数据表格组件
+interface FossilData2020Props {
+  resourceType: string
+  selectedProvince: string
+}
+
+function FossilData2020Table({ resourceType, selectedProvince }: FossilData2020Props) {
+  // 将资源类型映射到正确的key
+  const resourceKey = resourceType === "natural-gas" ? "gas" : resourceType;
+  
+  // 判断是否为全国数据
+  if (selectedProvince === "nation") {
+    // 检查是否有全国数据
+    if (!typedCnFossilData.national || !typedCnFossilData.national[resourceKey]) {
+      return (
+        <div className="text-sm text-muted-foreground mt-4">
+          没有可用的2020年全国{
+            resourceKey === "coal" ? "煤炭" : 
+            resourceKey === "oil" ? "石油" : 
+            "天然气"
+          }数据
+        </div>
+      );
+    }
+    
+    // 获取全国该资源的数据
+    const fossilData = typedCnFossilData.national[resourceKey];
+    
+    // 将数据转换为Mt单位
+    const extractionMt = fossilData.extraction / 1000000;
+    const importMt = fossilData.import / 1000000;
+    const exportMt = fossilData.export / 1000000;
+    const extractionCost = fossilData.extraction_cost;
+    const importPrice = fossilData.import_price;
+    
+    return (
+      <div className="mt-4">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-sm font-medium">2020年数据</h4>
+        </div>
+        <div className="border rounded-lg overflow-hidden bg-white">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="px-4 py-2 text-left text-sm font-medium border-r">年份</th>
+                <th className="px-4 py-2 text-left text-sm font-medium border-r">单位</th>
+                <th className="px-4 py-2 text-center text-sm font-medium border-r">开采量</th>
+                <th className="px-4 py-2 text-center text-sm font-medium border-r">进口量</th>
+                <th className="px-4 py-2 text-center text-sm font-medium border-r">出口量</th>
+                <th className="px-4 py-2 text-center text-sm font-medium border-r">开采价格</th>
+                <th className="px-4 py-2 text-center text-sm font-medium">进口价格</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t hover:bg-slate-50">
+                <td className="px-4 py-2 text-sm border-r font-medium">2020</td>
+                <td className="px-4 py-2 text-sm border-r text-muted-foreground">（美元）/ Mt</td>
+                <td className="px-4 py-2 text-sm text-center border-r">{extractionMt.toFixed(3)}</td>
+                <td className="px-4 py-2 text-sm text-center border-r">{importMt.toFixed(3)}</td>
+                <td className="px-4 py-2 text-sm text-center border-r">{exportMt.toFixed(3)}</td>
+                <td className="px-4 py-2 text-sm text-center border-r">{extractionCost.toFixed(1)}</td>
+                <td className="px-4 py-2 text-sm text-center">{importPrice.toFixed(1)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  } else {
+    // 处理省级数据
+    const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
+  
+    // 检查是否有该省份的数据
+    if (!typedFossilData[provinceCode] || !typedFossilData[provinceCode][resourceKey]) {
+      return (
+        <div className="text-sm text-muted-foreground mt-4">
+          没有可用的2020年{provinceNameMap[selectedProvince] || selectedProvince}的{
+            resourceKey === "coal" ? "煤炭" : 
+            resourceKey === "oil" ? "石油" : 
+            "天然气"
+          }数据
+        </div>
+      );
+    }
+    
+    // 获取该省份该资源的数据
+    const fossilData = typedFossilData[provinceCode][resourceKey];
+    
+    // 将数据转换为Mt单位
+    const extractionMt = fossilData.extraction / 1000000;
+    const importMt = fossilData.import / 1000000;
+    const exportMt = fossilData.export / 1000000;
+    
+    return (
+      <div className="mt-4">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-sm font-medium">2020年数据</h4>
+        </div>
+        <div className="border rounded-lg overflow-hidden bg-white">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="px-4 py-2 text-left text-sm font-medium border-r">年份</th>
+                <th className="px-4 py-2 text-left text-sm font-medium border-r">单位</th>
+                <th className="px-4 py-2 text-center text-sm font-medium border-r">开采量</th>
+                <th className="px-4 py-2 text-center text-sm font-medium border-r">调入量</th>
+                <th className="px-4 py-2 text-center text-sm font-medium">调出量</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t hover:bg-slate-50">
+                <td className="px-4 py-2 text-sm border-r font-medium">2020</td>
+                <td className="px-4 py-2 text-sm border-r text-muted-foreground">Mt</td>
+                <td className="px-4 py-2 text-sm text-center border-r">{extractionMt.toFixed(3)}</td>
+                <td className="px-4 py-2 text-sm text-center border-r">{importMt.toFixed(3)}</td>
+                <td className="px-4 py-2 text-sm text-center">{exportMt.toFixed(3)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+}
+
 interface DataPanelProps {
   activeNav: NavigationItem
   activeSection: ContentSection
@@ -195,6 +372,11 @@ export default function DataPanel({
         }
       }
     ];
+  };
+
+  // 判断当前选中的节点是否是化石能源节点
+  const isFossilEnergyNode = (nodeId: string | null): boolean => {
+    return nodeId === "coal" || nodeId === "oil" || nodeId === "natural-gas";
   };
 
   // Update data when province changes
@@ -1510,8 +1692,13 @@ export default function DataPanel({
               <EditableDataTable data={tableData} years={years} onDataChange={handleDataChange} />
             </div>
 
+            {/* 2020年化石能源数据表格 - 只在选择化石能源节点时显示 */}
+            {isFossilEnergyNode(selectedNode) && (
+              <FossilData2020Table resourceType={selectedNode} selectedProvince={selectedProvince} />
+            )}
+
             {/* Chart Section */}
-            <div className="flex-1">
+            <div className="flex-1 mt-6">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium">图表展示</h4>
                 <div className="flex gap-2">
