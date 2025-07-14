@@ -222,7 +222,7 @@ const getH2nData = (provinceData: any) => {
 
 const getElcTransData = (provinceData: any) => {
   if (!provinceData) return [];
-  return [createDataRow("净调入电量", "亿千瓦时", provinceData["ELC_TRA"])];
+  return [createDataRow("电力传输", "亿千瓦时", provinceData["ELC_TRA"])];
 };
 
 // 移除 getEmissionsData 函数，将逻辑直接内联到 useEffect 中
@@ -312,7 +312,7 @@ export default function ResultPanel({
           data: getH2nData(h2nResult)
         },
         "net-power-export": {
-      title: "净调入电量",
+      title: "电力传输",
       defaultChartType: "line",
           data: getElcTransData(elcTransResult)
         }

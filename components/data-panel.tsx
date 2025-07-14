@@ -75,6 +75,41 @@ const provinceCodeMap: Record<string, string> = {
   xinjiang: "XING"
 };
 
+// 添加一个新的映射对象，用于省份代码到中文名称的转换
+const provinceNameMap: Record<string, string> = {
+  nation: "全国",
+  beijing: "北京",
+  tianjin: "天津",
+  hebei: "河北",
+  shanxi: "山西",
+  neimenggu: "内蒙古",
+  liaoning: "辽宁",
+  jilin: "吉林",
+  heilongjiang: "黑龙江",
+  shanghai: "上海",
+  jiangsu: "江苏",
+  zhejiang: "浙江",
+  anhui: "安徽",
+  fujian: "福建",
+  jiangxi: "江西",
+  shandong: "山东",
+  henan: "河南",
+  hubei: "湖北",
+  hunan: "湖南",
+  guangdong: "广东",
+  guangxi: "广西",
+  hainan: "海南",
+  chongqing: "重庆",
+  sichuan: "四川",
+  guizhou: "贵州",
+  yunnan: "云南",
+  shaanxi: "陕西",
+  gansu: "甘肃",
+  qinghai: "青海",
+  ningxia: "宁夏",
+  xinjiang: "新疆"
+};
+
 interface DataRow {
   indicator: string
   unit: string
@@ -1448,7 +1483,7 @@ export default function DataPanel({
             <div className="text-sm text-muted-foreground">当前选择: {nodeTitle}</div>
           </div>
           <div className="text-sm text-muted-foreground mb-2">
-            展示 {selectedProvince === 'nation' ? '全国' : (Object.keys(provinceCodeMap).find(key => provinceCodeMap[key] === provinceCodeMap[selectedProvince]) || selectedProvince)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
+            展示 {provinceNameMap[selectedProvince] || selectedProvince} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
           </div>
           <div className="flex-1">
             {/* Parameter Tabs for Power Generation Technologies */}
