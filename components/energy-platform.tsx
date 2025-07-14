@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import MainContent from "./main-content"
 import DataPanel from "./data-panel"
 import ResultPanel from "./result-panel"
@@ -17,6 +17,14 @@ export default function EnergyPlatform() {
   const [selectedScenario, setSelectedScenario] = useState<string>("cn60")
   const [selectedProvince, setSelectedProvince] = useState<string>("nation")
   const [isModelComplete, setIsModelComplete] = useState(false)
+
+  // Add this effect to handle when the user is viewing "净调入电量" and selects "全国"
+  useEffect(() => {
+    if (selectedNode === "net-power-export" && selectedProvince === "nation") {
+      // Switch to a default node when this happens
+      setSelectedNode("power-generation-mix");
+    }
+  }, [selectedProvince, selectedNode]);
 
   const handleNodeSelect = (nodeId: string) => {
     setSelectedNode(nodeId)

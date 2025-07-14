@@ -282,9 +282,35 @@ export default function MainContent({
     },
   ]
 
-  // Get the appropriate tree based on the active section
+  // Get the appropriate tree based on the active section and selected province
   const getActiveTree = () => {
     if (activeNav === "results") {
+      // For "全国" (nation), we need to filter out the "net-power-export" option
+      if (selectedProvince === "nation") {
+        return [
+          {
+            id: "energy-supply",
+            label: "能源供应",
+            children: [
+              { id: "power-generation-mix", label: "发电结构" },
+              { id: "installed-power-capacity", label: "电力装机" },
+              { id: "new-power-capacity", label: "新增电力装机" },
+              { id: "primary-energy-supply", label: "一次能源供应" },
+              { id: "hydrogen-supply", label: "氢能供应" },
+              // "net-power-export" is intentionally omitted for "nation"
+            ]
+          },
+          {
+            id: "co2-emissions",
+            label: "二氧化碳排放",
+            children: [
+              { id: "emissions-supply", label: "供应排放" },
+              { id: "emissions-end-use", label: "终端排放" },
+              { id: "emissions-total", label: "总排放" }
+            ]
+          },
+        ];
+      }
       return resultsTree;
     }
     
@@ -410,7 +436,7 @@ export default function MainContent({
             )}
             {activeNav === "results" && isModelComplete && (
               <TreeView 
-                nodes={resultsTree} 
+                nodes={getActiveTree()} 
                 selectedNodeId={selectedNode} 
                 onNodeSelect={onNodeSelect} 
               />
