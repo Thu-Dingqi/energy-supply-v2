@@ -13,7 +13,7 @@ import capData from "@/data/excel/json/cap.json"
 import newCapData from "@/data/excel/json/newcap.json"
 import peData from "@/data/excel/json/pe.json"
 import h2nData from "@/data/excel/json/h2n.json"
-import elcTransData from "@/data/excel/json/elc_trans.json"
+import elcMatrixData from "@/data/excel/json/elc_matrix.json"
 import nationData from "@/data/excel/json/nation.json"
 
 interface DataRow {
@@ -65,11 +65,47 @@ const provinceCodeMap: Record<string, string> = {
   xinjiang: "XING"
 };
 
+// 省份代码到中文名称的映射
+const provinceNameMap: Record<string, string> = {
+  BEIJ: "北京",
+  TIAN: "天津",
+  HEBE: "河北",
+  SHNX: "山西",
+  NEMO: "内蒙古",
+  LIAO: "辽宁",
+  JILI: "吉林",
+  HEIL: "黑龙江",
+  SHAN: "上海",
+  JINU: "江苏",
+  ZHEJ: "浙江",
+  ANHU: "安徽",
+  FUJI: "福建",
+  JINX: "江西",
+  SHAD: "山东",
+  HENA: "河南",
+  HUBE: "湖北",
+  HUNA: "湖南",
+  GUAD: "广东",
+  GUAX: "广西",
+  HAIN: "海南",
+  CHON: "重庆",
+  SICH: "四川",
+  GUIZ: "贵州",
+  YUNN: "云南",
+  SHAA: "陕西",
+  GANS: "甘肃",
+  QING: "青海",
+  NINX: "宁夏",
+  XING: "新疆"
+};
+
 const years = ["2020", "2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
 // Special years array for emissions data (without 2020)
 const emissionsYears = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
 // Special years array for hydrogen and new capacity data (without 2020)
 const from2025Years = ["2025", "2030", "2035", "2040", "2045", "2050", "2055", "2060"];
+// 电力传输矩阵年份
+const matrixYears = ["2020", "2030", "2040", "2050", "2060"];
 
 // 1-2. 修正单位映射
 const unitMap: Record<string, string> = {
@@ -147,6 +183,61 @@ const h2nIndicatorMap: Record<string, string> = {
   offshore: "海上风电制氢"
 };
 
+// 电力传输矩阵表格组件
+const ElcMatrixTable = ({ year }: { year: string }) => {
+  const matrix = (elcMatrixData as any)[year];
+  if (!matrix) {
+    return <p>暂无 {year} 年数据</p>;
+  }
+
+  // 获取所有省份代码
+  const provinces = Object.keys(matrix);
+
+  // 格式化大数字，使用科学计数法或缩短显示
+  const formatNumber = (num: number | null): string => {
+    if (num === null) return "-";
+    
+    // 如果数字很大，使用科学计数法
+    if (Math.abs(num) >= 1000000) {
+      return num.toExponential(2);
+    }
+    
+    // 否则使用常规格式化
+    return num.toLocaleString();
+  };
+
+  return (
+    <div className="overflow-auto max-h-[calc(100vh-200px)]">
+      <table className="w-full border-collapse text-sm">
+        <thead>
+          <tr className="bg-slate-100">
+            <th className="p-1 border sticky left-0 z-10 bg-slate-100 min-w-[80px] whitespace-nowrap">省份</th>
+            {provinces.map(province => (
+              <th key={province} className="p-1 border min-w-[80px] whitespace-nowrap">
+                {provinceNameMap[province] || province}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {provinces.map(fromProvince => (
+            <tr key={fromProvince}>
+              <td className="p-1 border font-medium sticky left-0 z-10 bg-white min-w-[80px] whitespace-nowrap">
+                {provinceNameMap[fromProvince] || fromProvince}
+              </td>
+              {provinces.map(toProvince => (
+                <td key={toProvince} className="p-1 border text-right">
+                  {formatNumber(matrix[fromProvince][toProvince])}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
 // Data processing functions
 const getElcMixData = (provinceData: any) => {
   if (!provinceData) return [];
@@ -220,11 +311,6 @@ const getH2nData = (provinceData: any) => {
   ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
 };
 
-const getElcTransData = (provinceData: any) => {
-  if (!provinceData) return [];
-  return [createDataRow("电力传输", "亿千瓦时", provinceData["ELC_TRA"])];
-};
-
 // 移除 getEmissionsData 函数，将逻辑直接内联到 useEffect 中
 export default function ResultPanel({
   activeNav,
@@ -240,11 +326,12 @@ export default function ResultPanel({
   const [resultDataSets, setResultDataSets] = useState<Record<string, any>>({});
   // Track which years array to use based on the selected node
   const [currentYears, setCurrentYears] = useState<string[]>(years);
+  const [matrixYear, setMatrixYear] = useState("2020")
 
   useEffect(() => {
     const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
     
-    let emissionsResult, elcMixResult, capResult, newCapResult, peResult, h2nResult, elcTransResult;
+    let emissionsResult, elcMixResult, capResult, newCapResult, peResult, h2nResult;
 
     if (provinceCode === "NATION") {
       const nationJson = (nationData as any).NATION;
@@ -254,7 +341,6 @@ export default function ResultPanel({
       newCapResult = nationJson.newcap || {};
       peResult = nationJson.pe || {};
       h2nResult = nationJson.h2n || {};
-      elcTransResult = nationJson.elc_trans || {};
     } else {
       emissionsResult = (emissionsData as any)[provinceCode] || {};
       elcMixResult = (elcMixData as any)[provinceCode] || {};
@@ -262,7 +348,6 @@ export default function ResultPanel({
       newCapResult = (newCapData as any)[provinceCode] || {};
       peResult = (peData as any)[provinceCode] || {};
       h2nResult = (h2nData as any)[provinceCode] || {};
-      elcTransResult = (elcTransData as any)[provinceCode] || {};
     }
 
     // 格式化排放数据并移除2020年
@@ -290,14 +375,14 @@ export default function ResultPanel({
           title: "发电结构",
           defaultChartType: "line",
           data: getElcMixData(elcMixResult)
-    },
-    "installed-power-capacity": {
-      title: "电力装机",
+        },
+        "installed-power-capacity": {
+          title: "电力装机",
           defaultChartType: "line",
           data: getCapData(capResult)
         },
         "new-power-capacity": {
-      title: "新增电力装机",
+          title: "新增电力装机",
           defaultChartType: "line",
           data: getNewCapData(newCapResult)
         },
@@ -305,16 +390,16 @@ export default function ResultPanel({
           title: "一次能源供应",
           defaultChartType: "line",
           data: getPeData(peResult)
-    },
-    "hydrogen-supply": {
-      title: "氢能供应",
+        },
+        "hydrogen-supply": {
+          title: "氢能供应",
           defaultChartType: "line",
           data: getH2nData(h2nResult)
         },
         "net-power-export": {
-      title: "电力传输",
-      defaultChartType: "line",
-          data: getElcTransData(elcTransResult)
+          title: "电力传输",
+          defaultChartType: "none", // 表示不需要图表
+          data: [] // 空数组，因为我们使用自定义组件显示
         }
     };
     setResultDataSets(newResultDataSets);
@@ -376,11 +461,6 @@ export default function ResultPanel({
     }
   }
 
-  const getProvinceLabel = (provinceCode: string): string => {
-    const provinceName = Object.keys(provinceCodeMap).find(key => provinceCodeMap[key] === provinceCodeMap[provinceCode]);
-    return provinceName ? provinceName.charAt(0).toUpperCase() + provinceName.slice(1) : provinceCode;
-  }
-
   const provinceName = Object.entries(provinceCodeMap).find(([name, code]) => code === provinceCodeMap[selectedProvince])?.[0] || selectedProvince
 
   if (!isModelComplete) {
@@ -394,23 +474,57 @@ export default function ResultPanel({
     )
   }
 
+  // 电力传输矩阵视图
+  if (selectedNode === "net-power-export") {
+    return (
+      <Card className="h-full w-full flex flex-col">
+        <CardContent className="flex-1 flex flex-col p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">电力传输矩阵（PJ）</h2>
+            <div className="flex space-x-2">
+              {matrixYears.map(year => (
+                <Button
+                  key={year}
+                  variant={matrixYear === year ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setMatrixYear(year)}
+                >
+                  {year}
+                </Button>
+              ))}
+            </div>
+          </div>
+          
+          <div className="flex-1 overflow-hidden">
+            <ElcMatrixTable year={matrixYear} />
+          </div>
+          
+          <div className="text-sm text-muted-foreground mt-4">
+            展示 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下 {matrixYear} 年的电力传输矩阵数据。
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  // 其他结果视图
   return (
     <Card className="h-full w-full flex flex-col">
       <CardContent className="flex-1 flex flex-col p-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">{nodeTitle}</h2>
           <div className="flex space-x-2">
-                  <Button
+            <Button
               variant={chartType === "line" ? "secondary" : "ghost"}
-                    size="sm"
-                    onClick={() => setChartType("line")}
+              size="sm"
+              onClick={() => setChartType("line")}
             >
               折线图
             </Button>
-                  <Button
+            <Button
               variant={chartType === "bar" ? "secondary" : "ghost"}
-                    size="sm"
-                    onClick={() => setChartType("bar")}
+              size="sm"
+              onClick={() => setChartType("bar")}
             >
               柱状图
             </Button>
@@ -421,15 +535,15 @@ export default function ResultPanel({
             >
               堆叠图
             </Button>
-                  <Button
+            <Button
               variant={chartType === "pie" ? "secondary" : "ghost"}
-                    size="sm"
-                    onClick={() => setChartType("pie")}
+              size="sm"
+              onClick={() => setChartType("pie")}
             >
               饼图
             </Button>
-                </div>
-              </div>
+          </div>
+        </div>
         <div className="mb-4 h-[400px] w-full">
           <SimpleChart 
             type={chartType} 
@@ -446,7 +560,7 @@ export default function ResultPanel({
         <div className="text-sm text-muted-foreground mt-2">
            展示 {selectedProvince === 'nation' ? '全国' : provinceName.charAt(0).toUpperCase() + provinceName.slice(1)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
         </div>
-                </CardContent>
-              </Card>
+      </CardContent>
+    </Card>
   )
 }
