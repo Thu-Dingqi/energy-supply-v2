@@ -71,21 +71,21 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
 
   return (
     <div className="border rounded-lg bg-white">
-      <table className="w-full table-fixed">
-        <thead>
-          <tr className="bg-slate-100">
+        <table className="w-full table-fixed">
+          <thead>
+            <tr className="bg-slate-100">
             <th className="w-[120px] px-2 py-2 text-left text-sm font-semibold border-r">指标</th>
             <th className="w-[70px] px-2 py-2 text-left text-sm font-semibold border-r">单位</th>
-            {years.map((year) => (
+              {years.map((year) => (
               <th key={year} className="w-[60px] px-1 py-2 text-center text-sm font-semibold border-r">
-                {year}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {editableData.map((row, rowIndex) => (
-            <tr key={rowIndex} className="border-t hover:bg-slate-50">
+                  {year}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {editableData.map((row, rowIndex) => (
+              <tr key={rowIndex} className="border-t hover:bg-slate-50">
               <td className="w-[120px] px-2 py-2 text-sm border-r font-medium">
                 <TooltipProvider>
                   <Tooltip>
@@ -106,21 +106,21 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
                   </Tooltip>
                 </TooltipProvider>
               </td>
-              {years.map((year) => (
-                <td
-                  key={year}
+                {years.map((year) => (
+                  <td
+                    key={year}
                   className="w-[60px] px-1 py-2 text-sm text-center border-r"
-                  onClick={() => setEditingCell({ rowIndex, year })}
-                >
-                  {editingCell?.rowIndex === rowIndex && editingCell?.year === year ? (
-                    <Input
-                      autoFocus
+                    onClick={() => setEditingCell({ rowIndex, year })}
+                  >
+                    {editingCell?.rowIndex === rowIndex && editingCell?.year === year ? (
+                      <Input
+                        autoFocus
                       value={row.values[year] !== undefined ? row.values[year] : ''}
-                      onChange={(e) => handleCellValueChange(rowIndex, year, e.target.value)}
-                      onBlur={handleCellBlur}
-                      className="h-7 w-full p-1 text-center"
-                    />
-                  ) : (
+                        onChange={(e) => handleCellValueChange(rowIndex, year, e.target.value)}
+                        onBlur={handleCellBlur}
+                        className="h-7 w-full p-1 text-center"
+                      />
+                    ) : (
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -133,11 +133,11 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
           {editableData.length === 0 && (
             <tr>
               <td colSpan={years.length + 2} className="text-center py-4 text-muted-foreground">
@@ -145,8 +145,8 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
               </td>
             </tr>
           )}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
     </div>
   )
 }

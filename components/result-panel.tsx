@@ -440,20 +440,20 @@ export default function ResultPanel({
 
       // 设置延时以确保旧数据被清除
       setTimeout(() => {
-        const { title, data, defaultChartType } = resultDataSets[selectedNode]
-        setNodeTitle(title)
-        setTableData(data)
-        setChartType(defaultChartType || "line")
-        setCurrentNode(selectedNode)
-        
-        // Set appropriate years array based on the selected node
-        if (selectedNode.startsWith('emissions-')) {
-          setCurrentYears(emissionsYears);
-        } else if (selectedNode === 'hydrogen-supply' || selectedNode === 'new-power-capacity') {
-          setCurrentYears(from2025Years);
-        } else {
-          setCurrentYears(years);
-        }
+      const { title, data, defaultChartType } = resultDataSets[selectedNode]
+      setNodeTitle(title)
+      setTableData(data)
+      setChartType(defaultChartType || "line")
+      setCurrentNode(selectedNode)
+      
+      // Set appropriate years array based on the selected node
+      if (selectedNode.startsWith('emissions-')) {
+        setCurrentYears(emissionsYears);
+      } else if (selectedNode === 'hydrogen-supply' || selectedNode === 'new-power-capacity') {
+        setCurrentYears(from2025Years);
+      } else {
+        setCurrentYears(years);
+      }
       }, 0);
     } else if (activeNav === 'results') {
       // 先清空当前数据，避免混合
@@ -462,31 +462,31 @@ export default function ResultPanel({
       
       // 延时设置，确保旧数据被清除
       setTimeout(() => {
-        // Since NavigationItem doesn't have children, we need a different approach
-        // for selecting the first node based on activeNav
-        const resultsNodes = Object.keys(resultDataSets);
-        const firstNode = resultsNodes.length > 0 ? resultsNodes[0] : null;
+      // Since NavigationItem doesn't have children, we need a different approach
+      // for selecting the first node based on activeNav
+      const resultsNodes = Object.keys(resultDataSets);
+      const firstNode = resultsNodes.length > 0 ? resultsNodes[0] : null;
+      
+      if (firstNode && resultDataSets[firstNode]) {
+        const { title, data, defaultChartType } = resultDataSets[firstNode]
+        setNodeTitle(title)
+        setTableData(data)
+        setChartType(defaultChartType || "line")
+        setCurrentNode(firstNode)
         
-        if (firstNode && resultDataSets[firstNode]) {
-          const { title, data, defaultChartType } = resultDataSets[firstNode]
-          setNodeTitle(title)
-          setTableData(data)
-          setChartType(defaultChartType || "line")
-          setCurrentNode(firstNode)
-          
-          // Set appropriate years array based on the first node
-          if (firstNode.startsWith('emissions-')) {
-            setCurrentYears(emissionsYears);
-          } else if (firstNode === 'hydrogen-supply' || firstNode === 'new-power-capacity') {
-            setCurrentYears(from2025Years);
-          } else {
-            setCurrentYears(years);
-          }
+        // Set appropriate years array based on the first node
+        if (firstNode.startsWith('emissions-')) {
+          setCurrentYears(emissionsYears);
+        } else if (firstNode === 'hydrogen-supply' || firstNode === 'new-power-capacity') {
+          setCurrentYears(from2025Years);
         } else {
-          setNodeTitle("")
-          setTableData([])
           setCurrentYears(years);
         }
+      } else {
+        setNodeTitle("")
+        setTableData([])
+        setCurrentYears(years);
+      }
       }, 0);
     }
   }, [selectedNode, activeNav, resultDataSets])
@@ -594,12 +594,12 @@ export default function ResultPanel({
         
         <div className="mb-6 h-[400px] w-full overflow-hidden rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
           {isDataValid ? (
-            <SimpleChart 
-              type={chartType} 
-              data={tableData} 
-              title={nodeTitle} 
-              unit={tableData.length > 0 ? tableData[0].unit : ""} 
-            />
+          <SimpleChart 
+            type={chartType} 
+            data={tableData} 
+            title={nodeTitle} 
+            unit={tableData.length > 0 ? tableData[0].unit : ""} 
+          />
           ) : (
             <div className="h-full w-full flex items-center justify-center bg-muted/20">
               <div className="text-center">
@@ -613,7 +613,7 @@ export default function ResultPanel({
         <div className="h-[300px]">
           <ScrollArea className="h-full w-full">
             <div className="min-w-[800px]">
-              <EditableDataTable data={tableData} onDataChange={handleDataChange} years={currentYears} />
+            <EditableDataTable data={tableData} onDataChange={handleDataChange} years={currentYears} />
             </div>
           </ScrollArea>
         </div>
