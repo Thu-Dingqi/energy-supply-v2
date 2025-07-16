@@ -12,7 +12,7 @@
         },
         "gas": {
             "extraction": 255.0,
-            "import": 2443.0,
+            "import": 2443.1,
             "export": 255.0
         }
     },
@@ -58,13 +58,13 @@
         },
         "oil": {
             "extraction": 0.0,
-            "import": 996.9,
+            "import": 997.0,
             "export": 171.9
         },
         "gas": {
             "extraction": 1096.6,
             "import": 357.0,
-            "export": 276.5
+            "export": 276.4
         }
     },
     "NEMO": {
@@ -76,10 +76,10 @@
         "oil": {
             "extraction": 19.4,
             "import": 1826.8,
-            "export": 840.2
+            "export": 840.1
         },
         "gas": {
-            "extraction": 326.0,
+            "extraction": 326.1,
             "import": 1077.2,
             "export": 650.4
         }
@@ -96,14 +96,14 @@
             "export": 11472.3
         },
         "gas": {
-            "extraction": 94.1,
+            "extraction": 94.0,
             "import": 1718.5,
             "export": 872.1
         }
     },
     "JILI": {
         "coal": {
-            "extraction": 725.8,
+            "extraction": 725.9,
             "import": 5495.2,
             "export": 231.8
         },
@@ -178,7 +178,7 @@
         "oil": {
             "extraction": 0.0,
             "import": 4299.4,
-            "export": 5577.0
+            "export": 5576.9
         },
         "gas": {
             "extraction": 0.0,
@@ -189,13 +189,13 @@
     "ANHU": {
         "coal": {
             "extraction": 7735.0,
-            "import": 8626.3,
+            "import": 8626.4,
             "export": 4371.4
         },
         "oil": {
             "extraction": 0.0,
             "import": 1409.9,
-            "export": 163.5
+            "export": 163.4
         },
         "gas": {
             "extraction": 28.6,
@@ -205,7 +205,7 @@
     },
     "FUJI": {
         "coal": {
-            "extraction": 459.5,
+            "extraction": 459.6,
             "import": 3763.1,
             "export": 946.2
         },
@@ -229,7 +229,7 @@
         "oil": {
             "extraction": 0.0,
             "import": 1563.2,
-            "export": 128.6
+            "export": 128.7
         },
         "gas": {
             "extraction": 0.0,
@@ -250,7 +250,7 @@
         },
         "gas": {
             "extraction": 73.6,
-            "import": 2746.4,
+            "import": 2746.3,
             "export": 0.0
         }
     },
@@ -312,7 +312,7 @@
             "export": 2335.8
         },
         "oil": {
-            "extraction": 2304.5,
+            "extraction": 2304.6,
             "import": 1198.2,
             "export": 5912.1
         },
@@ -348,7 +348,7 @@
         "oil": {
             "extraction": 43.6,
             "import": 249.2,
-            "export": 855.8
+            "export": 855.9
         },
         "gas": {
             "extraction": 13.3,

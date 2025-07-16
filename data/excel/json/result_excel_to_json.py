@@ -1,20 +1,23 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# 读取pe
-
-# In[ ]:
-
-
+# 导入必要的库
 import pandas as pd
 import json
+import os
+
+# 获取脚本所在目录的绝对路径
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 定义 Excel 文件的完整路径
+excel_file_path = os.path.join(script_dir, '30PE_Results_ALL.xlsx')
+
+print(f"查找Excel文件: {excel_file_path}")
 
 # 读取一次能源数据
 try:
-    pe_file = '30PE_Results_ALL.xlsx'
-    
     # 读取Excel文件
-    pe_df = pd.read_excel(pe_file, sheet_name='PE')
+    pe_df = pd.read_excel(excel_file_path, sheet_name='PE')
     
     # 创建数据结构
     pe_data = {}
@@ -38,38 +41,25 @@ try:
             if not pd.isna(row[fuel_type]):
                 pe_data[province][fuel_type][year] = round(float(row[fuel_type]), 1)
     
-    # 确保json目录存在
-    import os
-    if not os.path.exists('./'):
-        os.makedirs('./')
-    
     # 将数据保存到当前目录下的pe.json文件
-    with open('./pe.json', 'w', encoding='utf-8') as f:
+    output_path = os.path.join(script_dir, 'pe.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(pe_data, f, ensure_ascii=False, indent=4)
     
-    print("\n一次能源数据已成功保存到当前目录下的pe.json文件")
+    print(f"\n一次能源数据已成功保存到 {output_path}")
     
 except FileNotFoundError:
-    print(f"未找到文件 '{pe_file}'，请确保文件在当前目录下。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件存在。")
 except Exception as e:
     print(f"处理一次能源数据时发生错误: {e}")
 
 
 # 保存发电量
-
-# In[5]:
-
-
-# 读取发电结构数据
 try:
-    # 定义文件路径
-    elec_pro_tech_file = '30PE_Results_ALL.xlsx'
-    
     # 读取Excel文件中的Generation sheet
-    elec_pro_tech_sheets = pd.read_excel(elec_pro_tech_file, sheet_name='Generation')
+    elec_pro_tech_sheets = pd.read_excel(excel_file_path, sheet_name='Generation')
     
-    # 打印sheet的内容
-    print(f"\n读取 {elec_pro_tech_file} 文件中的 Generation sheet内容:")
+    print(f"\n读取 {excel_file_path} 文件中的 Generation sheet内容:")
     
     # 设置显示选项，确保不省略任何内容
     with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.width', None):
@@ -103,34 +93,23 @@ try:
             if not pd.isna(row[tech]):
                 elc_mix_data[province][tech][current_year] = round(float(row[tech]), 1)
     
-    # 确保json目录存在
-    import os
-    if not os.path.exists('./'):
-        os.makedirs('./')
-    
     # 将数据保存到当前目录的 elc_mix.json 文件
-    with open('./elc_mix.json', 'w', encoding='utf-8') as f:
+    output_path = os.path.join(script_dir, 'elc_mix.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(elc_mix_data, f, ensure_ascii=False, indent=4)
     
-    print("\n发电结构数据已成功保存到当前目录的 elc_mix.json 文件")
+    print(f"\n发电结构数据已成功保存到 {output_path}")
     
 except FileNotFoundError:
-    print(f"未找到文件 '{elec_pro_tech_file}'，请确保文件存在。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件存在。")
 except Exception as e:
     print(f"处理发电结构数据时发生错误: {e}")
 
 
 # 电力装机量
-
-# In[7]:
-
-
 try:
-    # 定义文件路径
-    cap_file = '30PE_Results_ALL.xlsx'
-    
     # 读取Excel文件的Capacity表格
-    cap_df = pd.read_excel(cap_file, sheet_name='Capacity')
+    cap_df = pd.read_excel(excel_file_path, sheet_name='Capacity')
     
     # 创建数据结构
     cap_data = {}
@@ -159,34 +138,23 @@ try:
             if not pd.isna(row[tech]):
                 cap_data[province][tech][current_year] = round(float(row[tech]), 2)
     
-    # 确保json目录存在
-    import os
-    if not os.path.exists('./'):
-        os.makedirs('./')
-    
     # 将数据保存到当前目录的 cap.json 文件
-    with open('./cap.json', 'w', encoding='utf-8') as f:
+    output_path = os.path.join(script_dir, 'cap.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(cap_data, f, ensure_ascii=False, indent=4)
     
-    print("\n电力总装机数据已成功保存到当前目录的 cap.json 文件")
+    print(f"\n电力总装机数据已成功保存到 {output_path}")
     
 except FileNotFoundError:
-    print(f"未找到文件 '{cap_file}'，请确保文件存在。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件存在。")
 except Exception as e:
     print(f"处理电力总装机数据时发生错误: {e}")
 
 
 # 新增装机量
-
-# In[9]:
-
-
 try:
-    # 定义文件路径
-    capnew_file = '30PE_Results_ALL.xlsx'
-    
     # 读取Excel文件的"CAP_new" sheet
-    capnew_df = pd.read_excel(capnew_file, sheet_name='CAP_new')
+    capnew_df = pd.read_excel(excel_file_path, sheet_name='CAP_new')
     
     # 创建数据结构
     capnew_data = {}
@@ -215,34 +183,23 @@ try:
             if not pd.isna(row[tech]):
                 capnew_data[province][tech][current_year] = round(float(row[tech]), 2)
     
-    # 确保json目录存在
-    import os
-    if not os.path.exists('./'):
-        os.makedirs('./')
-    
     # 将数据保存到当前目录的 newcap.json 文件
-    with open('./newcap.json', 'w', encoding='utf-8') as f:
+    output_path = os.path.join(script_dir, 'newcap.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(capnew_data, f, ensure_ascii=False, indent=4)
     
-    print("\n电力新增装机数据已成功保存到当前目录的 newcap.json 文件")
+    print(f"\n电力新增装机数据已成功保存到 {output_path}")
     
 except FileNotFoundError:
-    print(f"未找到文件 '{capnew_file}'，请确保文件存在。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件存在。")
 except Exception as e:
     print(f"处理电力新增装机数据时发生错误: {e}")
 
 
 # 氢能制备
-
-# In[11]:
-
-
 try:
-    # 定义氢能制备技术文件路径
-    h2n_file = '30PE_Results_ALL.xlsx'
-    
     # 读取氢能制备技术数据
-    h2n_pro_tech_df = pd.read_excel(h2n_file, sheet_name="H2N")
+    h2n_pro_tech_df = pd.read_excel(excel_file_path, sheet_name="H2N")
     
     # 打印整个表格
     print("氢能制备技术数据:")
@@ -308,32 +265,22 @@ try:
                     h2n_data[province]["offshore"][year_str] = round(float(offshore_value), 2)
     
     # 将数据保存到当前目录的 h2n.json 文件
-    with open('./h2n.json', 'w', encoding='utf-8') as f:
+    output_path = os.path.join(script_dir, 'h2n.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(h2n_data, f, ensure_ascii=False, indent=4)
     
-    print("\n氢能制备数据已成功保存到当前目录的 h2n.json 文件")
+    print(f"\n氢能制备数据已成功保存到 {output_path}")
     
 except FileNotFoundError:
-    print(f"未找到文件 '{h2n_file}'，请确保文件在当前目录下。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件在当前目录下。")
 except Exception as e:
     print(f"处理氢能制备技术数据时发生错误: {e}")
 
 
 # 电力投资
-
-# In[12]:
-
-
-import pandas as pd
-import json
-import numpy as np
-
 try:
-    # 定义文件路径
-    inv_file = '30PE_Results_ALL.xlsx'
-    
     # 读取Excel文件的Investment sheet
-    inv_df = pd.read_excel(inv_file, sheet_name='Investment')
+    inv_df = pd.read_excel(excel_file_path, sheet_name='Investment')
     
     # 创建数据结构
     inv_data = {}
@@ -362,103 +309,83 @@ try:
                 inv_data[province][tech][current_year] = round(float(row[tech]), 3)
     
     # 将数据保存到当前目录的 inv.json 文件
-    with open('./inv.json', 'w', encoding='utf-8') as f:
+    output_path = os.path.join(script_dir, 'inv.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(inv_data, f, ensure_ascii=False, indent=4)
     
-    print("\n电力投资数据已成功保存到当前目录的 inv.json 文件")
+    print(f"\n电力投资数据已成功保存到 {output_path}")
     
 except FileNotFoundError:
-    print(f"未找到文件 '{inv_file}'，请确保文件在当前目录下。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件在当前目录下。")
 except Exception as e:
     print(f"处理电力投资数据时发生错误: {e}")
 
 
 # 排放
-
-# In[21]:
-
-
-import pandas as pd
-import json
-import os
-
-# --- 1. 配置 ---
-excel_file = "30PE_Results_ALL.xlsx"
-output_json_file = "emissions.json"
-
-# Mapeo de los nombres de las hojas a las claves que queremos en el JSON
-sheet_map = {
-    'FinalEmission': 'FE',
-    'SupplyEmission': 'SUPPLY',
-    'TotalEmission': 'TOTAL'
-}
-
-# Definir los años de interés: de 2025 a 2060, en pasos de 5 años.
-years_to_keep = list(range(2025, 2061, 5))
-
-# --- 2. LECTURA Y PREPARACIÓN DE DATOS ---
-
-# Cargar cada hoja en un DataFrame de pandas
 try:
-    df_fe = pd.read_excel(excel_file, sheet_name='FinalEmission', index_col=0)
-    df_supply = pd.read_excel(excel_file, sheet_name='SupplyEmission', index_col=0)
-    df_total = pd.read_excel(excel_file, sheet_name='TotalEmission', index_col=0)
+    # 定义输出 JSON 文件路径
+    output_json_file = os.path.join(script_dir, "emissions.json")
+
+    # 对应表格和 JSON 中的键
+    sheet_map = {
+        'FinalEmission': 'FE',
+        'SupplyEmission': 'SUPPLY',
+        'TotalEmission': 'TOTAL'
+    }
+
+    # 要保留的年份：从 2025 到 2060，每 5 年一个
+    years_to_keep = list(range(2025, 2061, 5))
+
+    # 载入每个表格到 pandas DataFrame
+    df_fe = pd.read_excel(excel_file_path, sheet_name='FinalEmission', index_col=0)
+    df_supply = pd.read_excel(excel_file_path, sheet_name='SupplyEmission', index_col=0)
+    df_total = pd.read_excel(excel_file_path, sheet_name='TotalEmission', index_col=0)
+
+    # 创建字典以方便访问 DataFrame
+    dataframes = {
+        'FE': df_fe,
+        'SUPPLY': df_supply,
+        'TOTAL': df_total
+    }
+
+    # 获取所有省份列表（取三个表格共有的列）
+    provinces = list(set(df_fe.columns) & set(df_supply.columns) & set(df_total.columns))
+    provinces.sort()  # 按字母顺序排序
+
+    # 构建 JSON 数据结构
+    final_data = {}
+
+    for province in provinces:
+        final_data[province] = {}
+        for key, df in dataframes.items():
+            # 按照指定年份过滤，选择省份列，并四舍五入到 3 位小数
+            province_year_data = df.loc[years_to_keep, province].round(3).to_dict()
+            # 转为 float 并保留 3 位小数
+            province_year_data = {str(year): float(f"{value:.3f}") if pd.notnull(value) else None 
+                                for year, value in province_year_data.items()}
+            final_data[province][key] = province_year_data
+
+    # 写入 JSON 文件
+    with open(output_json_file, 'w', encoding='utf-8') as f:
+        json.dump(final_data, f, ensure_ascii=False, indent=4)
+
+    print(f"\n排放数据已成功保存到 {output_json_file}")
+
+    # 输出一个样本以验证结构
+    print("\n--- 'ANHU' 省的数据样本 ---")
+    print(json.dumps({'ANHU': final_data.get('ANHU', {})}, indent=4, ensure_ascii=False))
+    
 except FileNotFoundError:
-    print(f"Error: No se encontró el archivo '{excel_file}'. Asegúrate de que esté en el mismo directorio.")
-    exit()
-
-# Crear un diccionario para acceder fácilmente a los dataframes
-dataframes = {
-    'FE': df_fe,
-    'SUPPLY': df_supply,
-    'TOTAL': df_total
-}
-
-# Obtener una lista consistente de todas las provincias (columnas)
-provinces = list(set(df_fe.columns) & set(df_supply.columns) & set(df_total.columns))
-provinces.sort() # Ordenar alfabéticamente para un resultado consistente
-
-# --- 3. CONSTRUCCIÓN DE LA ESTRUCTURA JSON ---
-
-final_data = {}
-
-for province in provinces:
-    final_data[province] = {}
-    for key, df in dataframes.items():
-        # Filtrar el DataFrame por los años de interés y seleccionar la columna de la provincia
-        # Redondear a 3 decimales
-        province_year_data = df.loc[years_to_keep, province].round(3).to_dict()
-        # 转为 float 并保留 3 位小数（即使是整数也会变成 3 位小数）
-        province_year_data = {str(year): float(f"{value:.3f}") if pd.notnull(value) else None for year, value in province_year_data.items()}
-        final_data[province][key] = province_year_data
-
-# --- 4. ESCRITURA DEL ARCHIVO JSON ---
-with open(output_json_file, 'w', encoding='utf-8') as f:
-    json.dump(final_data, f, ensure_ascii=False, indent=4)
-
-print(f"¡Proceso completado! Los datos han sido guardados en el archivo: '{output_json_file}'")
-
-# Opcional: Imprimir una muestra para verificar la estructura
-print("\n--- Muestra de los datos para la provincia 'ANHU' ---")
-print(json.dumps({'ANHU': final_data.get('ANHU', {})}, indent=4, ensure_ascii=False))
+    print(f"未找到文件 '{excel_file_path}'。请确保文件存在。")
+except Exception as e:
+    print(f"处理排放数据时发生错误: {e}")
 
 
 # 电力传输
-
-# In[24]:
-
-
-import pandas as pd
-import json
-import numpy as np
-
-file_path = '30PE_Results_ALL.xlsx'
-sheet_name = 'TransElc'
-json_path = 'elc_matrix.json'
-
 try:
-    # 读取数据
-    df = pd.read_excel(file_path, sheet_name=sheet_name, header=None)
+    # 输出 JSON 路径
+    json_path = os.path.join(script_dir, 'elc_matrix.json')
+    
     # 需要保存的年份
     years = ['2020', '2030', '2040', '2050', '2060']
     # 每个年份的起始行号
@@ -474,6 +401,9 @@ try:
     data_row_start_offset = 1  # 数据从起始行+1开始
     n_province = 30  # 省份数量
 
+    # 读取数据
+    df = pd.read_excel(excel_file_path, sheet_name='TransElc', header=None)
+    
     elc_matrix = {}
 
     for year in years:
@@ -511,30 +441,21 @@ try:
     # 保存为json
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(elc_matrix, f, ensure_ascii=False, indent=4)
-    print(f"电力传输矩阵已保存到 {json_path}")
+    print(f"\n电力传输矩阵已保存到 {json_path}")
 
 except FileNotFoundError:
-    print(f"未找到文件 '{file_path}'，请确保文件路径正确。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件路径正确。")
 except Exception as e:
     print(f"读取电网矩阵时发生错误: {e}")
 
 
 # 煤、油、气的开采量
-
-# In[25]:
-
-
-# 读取"开采-调入-调出"的sheet数据
 try:
-    import pandas as pd
-    import json
-    import os
-    
-    # 定义文件路径
-    resource_file = '30PE_Results_ALL.xlsx'
+    # 输出 JSON 文件路径
+    json_file_path = os.path.join(script_dir, '2020_pe_fossil.json')
     
     # 读取文件中的"Mine_ImExport"sheet
-    extraction_data = pd.read_excel(resource_file, sheet_name='Mine_ImExport')
+    extraction_data = pd.read_excel(excel_file_path, sheet_name='Mine_ImExport')
     
     # 创建用于存储数据的字典
     fossil_data = {}
@@ -563,14 +484,126 @@ try:
         }
     
     # 将数据保存为json文件
-    json_file_path = '2020_pe_fossil.json'
     with open(json_file_path, 'w', encoding='utf-8') as f:
         json.dump(fossil_data, f, ensure_ascii=False, indent=4)
     
     print(f"\n煤、油、气开采-调入-调出数据已成功保存到 {json_file_path}")
     
 except FileNotFoundError:
-    print(f"未找到文件 '{resource_file}'，请确保文件在当前目录下。")
+    print(f"未找到文件 '{excel_file_path}'，请确保文件在当前目录下。")
 except Exception as e:
     print(f"处理煤、油、气开采量数据时发生错误: {e}")
 
+# 读取资源潜力数据
+try:
+    # 输出 JSON 文件路径
+    json_file_path = os.path.join(script_dir, 'resource.json')
+    
+    # 读取文件中的"Resource"sheet
+    resource_data_df = pd.read_excel(excel_file_path, sheet_name="Resource")
+    
+    # 创建用于存储数据的字典
+    resource_data = {}
+    
+    # 遍历数据框中的每一行
+    for index, row in resource_data_df.iterrows():
+        # 跳过最后两行说明文字
+        if pd.isna(row['Unnamed: 0']) or index > 29:
+            continue
+            
+        province_code = row['Unnamed: 0']  # 省份代码
+        
+        # 创建省份数据结构
+        resource_data[province_code] = {
+            "coal": {
+                "2025": round(float(row['coal']) / 1000, 2),
+                "2030": round(float(row['coal']) / 1000, 2),
+                "2035": round(float(row['coal']) / 1000, 2),
+                "2040": round(float(row['coal']) / 1000, 2),
+                "2045": round(float(row['coal']) / 1000, 2),
+                "2050": round(float(row['coal']) / 1000, 2),
+                "2055": round(float(row['coal']) / 1000, 2),
+                "2060": round(float(row['coal']) / 1000, 2)
+            },
+            "oil": {
+                "2025": round(float(row['oil']), 2),
+                "2030": round(float(row['oil']), 2),
+                "2035": round(float(row['oil']), 2),
+                "2040": round(float(row['oil']), 2),
+                "2045": round(float(row['oil']), 2),
+                "2050": round(float(row['oil']), 2),
+                "2055": round(float(row['oil']), 2),
+                "2060": round(float(row['oil']), 2)
+            },
+            "gas": {
+                "2025": round(float(row['gas']), 2),
+                "2030": round(float(row['gas']), 2),
+                "2035": round(float(row['gas']), 2),
+                "2040": round(float(row['gas']), 2),
+                "2045": round(float(row['gas']), 2),
+                "2050": round(float(row['gas']), 2),
+                "2055": round(float(row['gas']), 2),
+                "2060": round(float(row['gas']), 2)
+            },
+            "nuclear": {
+                "2025": round(float(row['nuclear']), 2),
+                "2030": round(float(row['nuclear']), 2),
+                "2035": round(float(row['nuclear']), 2),
+                "2040": round(float(row['nuclear']), 2),
+                "2045": round(float(row['nuclear']), 2),
+                "2050": round(float(row['nuclear']), 2),
+                "2055": round(float(row['nuclear']), 2),
+                "2060": round(float(row['nuclear']), 2)
+            },
+            "biomass": {
+                "2025": round(float(row['biomass']), 2),
+                "2030": round(float(row['biomass']), 2),
+                "2035": round(float(row['biomass']), 2),
+                "2040": round(float(row['biomass']), 2),
+                "2045": round(float(row['biomass']), 2),
+                "2050": round(float(row['biomass']), 2),
+                "2055": round(float(row['biomass']), 2),
+                "2060": round(float(row['biomass']), 2)
+            },
+            "hydro": {
+                "2025": round(float(row['hydro']), 2),
+                "2030": round(float(row['hydro']), 2),
+                "2035": round(float(row['hydro']), 2),
+                "2040": round(float(row['hydro']), 2),
+                "2045": round(float(row['hydro']), 2),
+                "2050": round(float(row['hydro']), 2),
+                "2055": round(float(row['hydro']), 2),
+                "2060": round(float(row['hydro']), 2)
+            },
+            "wind": {
+                "2025": round(float(row['onwind']) + float(row['offwind']), 2),
+                "2030": round(float(row['onwind']) + float(row['offwind']), 2),
+                "2035": round(float(row['onwind']) + float(row['offwind']), 2),
+                "2040": round(float(row['onwind']) + float(row['offwind']), 2),
+                "2045": round(float(row['onwind']) + float(row['offwind']), 2),
+                "2050": round(float(row['onwind']) + float(row['offwind']), 2),
+                "2055": round(float(row['onwind']) + float(row['offwind']), 2),
+                "2060": round(float(row['onwind']) + float(row['offwind']), 2)
+            },
+            "solar": {
+                "2025": round(float(row['pv']), 2),
+                "2030": round(float(row['pv']), 2),
+                "2035": round(float(row['pv']), 2),
+                "2040": round(float(row['pv']), 2),
+                "2045": round(float(row['pv']), 2),
+                "2050": round(float(row['pv']), 2),
+                "2055": round(float(row['pv']), 2),
+                "2060": round(float(row['pv']), 2)
+            }
+        }
+    
+    # 将数据保存为json文件
+    with open(json_file_path, 'w', encoding='utf-8') as f:
+        json.dump(resource_data, f, ensure_ascii=False, indent=4)
+    
+    print(f"\n资源潜力数据已成功保存到 {json_file_path}")
+    
+except FileNotFoundError:
+    print(f"未找到文件 '{excel_file_path}'，请确保文件在当前目录下。")
+except Exception as e:
+    print(f"处理资源潜力数据时发生错误: {e}")

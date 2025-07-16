@@ -46,14 +46,33 @@ export default function MainContent({
   const [showModelDialog, setShowModelDialog] = useState(false)
 
   // 运行模型的函数
-  const runModel = () => {
+  const runModel = async () => {
     setIsModelRunning(true)
-    // 3秒后完成
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/run-model', {
+        method: 'POST',
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || `Server error: ${response.status}`);
+      }
+
+      if (result.success) {
+        alert("模型运行成功！");
+        onModelComplete();
+      } else {
+        throw new Error(result.message || 'The model script reported an error.');
+      }
+
+    } catch (error: any) {
+      console.error("Error running model:", error);
+      alert(`模型运行失败: ${error.message}`);
+    } finally {
       setIsModelRunning(false)
-      onModelComplete() // Call the parent's onModelComplete function
       setShowModelDialog(false)
-    }, 3000)
+    }
   }
 
   // 当切换到结果标签时的处理
