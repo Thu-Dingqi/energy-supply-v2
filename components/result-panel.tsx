@@ -25,6 +25,7 @@ interface DataRow {
 
 interface ResultPanelProps {
   activeNav: NavigationItem
+  // 移除 activeSection 属性
   selectedNode: string | null
   selectedScenario: string
   selectedProvince: string
@@ -354,24 +355,8 @@ export default function ResultPanel({
       peResult = nationJson.pe || {};
       h2nResult = nationJson.h2n || {};
       
-      // 由于全国数据中没有inv属性，所以我们手动聚合
-      let invResult = {};
-      Object.keys(invData).forEach(province => {
-        const provinceInvData = (invData as any)[province];
-        if (provinceInvData) {
-          Object.entries(provinceInvData).forEach(([tech, values]) => {
-            if (!invResult[tech]) {
-              invResult[tech] = {};
-            }
-            Object.entries(values).forEach(([year, value]) => {
-              if (!invResult[tech][year]) {
-                invResult[tech][year] = 0;
-              }
-              invResult[tech][year] += parseFloat(value as string) || 0;
-            });
-          });
-        }
-      });
+      // 直接使用inv.json中的NATION节点数据
+      invResult = (invData as any).NATION || {};
     } else {
       emissionsResult = (emissionsData as any)[provinceCode] || {};
       elcMixResult = (elcMixData as any)[provinceCode] || {};

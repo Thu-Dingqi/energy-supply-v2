@@ -52,7 +52,6 @@ export default function EnergyPlatform() {
         return (
           <ResultPanel
             activeNav={activeNav}
-            activeSection={activeSection}
             selectedNode={selectedNode}
             selectedScenario={selectedScenario}
             selectedProvince={selectedProvince}
