@@ -15,6 +15,7 @@ import peData from "@/data/excel/json/pe.json"
 import h2nData from "@/data/excel/json/h2n.json"
 import elcMatrixData from "@/data/excel/json/elc_matrix.json"
 import nationData from "@/data/excel/json/nation.json"
+import invData from "@/data/excel/json/inv.json"
 
 interface DataRow {
   indicator: string
@@ -183,6 +184,9 @@ const h2nIndicatorMap: Record<string, string> = {
   offshore: "海上风电制氢"
 };
 
+// 添加投资指标映射，与 elcMixIndicatorMap 一致
+const invIndicatorMap = elcMixIndicatorMap;
+
 // 电力传输矩阵表格组件
 const ElcMatrixTable = ({ year }: { year: string }) => {
   const matrix = (elcMatrixData as any)[year];
@@ -311,6 +315,14 @@ const getH2nData = (provinceData: any) => {
   ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
 };
 
+// 添加获取投资数据的函数
+const getInvData = (provinceData: any) => {
+  if (!provinceData) return [];
+  return Object.entries(invIndicatorMap).map(([key, indicator]) =>
+    createDataRow(indicator, "吉瓦", provinceData[key])
+  ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+};
+
 // 移除 getEmissionsData 函数，将逻辑直接内联到 useEffect 中
 export default function ResultPanel({
   activeNav,
@@ -331,7 +343,7 @@ export default function ResultPanel({
   useEffect(() => {
     const provinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
     
-    let emissionsResult, elcMixResult, capResult, newCapResult, peResult, h2nResult;
+    let emissionsResult, elcMixResult, capResult, newCapResult, peResult, h2nResult, invResult;
 
     if (provinceCode === "NATION") {
       const nationJson = (nationData as any).NATION;
@@ -341,6 +353,25 @@ export default function ResultPanel({
       newCapResult = nationJson.newcap || {};
       peResult = nationJson.pe || {};
       h2nResult = nationJson.h2n || {};
+      
+      // 由于全国数据中没有inv属性，所以我们手动聚合
+      invResult = {};
+      Object.keys(invData).forEach(province => {
+        const provinceInvData = (invData as any)[province];
+        if (provinceInvData) {
+          Object.entries(provinceInvData).forEach(([tech, values]) => {
+            if (!invResult[tech]) {
+              invResult[tech] = {};
+            }
+            Object.entries(values).forEach(([year, value]) => {
+              if (!invResult[tech][year]) {
+                invResult[tech][year] = 0;
+              }
+              invResult[tech][year] += parseFloat(value as string) || 0;
+            });
+          });
+        }
+      });
     } else {
       emissionsResult = (emissionsData as any)[provinceCode] || {};
       elcMixResult = (elcMixData as any)[provinceCode] || {};
@@ -348,6 +379,7 @@ export default function ResultPanel({
       newCapResult = (newCapData as any)[provinceCode] || {};
       peResult = (peData as any)[provinceCode] || {};
       h2nResult = (h2nData as any)[provinceCode] || {};
+      invResult = (invData as any)[provinceCode] || {}; // 从各省数据获取投资数据
     }
 
     // 格式化排放数据并移除2020年
@@ -385,6 +417,11 @@ export default function ResultPanel({
           title: "新增电力装机",
           defaultChartType: "line",
           data: getNewCapData(newCapResult)
+        },
+        "power-investment": {
+          title: "电力投资",
+          defaultChartType: "line",
+          data: getInvData(invResult)
         },
         "primary-energy-supply": {
           title: "一次能源供应",

@@ -12,7 +12,8 @@ const filesToAggregate = [
   'emissions.json',
   'pe.json',
   'newcap.json',
-  'h2n.json'
+  'h2n.json',
+  'inv.json'  // 添加inv.json
 ];
 
 const nationData = {};

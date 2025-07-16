@@ -266,6 +266,7 @@ export default function MainContent({
         { id: "power-generation-mix", label: "发电结构" },
         { id: "installed-power-capacity", label: "电力装机" },
         { id: "new-power-capacity", label: "新增电力装机" },
+        { id: "power-investment", label: "电力投资" },
         { id: "primary-energy-supply", label: "一次能源供应" },
         { id: "hydrogen-supply", label: "氢能供应" },
         { id: "net-power-export", label: "电力传输" },
@@ -295,6 +296,7 @@ export default function MainContent({
               { id: "power-generation-mix", label: "发电结构" },
               { id: "installed-power-capacity", label: "电力装机" },
               { id: "new-power-capacity", label: "新增电力装机" },
+              { id: "power-investment", label: "电力投资" },
               { id: "primary-energy-supply", label: "一次能源供应" },
               { id: "hydrogen-supply", label: "氢能供应" },
               // "net-power-export" is intentionally omitted for "nation"
