@@ -185,8 +185,17 @@ const h2nIndicatorMap: Record<string, string> = {
   offshore: "海上风电制氢"
 };
 
-// 添加投资指标映射，与 elcMixIndicatorMap 一致
-const invIndicatorMap = elcMixIndicatorMap;
+// 添加投资指标映射
+const invIndicatorMap: Record<string, string> = {
+  fossil: "化石能源",
+  "fossil ccs": "化石能源CCS",
+  nuclear: "核电",
+  hydro: "水电",
+  biomass: "生物质",
+  "biomass ccs": "生物质CCS",
+  wind: "风电",
+  pv: "太阳能"
+};
 
 // 电力传输矩阵表格组件
 const ElcMatrixTable = ({ year }: { year: string }) => {

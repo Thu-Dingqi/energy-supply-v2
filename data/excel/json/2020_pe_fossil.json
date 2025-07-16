@@ -1,512 +1,512 @@
 {
     "BEIJ": {
         "coal": {
-            "extraction": 1279458.5,
-            "import": 1279458.5,
-            "export": 1279458.5
+            "extraction": 0.0,
+            "import": 89.5,
+            "export": 15.4
         },
         "oil": {
-            "extraction": 93.5,
-            "import": 93.5,
-            "export": 93.5
+            "extraction": 0.0,
+            "import": 4045.1,
+            "export": 2274.7
         },
         "gas": {
-            "extraction": 28.2,
-            "import": 28.2,
-            "export": 28.2
+            "extraction": 255.0,
+            "import": 2443.0,
+            "export": 255.0
         }
     },
     "TIAN": {
         "coal": {
-            "extraction": 181420.0,
-            "import": 181420.0,
-            "export": 181420.0
+            "extraction": 0.0,
+            "import": 3475.6,
+            "export": 366.1
         },
         "oil": {
-            "extraction": 2000.0,
-            "import": 2000.0,
-            "export": 2000.0
+            "extraction": 4631.8,
+            "import": 8607.6,
+            "export": 11199.8
         },
         "gas": {
-            "extraction": 395.4,
-            "import": 395.4,
-            "export": 395.4
+            "extraction": 463.4,
+            "import": 1282.4,
+            "export": 223.1
         }
     },
     "HEBE": {
         "coal": {
-            "extraction": 528569.8,
-            "import": 528569.8,
-            "export": 528569.8
+            "extraction": 3471.5,
+            "import": 26989.6,
+            "export": 6766.6
         },
         "oil": {
-            "extraction": 2994409.1,
-            "import": 2994409.1,
-            "export": 2994409.1
+            "extraction": 776.5,
+            "import": 2735.8,
+            "export": 2174.2
         },
         "gas": {
-            "extraction": 1470.0,
-            "import": 1470.0,
-            "export": 1470.0
+            "extraction": 71.6,
+            "import": 2151.0,
+            "export": 10.0
         }
     },
     "SHNX": {
         "coal": {
-            "extraction": 53492.9,
-            "import": 53492.9,
-            "export": 53492.9
+            "extraction": 75299.3,
+            "import": 6714.9,
+            "export": 46931.4
         },
         "oil": {
-            "extraction": 2000.0,
-            "import": 2000.0,
-            "export": 2000.0
+            "extraction": 0.0,
+            "import": 996.9,
+            "export": 171.9
         },
         "gas": {
-            "extraction": 0.0,
-            "import": 0.0,
-            "export": 0.0
+            "extraction": 1096.6,
+            "import": 357.0,
+            "export": 276.5
         }
     },
     "NEMO": {
         "coal": {
-            "extraction": 2989224.6,
-            "import": 2989224.6,
-            "export": 2989224.6
+            "extraction": 71562.5,
+            "import": 4395.5,
+            "export": 42178.3
         },
         "oil": {
-            "extraction": 298970.2,
-            "import": 298970.2,
-            "export": 298970.2
+            "extraction": 19.4,
+            "import": 1826.8,
+            "export": 840.2
         },
         "gas": {
-            "extraction": 21.0,
-            "import": 21.0,
-            "export": 21.0
+            "extraction": 326.0,
+            "import": 1077.2,
+            "export": 650.4
         }
     },
     "LIAO": {
         "coal": {
-            "extraction": 19058.3,
-            "import": 19058.3,
-            "export": 19058.3
+            "extraction": 2183.4,
+            "import": 13881.7,
+            "export": 1569.3
         },
         "oil": {
-            "extraction": 483.2,
-            "import": 483.2,
-            "export": 483.2
+            "extraction": 1499.1,
+            "import": 10740.9,
+            "export": 11472.3
         },
         "gas": {
-            "extraction": 1490.7,
-            "import": 1490.7,
-            "export": 1490.7
+            "extraction": 94.1,
+            "import": 1718.5,
+            "export": 872.1
         }
     },
     "JILI": {
         "coal": {
-            "extraction": 36903.2,
-            "import": 36903.2,
-            "export": 36903.2
+            "extraction": 725.8,
+            "import": 5495.2,
+            "export": 231.8
         },
         "oil": {
-            "extraction": 5284.2,
-            "import": 5284.2,
-            "export": 5284.2
+            "extraction": 577.7,
+            "import": 1667.0,
+            "export": 852.1
         },
         "gas": {
-            "extraction": 3.3,
-            "import": 3.3,
-            "export": 3.3
+            "extraction": 252.8,
+            "import": 186.1,
+            "export": 30.9
         }
     },
     "HEIL": {
         "coal": {
-            "extraction": 3968352.7,
-            "import": 3968352.7,
-            "export": 3968352.7
+            "extraction": 3878.3,
+            "import": 7211.6,
+            "export": 2138.7
         },
         "oil": {
-            "extraction": 16538.4,
-            "import": 16538.4,
-            "export": 16538.4
+            "extraction": 4287.3,
+            "import": 319.2,
+            "export": 6762.6
         },
         "gas": {
-            "extraction": 42.2,
-            "import": 42.2,
-            "export": 42.2
+            "extraction": 597.0,
+            "import": 11.4,
+            "export": 7.5
         }
     },
     "SHAN": {
         "coal": {
-            "extraction": 20.9,
-            "import": 20.9,
-            "export": 20.9
+            "extraction": 0.0,
+            "import": 3207.0,
+            "export": 193.1
         },
         "oil": {
-            "extraction": 1091.1,
-            "import": 1091.1,
-            "export": 1091.1
+            "extraction": 74.3,
+            "import": 9828.7,
+            "export": 9397.4
         },
         "gas": {
-            "extraction": 13.7,
-            "import": 13.7,
-            "export": 13.7
+            "extraction": 192.8,
+            "import": 489.9,
+            "export": 163.0
         }
     },
     "JINU": {
         "coal": {
-            "extraction": 1258119.9,
-            "import": 1258119.9,
-            "export": 1258119.9
+            "extraction": 713.4,
+            "import": 26706.0,
+            "export": 8945.5
         },
         "oil": {
-            "extraction": 560093.6,
-            "import": 560093.6,
-            "export": 560093.6
+            "extraction": 217.2,
+            "import": 7283.0,
+            "export": 6607.4
         },
         "gas": {
-            "extraction": 77.7,
-            "import": 77.7,
-            "export": 77.7
+            "extraction": 54.1,
+            "import": 3988.9,
+            "export": 1855.9
         }
     },
     "ZHEJ": {
         "coal": {
-            "extraction": 368467.5,
-            "import": 368467.5,
-            "export": 368467.5
+            "extraction": 0.0,
+            "import": 7283.0,
+            "export": 0.0
         },
         "oil": {
-            "extraction": 2267964.6,
-            "import": 2267964.6,
-            "export": 2267964.6
+            "extraction": 0.0,
+            "import": 4299.4,
+            "export": 5577.0
         },
         "gas": {
-            "extraction": 607.4,
-            "import": 607.4,
-            "export": 607.4
+            "extraction": 0.0,
+            "import": 1818.2,
+            "export": 0.0
         }
     },
     "ANHU": {
         "coal": {
-            "extraction": 1924051.7,
-            "import": 1924051.7,
-            "export": 1924051.7
+            "extraction": 7735.0,
+            "import": 8626.3,
+            "export": 4371.4
         },
         "oil": {
-            "extraction": 154644.6,
-            "import": 154644.6,
-            "export": 154644.6
+            "extraction": 0.0,
+            "import": 1409.9,
+            "export": 163.5
         },
         "gas": {
-            "extraction": 39.4,
-            "import": 39.4,
-            "export": 39.4
+            "extraction": 28.6,
+            "import": 820.9,
+            "export": 0.4
         }
     },
     "FUJI": {
         "coal": {
-            "extraction": 4267.7,
-            "import": 4267.7,
-            "export": 4267.7
+            "extraction": 459.5,
+            "import": 3763.1,
+            "export": 946.2
         },
         "oil": {
-            "extraction": 7295.0,
-            "import": 7295.0,
-            "export": 7295.0
+            "extraction": 0.0,
+            "import": 1252.8,
+            "export": 1517.4
         },
         "gas": {
-            "extraction": 65.0,
-            "import": 65.0,
-            "export": 65.0
+            "extraction": 0.0,
+            "import": 124.9,
+            "export": 0.0
         }
     },
     "JINX": {
         "coal": {
-            "extraction": 94873.1,
-            "import": 94873.1,
-            "export": 94873.1
+            "extraction": 219.4,
+            "import": 5842.9,
+            "export": 164.6
         },
         "oil": {
-            "extraction": 2000.0,
-            "import": 2000.0,
-            "export": 2000.0
+            "extraction": 0.0,
+            "import": 1563.2,
+            "export": 128.6
         },
         "gas": {
             "extraction": 0.0,
-            "import": 0.0,
+            "import": 354.4,
             "export": 0.0
         }
     },
     "SHAD": {
         "coal": {
-            "extraction": 62823.4,
-            "import": 62823.4,
-            "export": 62823.4
+            "extraction": 7637.4,
+            "import": 22381.9,
+            "export": 3004.2
         },
         "oil": {
-            "extraction": 1061920.8,
-            "import": 1061920.8,
-            "export": 1061920.8
+            "extraction": 3170.3,
+            "import": 4571.6,
+            "export": 16711.9
         },
         "gas": {
-            "extraction": 266.1,
-            "import": 266.1,
-            "export": 266.1
+            "extraction": 73.6,
+            "import": 2746.4,
+            "export": 0.0
         }
     },
     "HENA": {
         "coal": {
-            "extraction": 105626.1,
-            "import": 105626.1,
-            "export": 105626.1
+            "extraction": 7430.1,
+            "import": 12906.9,
+            "export": 6486.7
         },
         "oil": {
-            "extraction": 36880.3,
-            "import": 36880.3,
-            "export": 36880.3
+            "extraction": 342.7,
+            "import": 5413.2,
+            "export": 2294.3
         },
         "gas": {
-            "extraction": 162.1,
-            "import": 162.1,
-            "export": 162.1
+            "extraction": 37.0,
+            "import": 1293.4,
+            "export": 36.7
         }
     },
     "HUBE": {
         "coal": {
-            "extraction": 85438.1,
-            "import": 85438.1,
-            "export": 85438.1
+            "extraction": 28.1,
+            "import": 7598.4,
+            "export": 0.0
         },
         "oil": {
-            "extraction": 2000.0,
-            "import": 2000.0,
-            "export": 2000.0
+            "extraction": 76.4,
+            "import": 3652.4,
+            "export": 67.3
         },
         "gas": {
-            "extraction": 0.4,
-            "import": 0.4,
-            "export": 0.4
+            "extraction": 12.9,
+            "import": 793.9,
+            "export": 30.1
         }
     },
     "HUNA": {
         "coal": {
-            "extraction": 123994.0,
-            "import": 123994.0,
-            "export": 123994.0
+            "extraction": 745.1,
+            "import": 7137.8,
+            "export": 576.3
         },
         "oil": {
-            "extraction": 326451.1,
-            "import": 326451.1,
-            "export": 326451.1
+            "extraction": 0.0,
+            "import": 3534.2,
+            "export": 453.3
         },
         "gas": {
-            "extraction": 82.5,
-            "import": 82.5,
-            "export": 82.5
+            "extraction": 0.4,
+            "import": 511.9,
+            "export": 1.8
         }
     },
     "GUAD": {
         "coal": {
-            "extraction": 25628081.8,
-            "import": 25628081.8,
-            "export": 25628081.8
+            "extraction": 0.0,
+            "import": 9687.9,
+            "export": 2335.8
         },
         "oil": {
-            "extraction": 11144261.1,
-            "import": 11144261.1,
-            "export": 11144261.1
+            "extraction": 2304.5,
+            "import": 1198.2,
+            "export": 5912.1
         },
         "gas": {
-            "extraction": 339.8,
-            "import": 339.8,
-            "export": 339.8
+            "extraction": 1679.2,
+            "import": 1033.5,
+            "export": 1741.4
         }
     },
     "GUAX": {
         "coal": {
-            "extraction": 3600596.5,
-            "import": 3600596.5,
-            "export": 3600596.5
+            "extraction": 288.6,
+            "import": 6362.0,
+            "export": 0.0
         },
         "oil": {
-            "extraction": 4286.6,
-            "import": 4286.6,
-            "export": 4286.6
+            "extraction": 69.7,
+            "import": 3260.3,
+            "export": 1831.0
         },
         "gas": {
-            "extraction": 0.0,
-            "import": 0.0,
+            "extraction": 2.8,
+            "import": 406.7,
             "export": 0.0
         }
     },
     "HAIN": {
         "coal": {
-            "extraction": 795846.2,
-            "import": 795846.2,
-            "export": 795846.2
+            "extraction": 0.0,
+            "import": 687.3,
+            "export": 0.0
         },
         "oil": {
-            "extraction": 2060509.3,
-            "import": 2060509.3,
-            "export": 2060509.3
+            "extraction": 43.6,
+            "import": 249.2,
+            "export": 855.8
         },
         "gas": {
-            "extraction": 851.2,
-            "import": 851.2,
-            "export": 851.2
+            "extraction": 13.3,
+            "import": 838.2,
+            "export": 189.8
         }
     },
     "CHON": {
         "coal": {
-            "extraction": 4249101.8,
-            "import": 4249101.8,
-            "export": 4249101.8
+            "extraction": 655.5,
+            "import": 3048.3,
+            "export": 249.1
         },
         "oil": {
-            "extraction": 8772872.7,
-            "import": 8772872.7,
-            "export": 8772872.7
+            "extraction": 0.0,
+            "import": 1526.3,
+            "export": 144.0
         },
         "gas": {
-            "extraction": 6296.5,
-            "import": 6296.5,
-            "export": 6296.5
+            "extraction": 1659.5,
+            "import": 375.7,
+            "export": 694.5
         }
     },
     "SICH": {
         "coal": {
-            "extraction": 847540.1,
-            "import": 847540.1,
-            "export": 847540.1
+            "extraction": 1563.4,
+            "import": 4769.4,
+            "export": 875.2
         },
         "oil": {
-            "extraction": 572049.3,
-            "import": 572049.3,
-            "export": 572049.3
+            "extraction": 11.2,
+            "import": 3731.5,
+            "export": 0.0
         },
         "gas": {
-            "extraction": 67.8,
-            "import": 67.8,
-            "export": 67.8
+            "extraction": 5912.8,
+            "import": 5.1,
+            "export": 2577.8
         }
     },
     "GUIZ": {
         "coal": {
-            "extraction": 2092.0,
-            "import": 2092.0,
-            "export": 2092.0
+            "extraction": 8412.5,
+            "import": 1098.4,
+            "export": 1418.4
         },
         "oil": {
-            "extraction": 2000.0,
-            "import": 2000.0,
-            "export": 2000.0
+            "extraction": 0.0,
+            "import": 1762.6,
+            "export": 0.0
         },
         "gas": {
-            "extraction": 165.9,
-            "import": 165.9,
-            "export": 165.9
+            "extraction": 64.3,
+            "import": 436.1,
+            "export": 0.0
         }
     },
     "YUNN": {
         "coal": {
-            "extraction": 8157162.5,
-            "import": 8157162.5,
-            "export": 8157162.5
+            "extraction": 3858.8,
+            "import": 4164.4,
+            "export": 1865.1
         },
         "oil": {
-            "extraction": 2000.0,
-            "import": 2000.0,
-            "export": 2000.0
+            "extraction": 0.0,
+            "import": 3250.9,
+            "export": 1094.2
         },
         "gas": {
-            "extraction": 1142.9,
-            "import": 1142.9,
-            "export": 1142.9
+            "extraction": 0.0,
+            "import": 12.0,
+            "export": 11.1
         }
     },
     "SHAA": {
         "coal": {
-            "extraction": 635534.8,
-            "import": 635534.8,
-            "export": 635534.8
+            "extraction": 47433.3,
+            "import": 2715.2,
+            "export": 38454.8
         },
         "oil": {
-            "extraction": 10542065.3,
-            "import": 10542065.3,
-            "export": 10542065.3
+            "extraction": 3848.2,
+            "import": 600.8,
+            "export": 3558.6
         },
         "gas": {
-            "extraction": 5870.0,
-            "import": 5870.0,
-            "export": 5870.0
+            "extraction": 6730.0,
+            "import": 44.0,
+            "export": 5283.3
         }
     },
     "GANS": {
         "coal": {
-            "extraction": 93136.7,
-            "import": 93136.7,
-            "export": 93136.7
+            "extraction": 2692.9,
+            "import": 3471.3,
+            "export": 1106.7
         },
         "oil": {
-            "extraction": 449920.5,
-            "import": 449920.5,
-            "export": 449920.5
+            "extraction": 1383.9,
+            "import": 786.8,
+            "export": 1082.0
         },
         "gas": {
-            "extraction": 464.2,
-            "import": 464.2,
-            "export": 464.2
+            "extraction": 49.8,
+            "import": 424.6,
+            "export": 16.1
         }
     },
     "QING": {
         "coal": {
-            "extraction": 37734392.4,
-            "import": 37734392.4,
-            "export": 37734392.4
+            "extraction": 762.1,
+            "import": 325.6,
+            "export": 8.0
         },
         "oil": {
-            "extraction": 13430946.4,
-            "import": 13430946.4,
-            "export": 13430946.4
+            "extraction": 326.4,
+            "import": 238.1,
+            "export": 110.5
         },
         "gas": {
-            "extraction": 4549.0,
-            "import": 4549.0,
-            "export": 4549.0
+            "extraction": 816.8,
+            "import": 0.0,
+            "export": 228.6
         }
     },
     "NINX": {
         "coal": {
-            "extraction": 916032.8,
-            "import": 916032.8,
-            "export": 916032.8
+            "extraction": 5688.4,
+            "import": 5410.6,
+            "export": 1452.1
         },
         "oil": {
-            "extraction": 3756.6,
-            "import": 3756.6,
-            "export": 3756.6
+            "extraction": 0.0,
+            "import": 1005.6,
+            "export": 937.2
         },
         "gas": {
             "extraction": 0.0,
-            "import": 0.0,
-            "export": 0.0
+            "import": 833.3,
+            "export": 463.3
         }
     },
     "XING": {
         "coal": {
-            "extraction": 920.5,
-            "import": 920.5,
-            "export": 920.5
+            "extraction": 18817.3,
+            "import": 832.2,
+            "export": 2440.8
         },
         "oil": {
-            "extraction": 2000.0,
-            "import": 2000.0,
-            "export": 2000.0
+            "extraction": 4164.0,
+            "import": 0.3,
+            "export": 3758.1
         },
         "gas": {
-            "extraction": 0.0,
+            "extraction": 4719.5,
             "import": 0.0,
-            "export": 0.0
+            "export": 8471.4
         }
     }
 }

@@ -1,0 +1,25 @@
+{
+    "national": {
+        "coal": {
+            "extraction": 3900000.0,
+            "import": 304000.0,
+            "export": 2700.0,
+            "extraction_cost": 270.0,
+            "import_price": 600.0
+        },
+        "oil": {
+            "extraction": 19100000.0,
+            "import": 51300000.0,
+            "export": 3100000.0,
+            "extraction_cost": 2100.0,
+            "import_price": 3200.0
+        },
+        "gas": {
+            "extraction": 1880.0,
+            "import": 1420.0,
+            "export": 40.0,
+            "extraction_cost": 1200.0,
+            "import_price": 2400.0
+        }
+    }
+}

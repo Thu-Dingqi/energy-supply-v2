@@ -356,7 +356,7 @@ export default function DataPanel({
       // Create a data row with the values from resourceData
       return [
         {
-          indicator: "资源开发潜力上限",
+          indicator: "开发上限",
           unit: resourceKey === "coal" ? "EJ" : 
                 resourceKey === "oil" ? "PJ" : 
                 resourceKey === "gas" ? "PJ" : 
@@ -370,7 +370,7 @@ export default function DataPanel({
     // Default fallback if data doesn't exist
     return [
       {
-        indicator: "资源开发潜力上限",
+        indicator: "开发上限",
         unit: "未知",
         values: {
           "2025": 0,
