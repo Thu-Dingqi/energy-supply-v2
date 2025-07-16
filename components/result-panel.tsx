@@ -355,7 +355,7 @@ export default function ResultPanel({
       h2nResult = nationJson.h2n || {};
       
       // 由于全国数据中没有inv属性，所以我们手动聚合
-      invResult = {};
+      let invResult = {};
       Object.keys(invData).forEach(province => {
         const provinceInvData = (invData as any)[province];
         if (provinceInvData) {
