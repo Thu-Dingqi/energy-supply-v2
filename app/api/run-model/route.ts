@@ -5,7 +5,8 @@ import path from 'path';
 export async function POST() {
   const scriptPath = path.join(process.cwd(), 'data', 'excel', 'json', 'result_excel_to_json.py');
   const scriptDir = path.dirname(scriptPath);
-  const pythonExecutable = 'python3'; // or 'python' if that's your command
+  // const pythonExecutable = '/usr/bin/python3'; // or 'python' if that's your command
+  const pythonExecutable = process.env.PYTHON_PATH || 'python3';
 
   console.log(`Executing script: ${pythonExecutable} ${scriptPath}`);
   console.log(`Working directory: ${scriptDir}`);
