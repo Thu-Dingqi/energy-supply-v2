@@ -345,59 +345,63 @@ export default function MainContent({
         </DialogContent>
       </Dialog>
 
+      {/* 修改 div 部分布局，美化标题并调整选择器宽度和对齐方式 */}
       <div className="flex flex-col h-full overflow-hidden">
         <div className="p-4 border-b border-border">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-lg font-semibold">能源平台</h2>
-              <div className="flex flex-wrap gap-2">
-                <Select value={selectedScenario} onValueChange={setSelectedScenario}>
-                  <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="选择情景" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="cn60">CN60碳中和</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={selectedProvince} onValueChange={setSelectedProvince}>
-                  <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="选择区域" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="nation">全国</SelectItem>
-                    <SelectItem value="beijing">北京</SelectItem>
-                    <SelectItem value="tianjin">天津</SelectItem>
-                    <SelectItem value="hebei">河北</SelectItem>
-                    <SelectItem value="shanxi">山西</SelectItem>
-                    <SelectItem value="neimenggu">内蒙古</SelectItem>
-                    <SelectItem value="liaoning">辽宁</SelectItem>
-                    <SelectItem value="jilin">吉林</SelectItem>
-                    <SelectItem value="heilongjiang">黑龙江</SelectItem>
-                    <SelectItem value="shanghai">上海</SelectItem>
-                    <SelectItem value="jiangsu">江苏</SelectItem>
-                    <SelectItem value="zhejiang">浙江</SelectItem>
-                    <SelectItem value="anhui">安徽</SelectItem>
-                    <SelectItem value="fujian">福建</SelectItem>
-                    <SelectItem value="jiangxi">江西</SelectItem>
-                    <SelectItem value="shandong">山东</SelectItem>
-                    <SelectItem value="henan">河南</SelectItem>
-                    <SelectItem value="hubei">湖北</SelectItem>
-                    <SelectItem value="hunan">湖南</SelectItem>
-                    <SelectItem value="guangdong">广东</SelectItem>
-                    <SelectItem value="guangxi">广西</SelectItem>
-                    <SelectItem value="hainan">海南</SelectItem>
-                    <SelectItem value="chongqing">重庆</SelectItem>
-                    <SelectItem value="sichuan">四川</SelectItem>
-                    <SelectItem value="guizhou">贵州</SelectItem>
-                    <SelectItem value="yunnan">云南</SelectItem>
-                    <SelectItem value="shaanxi">陕西</SelectItem>
-                    <SelectItem value="gansu">甘肃</SelectItem>
-                    <SelectItem value="qinghai">青海</SelectItem>
-                    <SelectItem value="ningxia">宁夏</SelectItem>
-                    <SelectItem value="xinjiang">新疆</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          <div className="flex flex-col gap-5">
+            {/* 更新标题并美化样式 */}
+            <h2 className="text-xl font-bold text-center pb-2 border-b border-border/50">
+              国网能源研究院-能源优化平台
+            </h2>
+            
+            {/* 调整选择器宽度和对齐方式 */}
+            <div className="grid grid-cols-2 gap-4 px-4">
+              <Select value={selectedScenario} onValueChange={setSelectedScenario}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="选择情景" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cn60">CN60碳中和</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={selectedProvince} onValueChange={setSelectedProvince}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="选择区域" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="nation">全国</SelectItem>
+                  <SelectItem value="beijing">北京</SelectItem>
+                  <SelectItem value="tianjin">天津</SelectItem>
+                  <SelectItem value="hebei">河北</SelectItem>
+                  <SelectItem value="shanxi">山西</SelectItem>
+                  <SelectItem value="neimenggu">内蒙古</SelectItem>
+                  <SelectItem value="liaoning">辽宁</SelectItem>
+                  <SelectItem value="jilin">吉林</SelectItem>
+                  <SelectItem value="heilongjiang">黑龙江</SelectItem>
+                  <SelectItem value="shanghai">上海</SelectItem>
+                  <SelectItem value="jiangsu">江苏</SelectItem>
+                  <SelectItem value="zhejiang">浙江</SelectItem>
+                  <SelectItem value="anhui">安徽</SelectItem>
+                  <SelectItem value="fujian">福建</SelectItem>
+                  <SelectItem value="jiangxi">江西</SelectItem>
+                  <SelectItem value="shandong">山东</SelectItem>
+                  <SelectItem value="henan">河南</SelectItem>
+                  <SelectItem value="hubei">湖北</SelectItem>
+                  <SelectItem value="hunan">湖南</SelectItem>
+                  <SelectItem value="guangdong">广东</SelectItem>
+                  <SelectItem value="guangxi">广西</SelectItem>
+                  <SelectItem value="hainan">海南</SelectItem>
+                  <SelectItem value="chongqing">重庆</SelectItem>
+                  <SelectItem value="sichuan">四川</SelectItem>
+                  <SelectItem value="guizhou">贵州</SelectItem>
+                  <SelectItem value="yunnan">云南</SelectItem>
+                  <SelectItem value="shaanxi">陕西</SelectItem>
+                  <SelectItem value="gansu">甘肃</SelectItem>
+                  <SelectItem value="qinghai">青海</SelectItem>
+                  <SelectItem value="ningxia">宁夏</SelectItem>
+                  <SelectItem value="xinjiang">新疆</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* 根据 activeNav 来显示不同的内容 */}
@@ -424,7 +428,7 @@ export default function MainContent({
             ) : null}
           </div>
         </div>
-
+        
         <ScrollArea className="flex-1">
           <div className="p-4 w-full max-w-[328px]">
             {activeNav === "analysis" && (

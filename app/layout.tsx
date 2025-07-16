@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Create Next App',
+  title: '国网能源研究院-能源优化平台',
   description: 'Created with v0',
   generator: 'v0.dev',
 }
