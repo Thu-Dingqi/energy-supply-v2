@@ -37,6 +37,11 @@ type ResourceDataType = {
 // Type for 2020 fossil data for provinces
 type FossilDataType = {
   [provinceCode: string]: {
+    [key: string]: {  // 添加字符串索引签名
+      extraction: number;
+      import: number;
+      export: number;
+    };
     coal: {
       extraction: number;
       import: number;
@@ -58,6 +63,13 @@ type FossilDataType = {
 // Type for 2020 national fossil data
 type NationalFossilDataType = {
   national: {
+    [key: string]: {  // 添加字符串索引签名
+      extraction: number;
+      import: number;
+      export: number;
+      extraction_cost: number;
+      import_price: number;
+    };
     coal: {
       extraction: number;
       import: number;
@@ -1467,12 +1479,13 @@ export default function DataPanel({
     if (currentNode && dataSets[currentNode]?.isEnergyTech) {
       // 修复这里：确保当参数变化时，表格数据也会更新
       const paramData = dataSets[currentNode].techData[selectedParameter].data
+      const paramUnit = getUnitForParameter(selectedParameter);
 
       // 创建新的数据对象，确保指标名称与所选参数匹配
       const updatedData = paramData.map((row: DataRow) => ({
         ...row,
         indicator: getLabelForParameter(selectedParameter),
-        unit: getUnitForParameter(selectedParameter),
+        unit: paramUnit,
       }))
 
       setTableData(updatedData)
@@ -1735,7 +1748,12 @@ export default function DataPanel({
 
               <Card className="h-[400px]">
                 <CardContent className="p-6">
-                  <SimpleChart type={chartType} data={tableData} title={nodeTitle} />
+                  <SimpleChart 
+                    type={chartType} 
+                    data={tableData} 
+                    title={nodeTitle} 
+                    unit={tableData.length > 0 ? tableData[0].unit : ""}
+                  />
                 </CardContent>
               </Card>
             </div>

@@ -42,20 +42,22 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
   const formatDisplayValue = (value: string | number): string => {
     if (value === undefined || value === null || value === "") return "-";
     
-    if (typeof value === 'number') {
+    if (typeof value === 'number' || (typeof value === 'string' && !isNaN(parseFloat(value)))) {
+      const numValue = typeof value === 'string' ? parseFloat(value) : value;
+      
       // 非常大的数字：使用K, M, G等缩写单位
-      if (Math.abs(value) >= 1000000000) {
-        return (value / 1000000000).toFixed(1) + 'G';
-      } else if (Math.abs(value) >= 1000000) {
-        return (value / 1000000).toFixed(1) + 'M';
-      } else if (Math.abs(value) >= 1000) {
-        return (value / 1000).toFixed(1) + 'K';
-      } else if (Math.abs(value) < 0.01 && value !== 0) {
+      if (Math.abs(numValue) >= 1000000000) {
+        return (numValue / 1000000000).toFixed(1) + 'G';
+      } else if (Math.abs(numValue) >= 1000000) {
+        return (numValue / 1000000).toFixed(1) + 'M';
+      } else if (Math.abs(numValue) >= 1000) {
+        return (numValue / 1000).toFixed(1) + 'K';
+      } else if (Math.abs(numValue) < 0.01 && numValue !== 0) {
         // 非常小的数字使用科学计数法
-        return value.toExponential(1);
+        return numValue.toExponential(1);
       } else {
         // 普通数字保留1位小数
-        return value.toFixed(1);
+        return numValue.toFixed(1);
       }
     }
     
@@ -68,14 +70,14 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
   }
 
   return (
-    <div className="border rounded-lg overflow-hidden bg-white">
+    <div className="border rounded-lg bg-white">
       <table className="w-full table-fixed">
         <thead>
           <tr className="bg-slate-100">
-            <th className="w-[110px] px-2 py-1 text-left text-sm font-medium border-r">指标</th>
-            <th className="w-[70px] px-2 py-1 text-left text-sm font-medium border-r">单位</th>
+            <th className="w-[120px] px-2 py-2 text-left text-sm font-semibold border-r">指标</th>
+            <th className="w-[70px] px-2 py-2 text-left text-sm font-semibold border-r">单位</th>
             {years.map((year) => (
-              <th key={year} className="w-[62px] px-1 py-1 text-center text-sm font-medium border-r">
+              <th key={year} className="w-[60px] px-1 py-2 text-center text-sm font-semibold border-r">
                 {year}
               </th>
             ))}
@@ -84,36 +86,36 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
         <tbody>
           {editableData.map((row, rowIndex) => (
             <tr key={rowIndex} className="border-t hover:bg-slate-50">
-              <td className="w-[110px] px-2 py-1 text-sm border-r font-medium truncate">
+              <td className="w-[120px] px-2 py-2 text-sm border-r font-medium">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <span className="truncate block">{row.indicator}</span>
+                      <div className="truncate max-w-[110px]">{row.indicator}</div>
                     </TooltipTrigger>
-                    <TooltipContent>{row.indicator}</TooltipContent>
+                    <TooltipContent side="right">{row.indicator}</TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </td>
-              <td className="w-[70px] px-2 py-1 text-sm border-r text-muted-foreground truncate">
+              <td className="w-[70px] px-2 py-2 text-sm border-r text-muted-foreground">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <span className="truncate block">{row.unit}</span>
+                      <div className="truncate max-w-[60px]">{row.unit}</div>
                     </TooltipTrigger>
-                    <TooltipContent>{row.unit}</TooltipContent>
+                    <TooltipContent side="right">{row.unit}</TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </td>
               {years.map((year) => (
                 <td
                   key={year}
-                  className="w-[62px] px-1 py-1 text-sm text-center border-r"
+                  className="w-[60px] px-1 py-2 text-sm text-center border-r"
                   onClick={() => setEditingCell({ rowIndex, year })}
                 >
                   {editingCell?.rowIndex === rowIndex && editingCell?.year === year ? (
                     <Input
                       autoFocus
-                      value={row.values[year]}
+                      value={row.values[year] !== undefined ? row.values[year] : ''}
                       onChange={(e) => handleCellValueChange(rowIndex, year, e.target.value)}
                       onBlur={handleCellBlur}
                       className="h-7 w-full p-1 text-center"
@@ -122,11 +124,13 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div className="cursor-pointer hover:bg-slate-100 p-1 rounded truncate">
+                          <div className="cursor-pointer hover:bg-slate-100 p-1 rounded truncate max-w-[50px] mx-auto">
                             {formatDisplayValue(row.values[year])}
                           </div>
                         </TooltipTrigger>
-                        <TooltipContent>{row.values[year]}</TooltipContent>
+                        <TooltipContent side="top">
+                          {row.values[year] !== undefined ? row.values[year] : '-'}
+                        </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                   )}
@@ -134,6 +138,13 @@ export default function EditableDataTable({ data, years, onDataChange }: Editabl
               ))}
             </tr>
           ))}
+          {editableData.length === 0 && (
+            <tr>
+              <td colSpan={years.length + 2} className="text-center py-4 text-muted-foreground">
+                无数据
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

@@ -319,8 +319,12 @@ const getH2nData = (provinceData: any) => {
 // 添加获取投资数据的函数
 const getInvData = (provinceData: any) => {
   if (!provinceData) return [];
+  
+  // 添加调试，帮助理解数据结构
+  console.log('投资数据结构:', provinceData);
+  
   return Object.entries(invIndicatorMap).map(([key, indicator]) =>
-    createDataRow(indicator, "吉瓦", provinceData[key])
+    createDataRow(indicator, "亿元", provinceData[key])
   ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
 };
 
@@ -430,46 +434,60 @@ export default function ResultPanel({
 
   useEffect(() => {
     if (selectedNode && resultDataSets[selectedNode]) {
-      const { title, data, defaultChartType } = resultDataSets[selectedNode]
-      setNodeTitle(title)
-      setTableData(data)
-      setChartType(defaultChartType || "line")
-      setCurrentNode(selectedNode)
-      
-      // Set appropriate years array based on the selected node
-      if (selectedNode.startsWith('emissions-')) {
-        setCurrentYears(emissionsYears);
-      } else if (selectedNode === 'hydrogen-supply' || selectedNode === 'new-power-capacity') {
-        setCurrentYears(from2025Years);
-      } else {
-        setCurrentYears(years);
-      }
-    } else if (activeNav === 'results') {
-      // Since NavigationItem doesn't have children, we need a different approach
-      // for selecting the first node based on activeNav
-      const resultsNodes = Object.keys(resultDataSets);
-      const firstNode = resultsNodes.length > 0 ? resultsNodes[0] : null;
-      
-      if (firstNode && resultDataSets[firstNode]) {
-        const { title, data, defaultChartType } = resultDataSets[firstNode]
+      // 先清空当前数据，避免混合
+      setTableData([]);
+      setNodeTitle("");
+
+      // 设置延时以确保旧数据被清除
+      setTimeout(() => {
+        const { title, data, defaultChartType } = resultDataSets[selectedNode]
         setNodeTitle(title)
         setTableData(data)
         setChartType(defaultChartType || "line")
-        setCurrentNode(firstNode)
+        setCurrentNode(selectedNode)
         
-        // Set appropriate years array based on the first node
-        if (firstNode.startsWith('emissions-')) {
+        // Set appropriate years array based on the selected node
+        if (selectedNode.startsWith('emissions-')) {
           setCurrentYears(emissionsYears);
-        } else if (firstNode === 'hydrogen-supply' || firstNode === 'new-power-capacity') {
+        } else if (selectedNode === 'hydrogen-supply' || selectedNode === 'new-power-capacity') {
           setCurrentYears(from2025Years);
         } else {
           setCurrentYears(years);
         }
-      } else {
-        setNodeTitle("")
-        setTableData([])
-        setCurrentYears(years);
-      }
+      }, 0);
+    } else if (activeNav === 'results') {
+      // 先清空当前数据，避免混合
+      setTableData([]);
+      setNodeTitle("");
+      
+      // 延时设置，确保旧数据被清除
+      setTimeout(() => {
+        // Since NavigationItem doesn't have children, we need a different approach
+        // for selecting the first node based on activeNav
+        const resultsNodes = Object.keys(resultDataSets);
+        const firstNode = resultsNodes.length > 0 ? resultsNodes[0] : null;
+        
+        if (firstNode && resultDataSets[firstNode]) {
+          const { title, data, defaultChartType } = resultDataSets[firstNode]
+          setNodeTitle(title)
+          setTableData(data)
+          setChartType(defaultChartType || "line")
+          setCurrentNode(firstNode)
+          
+          // Set appropriate years array based on the first node
+          if (firstNode.startsWith('emissions-')) {
+            setCurrentYears(emissionsYears);
+          } else if (firstNode === 'hydrogen-supply' || firstNode === 'new-power-capacity') {
+            setCurrentYears(from2025Years);
+          } else {
+            setCurrentYears(years);
+          }
+        } else {
+          setNodeTitle("")
+          setTableData([])
+          setCurrentYears(years);
+        }
+      }, 0);
     }
   }, [selectedNode, activeNav, resultDataSets])
 
@@ -529,6 +547,13 @@ export default function ResultPanel({
     )
   }
 
+  // 检查表格数据是否有效
+  const isDataValid = tableData && tableData.length > 0 && 
+    tableData.some(row => 
+      Object.keys(row.values).length > 0 && 
+      Object.values(row.values).some(v => v !== 0 && v !== null && v !== undefined)
+    );
+
   // 其他结果视图
   return (
     <Card className="h-full w-full flex flex-col">
@@ -566,19 +591,33 @@ export default function ResultPanel({
             </Button>
           </div>
         </div>
-        <div className="mb-4 h-[400px] w-full">
-          <SimpleChart 
-            type={chartType} 
-            data={tableData} 
-            title={nodeTitle} 
-            unit={tableData.length > 0 ? tableData[0].unit : ""} 
-          />
+        
+        <div className="mb-6 h-[400px] w-full overflow-hidden rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+          {isDataValid ? (
+            <SimpleChart 
+              type={chartType} 
+              data={tableData} 
+              title={nodeTitle} 
+              unit={tableData.length > 0 ? tableData[0].unit : ""} 
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center bg-muted/20">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-muted-foreground">无数据可显示</h3>
+                <p className="text-sm text-muted-foreground/80">当前选择的数据集无数据可视化。</p>
+              </div>
+            </div>
+          )}
         </div>
+        
         <div className="h-[300px]">
-          <ScrollArea className="h-full">
-            <EditableDataTable data={tableData} onDataChange={handleDataChange} years={currentYears} />
+          <ScrollArea className="h-full w-full">
+            <div className="min-w-[800px]">
+              <EditableDataTable data={tableData} onDataChange={handleDataChange} years={currentYears} />
+            </div>
           </ScrollArea>
         </div>
+        
         <div className="text-sm text-muted-foreground mt-2">
            展示 {selectedProvince === 'nation' ? '全国' : provinceName.charAt(0).toUpperCase() + provinceName.slice(1)} 在 {selectedScenario === "cn60" ? "CN60碳中和" : ""} 情景下的数据。
         </div>

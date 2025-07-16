@@ -17,6 +17,8 @@ export default function EnergyPlatform() {
   const [selectedScenario, setSelectedScenario] = useState<string>("cn60")
   const [selectedProvince, setSelectedProvince] = useState<string>("nation")
   const [isModelComplete, setIsModelComplete] = useState(false)
+  // 添加重设标识符，用于通知子组件重置状态
+  const [resetKey, setResetKey] = useState<number>(0)
 
   // Add this effect to handle when the user is viewing "净调入电量" and selects "全国"
   useEffect(() => {
@@ -27,13 +29,56 @@ export default function EnergyPlatform() {
   }, [selectedProvince, selectedNode]);
 
   const handleNodeSelect = (nodeId: string) => {
-    setSelectedNode(nodeId)
+    // 判断是否切换到不同类别的节点
+    const currentCategory = getNodeCategory(selectedNode);
+    const newCategory = getNodeCategory(nodeId);
+    
+    if (currentCategory !== newCategory) {
+      // 如果切换到不同类别，增加重设标识符
+      setResetKey(prev => prev + 1);
+    }
+    
+    setSelectedNode(nodeId);
+  }
+
+  // 辅助函数：获取节点所属的类别
+  const getNodeCategory = (nodeId: string | null): string => {
+    if (!nodeId) return "";
+    
+    if (nodeId.startsWith("emissions-")) {
+      return "emissions";
+    }
+    
+    // 能源供应类别
+    const energySupplyNodes = [
+      "power-generation-mix", "installed-power-capacity", 
+      "new-power-capacity", "power-investment", 
+      "primary-energy-supply", "hydrogen-supply", "net-power-export"
+    ];
+    if (energySupplyNodes.includes(nodeId)) {
+      return "energy-supply";
+    }
+    
+    // 技术类别
+    if (nodeId.includes("PLT") || nodeId.includes("CHP")) {
+      return "technology";
+    }
+    
+    // 资源类别
+    const resourceNodes = ["coal", "oil", "natural-gas", "nuclear", "biomass", "solar", "wind"];
+    if (resourceNodes.includes(nodeId)) {
+      return "resource";
+    }
+    
+    return "other";
   }
 
   const handleModelComplete = () => {
     setIsModelComplete(true)
     setActiveNav("results")
     setSelectedNode("power-generation-mix") // Set a default selection for results
+    // 切换到结果视图时重置状态
+    setResetKey(prev => prev + 1);
   }
 
   const renderActivePanel = () => {
@@ -41,6 +86,7 @@ export default function EnergyPlatform() {
       case "analysis":
         return (
           <DataPanel
+            key={`data-${resetKey}`}
             activeNav={activeNav}
             activeSection={activeSection}
             selectedNode={selectedNode}
@@ -51,6 +97,7 @@ export default function EnergyPlatform() {
       case "results":
         return (
           <ResultPanel
+            key={`result-${resetKey}`}
             activeNav={activeNav}
             selectedNode={selectedNode}
             selectedScenario={selectedScenario}
@@ -61,6 +108,7 @@ export default function EnergyPlatform() {
       case "note":
         return (
           <DataPanel
+            key={`note-${resetKey}`}
             activeNav="note"
             activeSection={activeSection}
             selectedNode={selectedNode}
@@ -78,7 +126,13 @@ export default function EnergyPlatform() {
       <div className="flex min-h-screen w-full">
         <Sidebar
           activeNav={activeNav}
-          setActiveNav={setActiveNav}
+          setActiveNav={(nav) => {
+            if (nav !== activeNav) {
+              // 切换导航时重置状态
+              setResetKey(prev => prev + 1);
+            }
+            setActiveNav(nav);
+          }}
           isModelComplete={isModelComplete}
           setIsModelComplete={setIsModelComplete}
           onRunModel={handleModelComplete}
@@ -88,11 +142,23 @@ export default function EnergyPlatform() {
             <MainContent
               activeNav={activeNav}
               activeSection={activeSection}
-              setActiveSection={setActiveSection}
+              setActiveSection={(section) => {
+                if (section !== activeSection) {
+                  // 切换区域时重置状态
+                  setResetKey(prev => prev + 1);
+                }
+                setActiveSection(section);
+              }}
               selectedScenario={selectedScenario}
               setSelectedScenario={setSelectedScenario}
               selectedProvince={selectedProvince}
-              setSelectedProvince={setSelectedProvince}
+              setSelectedProvince={(province) => {
+                if (province !== selectedProvince) {
+                  // 切换省份时重置状态
+                  setResetKey(prev => prev + 1);
+                }
+                setSelectedProvince(province);
+              }}
               selectedNode={selectedNode}
               onNodeSelect={handleNodeSelect}
               isModelComplete={isModelComplete}

@@ -110,3 +110,23 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* 添加图表相关样式 */
+@layer components {
+  .chart-container {
+    @apply transition-all duration-300;
+  }
+  
+  .chart-container:hover {
+    @apply shadow-md border-gray-200;
+  }
+  
+  /* 添加更多图表相关样式类 */
+  .chart-title {
+    @apply text-xl font-semibold mb-2;
+  }
+  
+  .chart-subtitle {
+    @apply text-sm text-muted-foreground mb-4;
+  }
+}
