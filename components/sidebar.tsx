@@ -30,7 +30,7 @@ export default function Sidebar({
       id: "return" as const, 
       icon: ArrowLeft, 
       label: "返回",
-      onClick: () => window.location.href = 'https://national-grid-website.vercel.app/'
+      onClick: () => window.location.href = 'https://demand.energy-model.site/'
     }
   ]
 
