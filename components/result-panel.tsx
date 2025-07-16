@@ -325,16 +325,32 @@ const getH2nData = (provinceData: any) => {
   ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
 };
 
-// 添加获取投资数据的函数
-const getInvData = (provinceData: any) => {
+// 添加投资数据获取函数
+const getInvData = (provinceData: any, selectedProvince: string) => {
   if (!provinceData) return [];
   
-  // 添加调试，帮助理解数据结构
-  console.log('投资数据结构:', provinceData);
+  // 获取当前选择的省份代码
+  const currentProvinceCode = provinceCodeMap[selectedProvince] || "BEIJ";
   
-  return Object.entries(invIndicatorMap).map(([key, indicator]) =>
-    createDataRow(indicator, "亿元", provinceData[key])
-  ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+  // 如果是全国数据（NATION），使用 nation.json 中的数据
+  if (currentProvinceCode === "NATION") {
+    try {
+      // 尝试从 nationData 中获取全国的投资数据
+      const nationInvData = (nationData as any).NATION?.investment || {};
+      
+      return Object.entries(invIndicatorMap).map(([key, indicator]) =>
+        createDataRow(indicator, "亿元", nationInvData[key])
+      ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+    } catch (error) {
+      console.error("获取全国投资数据时出错:", error);
+      return [];
+    }
+  } else {
+    // 非全国数据，使用原来的 invData
+    return Object.entries(invIndicatorMap).map(([key, indicator]) =>
+      createDataRow(indicator, "亿元", provinceData[key])
+    ).filter(row => Object.keys(row.values).length > 0 && Object.values(row.values).some(v => v !== 0));
+  }
 };
 
 // 移除 getEmissionsData 函数，将逻辑直接内联到 useEffect 中
@@ -368,8 +384,8 @@ export default function ResultPanel({
       peResult = nationJson.pe || {};
       h2nResult = nationJson.h2n || {};
       
-      // 直接使用inv.json中的NATION节点数据
-      invResult = (invData as any).NATION || {};
+      // 直接使用 nation.json 中的 investment 节点数据
+      invResult = nationJson.investment || {};
     } else {
       emissionsResult = (emissionsData as any)[provinceCode] || {};
       elcMixResult = (elcMixData as any)[provinceCode] || {};
@@ -419,7 +435,7 @@ export default function ResultPanel({
         "power-investment": {
           title: "电力投资",
           defaultChartType: "line",
-          data: getInvData(invResult)
+          data: getInvData(invResult, selectedProvince)
         },
         "primary-energy-supply": {
           title: "一次能源供应",
