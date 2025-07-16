@@ -475,16 +475,12 @@ export default function MainContent({
             <button 
               onClick={() => {
                 // 创建一个函数来处理文件下载
-                const downloadFile = (filePath) => {
-                  const link = document.createElement('a');
-                  link.href = filePath;
-                  link.download = filePath.split('/').pop();
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
+                const downloadFile = (filename: string) => {
+                  // 使用API端点下载文件
+                  window.location.href = `/api/download-file?filename=${filename}`;
                 };
                 
-                downloadFile('/nation_results.xlsx');
+                downloadFile('nation_results.xlsx');
               }} 
               className="w-[45%] py-1 text-center bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
             >
@@ -492,16 +488,12 @@ export default function MainContent({
             </button>
             <button 
               onClick={() => {
-                const downloadFile = (filePath) => {
-                  const link = document.createElement('a');
-                  link.href = filePath;
-                  link.download = filePath.split('/').pop();
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
+                const downloadFile = (filename: string) => {
+                  // 使用API端点下载文件
+                  window.location.href = `/api/download-file?filename=${filename}`;
                 };
                 
-                downloadFile('/30PE_Results_ALL.xlsx');
+                downloadFile('30PE_Results_ALL.xlsx');
               }} 
               className="w-[45%] py-1 text-center bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
             >
