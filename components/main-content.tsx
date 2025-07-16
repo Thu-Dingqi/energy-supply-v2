@@ -348,9 +348,9 @@ export default function MainContent({
       <div className="flex flex-col h-full overflow-hidden">
         <div className="p-4 border-b border-border">
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-semibold">能源平台</h2>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Select value={selectedScenario} onValueChange={setSelectedScenario}>
                   <SelectTrigger className="w-[120px]">
                     <SelectValue placeholder="选择情景" />
@@ -426,7 +426,7 @@ export default function MainContent({
         </div>
 
         <ScrollArea className="flex-1">
-          <div className="p-4 w-[328px]">
+          <div className="p-4 w-full max-w-[328px]">
             {activeNav === "analysis" && (
               <TreeView 
                 nodes={getActiveTree()} 

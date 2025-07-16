@@ -11,6 +11,7 @@ interface SidebarProps {
   isModelComplete: boolean
   setIsModelComplete: (isComplete: boolean) => void
   onRunModel: () => void
+  className?: string
 }
 
 export default function Sidebar({
@@ -19,6 +20,7 @@ export default function Sidebar({
   isModelComplete,
   setIsModelComplete,
   onRunModel,
+  className = "",
 }: SidebarProps) {
   const navItems = [
     { id: "analysis" as const, icon: BarChart3, label: "分析" },
@@ -33,7 +35,7 @@ export default function Sidebar({
   ]
 
   return (
-    <div className="w-[130px] bg-muted/30 border-r border-border flex flex-col items-center py-6">
+    <div className={`w-[130px] bg-muted/30 border-r border-border flex flex-col items-center py-6 ${className}`}>
       <TooltipProvider>
         <div className="flex flex-col gap-6">
           {navItems.map((item) => (
@@ -42,11 +44,15 @@ export default function Sidebar({
                 <Button
                   variant={activeNav === item.id ? "secondary" : "ghost"}
                   size="icon"
-                  className="h-16 w-16"
+                  className={`h-16 w-16 transition-all flex flex-col items-center justify-center ${
+                    activeNav === item.id 
+                      ? "bg-primary/10 border-l-4 border-primary shadow-sm" 
+                      : "hover:bg-primary/5"
+                  }`}
                   onClick={item.onClick || (() => setActiveNav(item.id))}
                 >
-                  <item.icon className="h-10 w-10" />
-                  <span className="sr-only">{item.label}</span>
+                  <item.icon className={`h-8 w-8 ${activeNav === item.id ? "text-primary" : "text-muted-foreground"}`} />
+                  <span className="text-xs mt-1 font-medium">{item.label}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
