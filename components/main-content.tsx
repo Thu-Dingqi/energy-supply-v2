@@ -375,6 +375,24 @@ export default function MainContent({
               国网能源研究院-能源优化平台
             </h2>
             
+            {/* 添加两个导出按钮 */}
+            <div className="flex justify-center gap-4 mb-2">
+              <a 
+                href="/data/excel/json/nation_results.xlsx" 
+                download 
+                className="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
+              >
+                导出全国模型结果
+              </a>
+              <a 
+                href="/data/excel/json/30PE_Results_ALL.xlsx" 
+                download 
+                className="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
+              >
+                导出省区模型结果
+              </a>
+            </div>
+            
             {/* 调整选择器宽度和对齐方式 */}
             <div className="grid grid-cols-2 gap-4 px-4">
               <Select value={selectedScenario} onValueChange={setSelectedScenario}>
