@@ -367,31 +367,13 @@ export default function MainContent({
       </Dialog>
 
       {/* 修改 div 部分布局，美化标题并调整选择器宽度和对齐方式 */}
-      <div className="flex flex-col h-full overflow-hidden">
+      <div className="flex flex-col h-full overflow-hidden relative">
         <div className="p-4 border-b border-border">
           <div className="flex flex-col gap-5">
             {/* 更新标题并美化样式 */}
             <h2 className="text-xl font-bold text-center pb-2 border-b border-border/50">
               国网能源研究院-能源优化平台
             </h2>
-            
-            {/* 添加两个导出按钮 */}
-            <div className="flex justify-center gap-4 mb-2">
-              <a 
-                href="/data/excel/json/nation_results.xlsx" 
-                download 
-                className="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
-              >
-                导出全国模型结果
-              </a>
-              <a 
-                href="/data/excel/json/30PE_Results_ALL.xlsx" 
-                download 
-                className="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
-              >
-                导出省区模型结果
-              </a>
-            </div>
             
             {/* 调整选择器宽度和对齐方式 */}
             <div className="grid grid-cols-2 gap-4 px-4">
@@ -458,17 +440,17 @@ export default function MainContent({
             ) : activeNav === "results" ? (
               <div 
                 className="p-2 text-center bg-secondary rounded-md cursor-pointer hover:bg-secondary/80 transition-colors"
-                onClick={() => !isModelComplete && setShowModelDialog(true)}
+                onClick={() => setShowModelDialog(true)}
               >
                 <h3 className="text-md font-medium">
-                  {isModelComplete ? "结果数据" : "点击运行模型"}
+                  点击运行模型
                 </h3>
               </div>
             ) : null}
           </div>
         </div>
         
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 mb-16"> {/* 添加底部边距为按钮留出空间 */}
           <div className="p-4 w-full max-w-[328px]">
             {activeNav === "analysis" && (
               <TreeView 
@@ -486,6 +468,47 @@ export default function MainContent({
             )}
           </div>
         </ScrollArea>
+        
+        {/* 固定在页面底部的导出按钮 */}
+        {activeNav === "results" && isModelComplete && (
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-4 py-3 border-t border-border bg-background">
+            <button 
+              onClick={() => {
+                // 创建一个函数来处理文件下载
+                const downloadFile = (filePath) => {
+                  const link = document.createElement('a');
+                  link.href = filePath;
+                  link.download = filePath.split('/').pop();
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                };
+                
+                downloadFile('/nation_results.xlsx');
+              }} 
+              className="w-[45%] py-1 text-center bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
+            >
+              导出全国模型结果
+            </button>
+            <button 
+              onClick={() => {
+                const downloadFile = (filePath) => {
+                  const link = document.createElement('a');
+                  link.href = filePath;
+                  link.download = filePath.split('/').pop();
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                };
+                
+                downloadFile('/30PE_Results_ALL.xlsx');
+              }} 
+              className="w-[45%] py-1 text-center bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors"
+            >
+              导出省区模型结果
+            </button>
+          </div>
+        )}
       </div>
     </>
   )
